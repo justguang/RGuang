@@ -1,0 +1,539 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RGuang.Utils</name>
+    </assembly>
+    <members>
+        <member name="T:RGuang.Utils.ULogExtensionMethods">
+            <summary>
+            ULog扩展
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Log(System.Object,System.String,System.Object[])">
+            <summary>
+            打印普通日志
+            </summary>
+            <param name="log">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Log(System.Object,System.Object)">
+            <summary>
+            打印普通日志
+            </summary>
+            <param name="log">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.ColorLog(System.Object,RGuang.Utils.ULogColor,System.String,System.Object[])">
+            <summary>
+            打印带颜色的日志
+            </summary>
+            <param name="color">设置内容显示的颜色</param>
+            <param name="log">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.ColorLog(System.Object,RGuang.Utils.ULogColor,System.Object)">
+            <summary>
+            打印带颜色的日志
+            </summary>
+            <param name="color">设置内容显示的颜色</param>
+            <param name="log">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Warn(System.Object,System.String,System.Object[])">
+            <summary>
+            打印警告日志
+            </summary>
+            <param name="log">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Warn(System.Object,System.Object)">
+            <summary>
+            打印警告日志
+            </summary>
+            <param name="log">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Error(System.Object,System.String,System.Object[])">
+            <summary>
+            打印错误日志
+            </summary>
+            <param name="log">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Error(System.Object,System.Object)">
+            <summary>
+            打印错误日志
+            </summary>
+            <param name="log">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Trace(System.Object,System.String,System.Object[])">
+            <summary>
+            打印堆栈
+            </summary>
+            <param name="log">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULogExtensionMethods.Trace(System.Object,System.Object)">
+            <summary>
+            打印堆栈
+            </summary>
+            <param name="log">要打印的内容</param>
+        </member>
+        <member name="T:RGuang.Utils.ULog">
+            <summary>
+            日志工具核心类
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ULog.UnityLogger">
+            <summary>
+            unity类型的输出日志
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ULog.ConsoleLogger">
+            <summary>
+            控制台类型的输出日志
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULog.cfg">
+            <summary>
+            日志配置
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULog.logger">
+            <summary>
+            日志输出
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULog.logFileWriter">
+            <summary>
+            日志写入文件
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.ULog.InitSetting(RGuang.Utils.ULogConfig)">
+            <summary>
+            日志初始化
+            </summary>
+            <param name="logConfig">日志配置【默认null，自动配置】</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Log(System.String,System.Object[])">
+            <summary>
+            打印普通日志
+            </summary>
+            <param name="msg">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Log(System.Object)">
+            <summary>
+            打印普通日志
+            </summary>
+            <param name="obj">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.ColorLog(RGuang.Utils.ULogColor,System.String,System.Object[])">
+            <summary>
+            打印带颜色的日志
+            </summary>
+            <param name="color">设置内容颜色</param>
+            <param name="msg">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.ColorLog(RGuang.Utils.ULogColor,System.Object)">
+            <summary>
+            打印带颜色的日志
+            </summary>
+            <param name="color">设置内容颜色</param>
+            <param name="obj">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Warn(System.String,System.Object[])">
+            <summary>
+            打印警告日志
+            </summary>
+            <param name="msg">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Warn(System.Object)">
+            <summary>
+            打印警告日志
+            </summary>
+            <param name="obj">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Error(System.String,System.Object[])">
+            <summary>
+            打印错误日志
+            </summary>
+            <param name="msg">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Error(System.Object)">
+            <summary>
+            打印错误日志
+            </summary>
+            <param name="obj">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Trace(System.String,System.Object[])">
+            <summary>
+            打印堆栈
+            </summary>
+            <param name="msg">要打印的内容</param>
+            <param name="args">格式化的参数</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.Trace(System.Object)">
+            <summary>
+            打印堆栈
+            </summary>
+            <param name="obj">要打印的内容</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.DecorateLog(System.String,System.Boolean)">
+            <summary>
+            修饰日志
+            </summary>
+            <param name="msg">要修饰的内容</param>
+            <param name="isTrace">是否显示堆栈【默认false不显示】</param>
+        </member>
+        <member name="M:RGuang.Utils.ULog.GetThreadID">
+            <summary>
+            获取线程ID
+            </summary>
+            <returns>返回当前线程ID</returns>
+        </member>
+        <member name="M:RGuang.Utils.ULog.GetLogTrace">
+            <summary>
+            获取堆栈信息
+            </summary>
+            <returns>返回堆栈信息</returns>
+        </member>
+        <member name="M:RGuang.Utils.ULog.WriteToFile(System.String)">
+            <summary>
+            写日志内容到文件
+            </summary>
+            <param name="msg">要写的内容</param>
+        </member>
+        <member name="T:RGuang.Utils.ULoggerType">
+            <summary>
+            日志类型
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULoggerType.Unity">
+            <summary>
+            unity类型的日志
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULoggerType.Console">
+            <summary>
+            控制台类型的日志
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ULogColor">
+            <summary>
+            日志输出颜色
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ULoggerLevel">
+            <summary>
+            日志等级
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ULogConfig">
+            <summary>
+            ULog 配置
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.logLevel">
+            <summary>
+            日志启用等级
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.logPrefix">
+            <summary>
+            前缀标记【默认 #】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.enableTime">
+            <summary>
+            是否显示时间标记【默认true，显示】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.logSeparate">
+            <summary>
+            标记与日志具体内容间隔符号【默认 >>】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.enableThreadID">
+            <summary>
+            是否显示线程ID【默认true，显示】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.enableTrace">
+            <summary>
+            是否显示具体堆栈的消息【默认true，显示】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.enableSave">
+            <summary>
+            是否将日志保存下来【默认true，保存】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.enableCover">
+            <summary>
+            是否覆盖原有保存的日志【默认true，覆盖】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.loggerType">
+            <summary>
+            日志类型【默认LoggerType.Console】
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig._savePath">
+            <summary>
+            日志保存的路径【默认当前运行程序的更目录下Logs文件夹下】
+            </summary>
+        </member>
+        <member name="P:RGuang.Utils.ULogConfig.savePath">
+            <summary>
+            日志文件保存路径
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ULogConfig.saveName">
+            <summary>
+            日志文件保存的名字
+            </summary>
+        </member>
+        <member name="T:RGuang.Utils.ClassObjectPool">
+            <summary>
+            自定义类型对象池
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.#ctor(System.UInt32,System.UInt32)">
+            <param name="typeNum">对象种类数量</param>
+            <param name="poolMaxSize">每个对象池最大容量</param>
+        </member>
+        <member name="P:RGuang.Utils.ClassObjectPool.TypeNum">
+            <summary>
+            获取池内对象种类数量
+            </summary>
+        </member>
+        <member name="P:RGuang.Utils.ClassObjectPool.PoolMaxSize">
+            <summary>
+            获取池最大容量
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ClassObjectPool.mPool">
+            <summary>
+            key => 类型哈希码
+            </summary>
+        </member>
+        <member name="F:RGuang.Utils.ClassObjectPool.UnUsedCount">
+            <summary>
+            显示所有对象池限制对象
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.GetUnUsedCount``1">
+            <summary>
+            获取指定类型的对象池内对象数量，如果对象池不存在返回-1
+            </summary>
+            <typeparam name="T">指定类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.CreateObjectPool``1(System.Int32)">
+            <summary>
+            创建新对象池
+            </summary>
+            <typeparam name="T">对象类型</typeparam>
+            <param name="key">对象类型的HashCode作为key</param>
+            <returns>返回true则创建成功</returns>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.Get``1">
+            <summary>
+            取对象
+            </summary>
+            <typeparam name="T">对象类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.Release``1(System.Object)">
+            <summary>
+            还对象
+            </summary>
+            <param name="obj">要归还的对象</param>
+        </member>
+        <member name="M:RGuang.Utils.ClassObjectPool.Dispose">
+            <summary>
+            释放对象池资源
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Enqueue(`0)">
+            <summary>
+            进队列
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Enqueue(`0[])">
+            <summary>
+            进队列
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Enqueue(System.Collections.Generic.List{`0})">
+            <summary>
+            进队列
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Dequeue">
+            <summary>
+            移除并返回队列头部元素
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Peek">
+            <summary>
+            不移除并返回队列头部元素
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.IndexOf(`0)">
+            <summary>
+            获取元素的索引
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.RemoveAt(System.Int32)">
+            <summary>
+            移除指定索引的元素
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.RemoveItem(`0)">
+            <summary>
+            移除指定元素
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Clear">
+            <summary>
+            清空
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.Contains(`0)">
+            <summary>
+            是否包含指定元素
+            </summary>
+            <param name="item">指定元素</param>
+            <returns>true包含，false不包含</returns>
+        </member>
+        <member name="M:RGuang.Utils.UPriorityQueue`1.IsEmpty">
+            <summary>
+            队列是否为空
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.AsyncTimer.#ctor">
+            <summary>
+            实例化 AsyncTimer，运行在线程池
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.AsyncTimer.AddTask(System.UInt32,System.Action{System.Int32},System.Action{System.Int32},System.Int32)">
+            <summary>
+            添加定时任务
+            </summary>
+            <param name="delay">每次任务循环开始执行的延迟时间【单位毫秒】</param>
+            <param name="taskCallBack">任务执行时回调</param>
+            <param name="cancelCallBack">任务取消时回调</param>
+            <param name="count">指定任务循环多少次【默认1次, -1无限循环】</param>
+            <returns>返回该任务的id</returns>
+        </member>
+        <member name="M:RGuang.Utils.AsyncTimer.DelTask(System.Int32)">
+            <summary>
+            删除任务
+            </summary>
+            <param name="tid">要删除的任务的id</param>
+            <returns>删除成功返回true</returns>
+        </member>
+        <member name="M:RGuang.Utils.AsyncTimer.Reset">
+            <summary>
+            重置，停止并清理所有任务
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.FrameTimer.#ctor(System.UInt64)">
+            <summary>
+            实例一个定时器（需要使用者在外部用update驱动）
+            </summary>
+            <param name="frameID">默认帧id=0，任务循环中计算需要的帧id</param>
+        </member>
+        <member name="M:RGuang.Utils.FrameTimer.AddTask(System.UInt32,System.Action{System.Int32},System.Action{System.Int32},System.Int32)">
+            <summary>
+            添加一个定时任务
+            </summary>
+            <param name="delay">定时任务（每次循环)执行前延迟时间【毫秒】</param>
+            <param name="taskCallBack">任务执行时回调</param>
+            <param name="cancelCallBack">任务取消时回调</param>
+            <param name="count">任务循环执行次数【默认1次，-1表示无限次数】</param>
+            <returns>添加成功返回任务的唯一id</returns>
+        </member>
+        <member name="M:RGuang.Utils.FrameTimer.DelTask(System.Int32)">
+            <summary>
+            删除任务
+            </summary>
+            <param name="tid">要删除的任务的id</param>
+            <returns>删除成功返回true</returns>
+        </member>
+        <member name="M:RGuang.Utils.FrameTimer.Reset">
+            <summary>
+            重置清理定时任务
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.FrameTimer.UpdateTask">
+            <summary>
+            实例化FrameTimer后，使用者需在外部update调用此函数来驱动定时器
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            实例化timer，单线程轮询任务列表执行任务
+            </summary>
+            <param name="interval">任务驱动器每次驱动(任务列表轮询)的间隔时间【默认20，单位毫秒】</param>
+            <param name="setHandle">默认false，如果为true则需要使用者在外部update中调用
+            [HandleTask]驱动；如果为false，则tiemr内部update驱动</param>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.AddTask(System.UInt32,System.Action{System.Int32},System.Action{System.Int32},System.Int32)">
+            <summary>
+            添加定时任务
+            </summary>
+            <param name="delay">每次(循环)任务开始执行时的延时时间【单位毫秒】</param>
+            <param name="taskCallBack">任务执行时的回调</param>
+            <param name="cancelCallBack">任务取消时的回调</param>
+            <param name="count">指定该任务循环多少次【默认1次,-1无限次】</param>
+            <returns>返回该任务的id</returns>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.DelTask(System.Int32)">
+            <summary>
+            删除任务
+            </summary>
+            <param name="tid">要删除的任务的id</param>
+            <returns>返回true删除成功</returns>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.Reset">
+            <summary>
+            重置，停止并清理所有任务
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.UpdateTask">
+            <summary>
+            如果实例TickTimer定时器时，interval参数为0，则需要使用者外部update调用此函数来驱动定时器
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.TickTimer.HandleTask">
+            <summary>
+            如果实例TickTimer定时器时，setHandle参数为true，则需要使用者外部update调用此函数来驱动定时任务执行回调
+            </summary>
+        </member>
+        <member name="M:RGuang.Utils.UTimer.AddTask(System.UInt32,System.Action{System.Int32},System.Action{System.Int32},System.Int32)">
+            <summary>
+            添加、创建定时任务
+            </summary>
+            <param name="delay">定时任务</param>
+            <param name="taskCallBack">定时任务回调</param>
+            <param name="cancelCallBack">取消任务回调</param>
+            <param name="count">任务重复计数</param>
+            <returns>当前计时器唯一ID</returns>
+        </member>
+        <member name="M:RGuang.Utils.UTimer.DelTask(System.Int32)">
+            <summary>
+            删除定时任务
+            </summary>
+            <param name="tid">定时任务ID</param>
+            <returns>返回是否成功删除的结果</returns>
+        </member>
+        <member name="M:RGuang.Utils.UTimer.Reset">
+            <summary>
+            重置定时器
+            </summary>
+        </member>
+    </members>
+</doc>

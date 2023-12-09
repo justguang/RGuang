@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 
 /// <summary>
-/// 跳过 应用启动时 出现的unity logo
+/// 跳过 程序启动时 出现的unity logo
 /// 
 /// </summary>
 [UnityEngine.Scripting.Preserve]

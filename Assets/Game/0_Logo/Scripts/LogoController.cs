@@ -1,4 +1,6 @@
 using UnityEngine;
+using JustGuang;
+using System.Collections.Generic;
 
 namespace CardGame
 {
@@ -10,6 +12,7 @@ namespace CardGame
         private void Start()
         {
             _ani = transform.GetComponent<Animator>();
+
         }
 
         public void OnLogoCompleted()
@@ -19,3 +22,5 @@ namespace CardGame
     }
 
 }
+
+

@@ -71,7 +71,7 @@ namespace RGuang
     /// <summary>
     /// Log 配置
     /// </summary>
-    public class RLogConfig
+    public sealed class RLogConfig
     {
         /// <summary>
         /// 日志启用等级
@@ -254,7 +254,7 @@ namespace RGuang
     /// <summary>
     /// 日志工具核心类
     /// </summary>
-    public class RLog
+    public sealed class RLog
     {
         /// <summary>
         /// unity类型的输出日志

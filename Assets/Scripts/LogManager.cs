@@ -31,7 +31,6 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         if (!System.IO.Directory.Exists(logPath)) System.IO.Directory.CreateDirectory(logPath);
 #endif
 
-        
 
         RLogConfig cfg = new RLogConfig
         {

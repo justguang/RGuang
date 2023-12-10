@@ -309,7 +309,7 @@ MonoBehaviour:
   m_enableSave: 1
   m_enableSaveCover: 0
   m_saveFileName: lcg_1_CardGame.txt
-  m_saveFilePath: D:\workspace\lcg_a\Logs\ULog\
+  m_saveFilePath: D:\workspace\justguang\Logs\ULog\
 --- !u!1 &2076821547
 GameObject:
   m_ObjectHideFlags: 0

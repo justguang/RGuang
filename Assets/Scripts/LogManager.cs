@@ -14,7 +14,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     [Header("日志内容保存到文件"), SerializeField] bool m_enableSave;
     [Header("日志文件新内容覆盖原有内容"), SerializeField] bool m_enableSaveCover;
     [Header("日志文件名"), SerializeField] string m_saveFileName = "log.txt";
-    [Header("日志文件保存路劲"), SerializeField] string m_saveFilePath = @"D:\workspace\lcg_a\Logs\ULog\";
+    [Header("日志文件保存路劲"), SerializeField] string m_saveFilePath = @"D:\workspace\justguang\Logs\ULog\";
 
     readonly ULoggerType m_loggerType = ULoggerType.Unity;
 

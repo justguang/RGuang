@@ -4,6 +4,7 @@
 /// Description  ：  日志工具
 ///                  内有GC产生，适用于调试，如用在发布产品中建议优化
 ///********************************************/
+/// <summary>
 using System;
 using System.Diagnostics;
 using System.IO;

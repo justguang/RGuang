@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using UnityEngine;
 
-namespace JustGuang
+namespace RGuang
 {
     /// <summary>
     /// 图片加载 类

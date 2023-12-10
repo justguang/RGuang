@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace JustGuang
+namespace RGuang
 {
     /// <summary>
     /// 加密 解密类

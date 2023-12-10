@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace JustGuang
+namespace RGuang
 {
     /// <summary>
     /// 路径类

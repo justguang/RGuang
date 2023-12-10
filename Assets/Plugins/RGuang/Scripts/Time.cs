@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace JustGuang
+namespace RGuang
 {
     /// <summary>
     /// 时间类

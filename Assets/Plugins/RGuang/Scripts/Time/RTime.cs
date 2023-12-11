@@ -7,8 +7,10 @@ namespace RGuang
     /// 时间类
     /// 
     /// </summary>
-    public sealed class Time
+    public sealed class RTime
     {
+
+
         /// <summary>
         /// 获取单位为秒的 时间戳【获取失败返回-1】
         /// </summary>

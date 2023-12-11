@@ -1,6 +1,6 @@
 {
-	"name" : "rguang",
-	"version" : "0.1.0",
+	"name" : "com.justguang.rguang",
+	"version" : "0.1.1",
 	"displayName" : "RGuang",
 	"desscription" : "简单的自用功能工具",
 	"unity" : "2021.3",

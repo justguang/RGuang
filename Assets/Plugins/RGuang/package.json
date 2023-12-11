@@ -5,20 +5,10 @@
 	"desscription" : "简单的自用功能工具",
 	"unity" : "2021.3",
 	"license" : "MIT",
-	
-	"documentationUrl" : "",
-	"dependencies" : {
-		
-	},
-	"keywords" : {
-		"justguang",
-		"tool",
-		"rguang",
-	},
+	"keywords" : {"justguang","tool","rguang"},
 	"author" : {
 		"name" : "justguang",
 		"email" : "2320366520@qq.com",
 		"url" : "https://gitee.com/justguang/RGuang/tree/master/Assets/Plugins/RGuang"
 	}
-	
 }

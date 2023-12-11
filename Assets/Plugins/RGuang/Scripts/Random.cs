@@ -11,7 +11,7 @@ namespace RGuang
     {
 
         /// <summary>
-        ///  随机打乱一组数组
+        ///  洗牌
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="lst"></param>
@@ -32,7 +32,7 @@ namespace RGuang
         }
 
         /// <summary>
-        ///  随机打乱一组数组
+        ///  洗牌
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arr"></param>

@@ -56,6 +56,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         RLog.ColorLog(RLogColor.Cyan, $"日志等级{cfg.logLevel}");
         RLog.ColorLog(RLogColor.Cyan, $"日志保存路劲{cfg.savePath}");
         RLog.ColorLog(RLogColor.Cyan, $"日志文件名{cfg.saveName}");
+        RLog.ColorLog(RLogColor.Cyan, $"UnityEngine.Application.platform = {UnityEngine.Application.platform}");
     }
 
 }

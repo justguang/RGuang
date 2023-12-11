@@ -1,5 +1,5 @@
 {
-	"name" : "justguang.rguang",
+	"name" : "com.rguang",
 	"version" : "0.1.0",
 	"displayName" : "RGuang",
 	"desscription" : "简单的功能工具",
@@ -12,7 +12,8 @@
 	},
 	"keywords" : {
 		"justguang",
-		"tool"
+		"tool",
+		"rguang",
 	},
 	"author" : {
 		"name" : "justguang",

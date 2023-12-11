@@ -237,7 +237,7 @@ public class ClassObjectPool : IDisposable
                 }
                 else
                 {
-                    RGuang.Utils.ULog.Warn("获取大对象池数量达最大，{0}", _typeNum);
+                    Debug.LogWarning($"获取大对象池数量达最大，{_typeNum}");
                 }
             }
         }
@@ -277,7 +277,7 @@ public class ClassObjectPool : IDisposable
             else
             {
                 //对象池不存在...
-                RGuang.Utils.ULog.Warn("获取对象池不存在，对象类型:{0}", typeof(T));
+                Debug.LogWarning($"获取对象池不存在，对象类型:{typeof(T)}");
             }
         }
 
@@ -305,14 +305,14 @@ public class ClassObjectPool : IDisposable
                     }
                     else
                     {
-                        RGuang.Utils.ULog.Warn("获取对象池{0},数量达最大，{1}", typeof(T), _maxSize);
+                        Debug.LogWarning($"获取对象池{typeof(T)},数量达最大，{_maxSize}");
                     }
                 }
             }
         }
         else
         {
-            RGuang.Utils.ULog.Warn("归还对象池不存在，对象类型:{0}", typeof(T));
+            Debug.LogWarning($"归还对象池不存在，对象类型:{typeof(T)}");
         }
     }
 

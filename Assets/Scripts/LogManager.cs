@@ -6,6 +6,8 @@
 ///****************************************************************************
 using UnityEngine;
 using RGuang;
+using System.Collections;
+using System.Collections.Generic;
 
 public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 {
@@ -58,6 +60,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         RLog.ColorLog(RLogColor.Cyan, $"日志文件名{cfg.saveName}");
         RLog.ColorLog(RLogColor.Cyan, $"UnityEngine.Application.platform = {UnityEngine.Application.platform}");
     }
+
 
 }
 

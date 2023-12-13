@@ -9,20 +9,20 @@ namespace RGuang
         /// 如果不存在添加一个
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="eventHandler"></param>
-        /// <param name="addNewHandler"></param>
-        public static void AddHandlerIfNotExists<T>(ref T eventHandler, T addNewHandler) where T : Delegate
+        /// <param name="handlers"></param>
+        /// <param name="addHandler"></param>
+        public static void AddHandlerIfNotExists<T>(ref T handlers, T addHandler) where T : Delegate
         {
-            if (eventHandler == null) throw new ArgumentNullException(nameof(eventHandler));
-            if (addNewHandler == null) throw new ArgumentNullException(nameof(addNewHandler));
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
+            if (addHandler == null) throw new ArgumentNullException(nameof(addHandler));
 
-            var handlers = eventHandler.GetInvocationList();
+            var arr = handlers.GetInvocationList();
 
-            if (handlers.Length > 0 && !handlers.Contains(addNewHandler))
+            if (arr.Length > 0 && !arr.Contains(addHandler))
             {
                 try
                 {
-                    eventHandler = (T)Delegate.Combine(eventHandler, addNewHandler);
+                    handlers = (T)Delegate.Combine(handlers, addHandler);
                 }
                 catch (Exception e)
                 {
@@ -35,19 +35,19 @@ namespace RGuang
         /// 移除一个如果存在
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="eventHandler"></param>
+        /// <param name="handlers"></param>
         /// <param name="removeHandler"></param>
-        public static void RemoveHandlerIfExists<T>(ref T eventHandler, T removeHandler) where T : Delegate
+        public static void RemoveHandlerIfExists<T>(ref T handlers, T removeHandler) where T : Delegate
         {
-            if (eventHandler == null) throw new ArgumentNullException(nameof(eventHandler));
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
 
-            var handlers = eventHandler.GetInvocationList();
+            var arr = handlers.GetInvocationList();
 
-            if (handlers.Length > 0 && handlers.Contains(removeHandler))
+            if (arr.Length > 0 && arr.Contains(removeHandler))
             {
                 try
                 {
-                    eventHandler = (T)Delegate.Remove(eventHandler, removeHandler);
+                    handlers = (T)Delegate.Remove(handlers, removeHandler);
                 }
                 catch (Exception e)
                 {
@@ -60,18 +60,18 @@ namespace RGuang
         /// 移除所有
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="eventHandler"></param>
-        public static void RemoveAllHandlerFromEvent<T>(ref T eventHandler) where T : Delegate
+        /// <param name="handlers"></param>
+        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers) where T : Delegate
         {
-            if (eventHandler == null) throw new ArgumentNullException(nameof(eventHandler));
+            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
 
-            var handlers = eventHandler.GetInvocationList();
+            var arr = handlers.GetInvocationList();
 
-            for (int i = 0; i < handlers.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
                 try
                 {
-                    eventHandler = (T)Delegate.Remove(eventHandler, handlers[i]);
+                    handlers = (T)Delegate.Remove(handlers, arr[i]);
                 }
                 catch (Exception e)
                 {

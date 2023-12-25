@@ -33,6 +33,7 @@ namespace RGuang
         /// <param name="toRelease"></param>
         public static void Release(List<T> toRelease)
         {
+            if (toRelease == null) return;
             toRelease.Clear();
             if (_listStack.Contains(toRelease))
             {

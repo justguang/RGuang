@@ -62,5 +62,85 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     }
 
 
+    private void Start()
+    {
+        Test();
+    }
+
+    void Test()
+    {
+        float _014 = 0.14f;
+        float _015 = 0.15f;
+        float _016 = 0.16f;
+        float _024 = 0.24f;
+        float _025 = 0.25f;
+        float _026 = 0.26f;
+
+
+        float _14 = 1.4f;
+        float _15 = 1.5f;
+        float _16 = 1.6f;
+        float _24 = 2.4f;
+        float _25 = 2.5f;
+        float _26 = 2.6f;
+
+        RLog.Log("【-0.14】=> " + RMath.Round(_014, 1));
+        RLog.Log("【-0.15】=> " + RMath.Round(_015, 1));
+        RLog.Log("【-0.16】=> " + RMath.Round(_016, 1));
+        RLog.Log("");
+        RLog.Log("【-0.24】=> " + RMath.Round(_024, 1));
+        RLog.Log("【-0.25】=> " + RMath.Round(_025, 1));
+        RLog.Log("【-0.26】=> " + RMath.Round(_026, 1));
+        RLog.Log("");
+
+        RLog.Log("【-1.4】=> " + RMath.Round(_14, 0));
+        RLog.Log("【-1.5】=> " + RMath.Round(_15, 0));
+        RLog.Log("【-1.6】=> " + RMath.Round(_16, 0));
+        RLog.Log("");
+        RLog.Log("【-2.4】=> " + RMath.Round(_24, 0));
+        RLog.Log("【-2.5】=> " + RMath.Round(_25, 0));
+        RLog.Log("【-2.6】=> " + RMath.Round(_26, 0));
+        RLog.Log("");
+
+        RInt t1 = new RInt(0.120);
+        RInt t2 = new RInt(-1.930);
+        RInt t3 = new RInt(-0.120);
+        RInt t4 = new RInt(1.930);
+
+        RLog.Log($"【0.1】 {t1} RawInt=>" + t1.RawInt + "  RawFloat=>" + t1.RawFloat);
+        RLog.Log($"【1.53】 {t2} RawInt=>" + t2.RawInt + "  RawFloat=>" + t2.RawFloat);
+        RLog.Log($"【-0.1】 {t3} RawInt=>" + t3.RawInt + "  RawFloat=>" + t3.RawFloat);
+        RLog.Log($"【-1.53】{t4} RawInt=>" + t4.RawInt + "  RawFloat=>" + t4.RawFloat);
+        RLog.Log("");
+
+
+        var t1__2 = t1 + t2;
+        var t1_2 = t1 - t2;
+        var t1x2 = t1 * t2;
+        var t1xx2 = t1 / t2;
+        
+        RLog.Log($"【0.120 +  -1.530】{t1__2.ScaledValue}  RawInt=>{t1__2.RawInt}  RawFloat=>{t1__2.RawFloat} RawDouble=>{t1__2.RawDouble}");
+        RLog.Log($"【0.120 -  -1.530】{t1_2.ScaledValue}  RawInt=>{t1_2.RawInt}  RawFloat=>{t1_2.RawFloat} RawDouble=>{t1_2.RawDouble}");
+        RLog.Log($"【0.120 *  -1.530】{t1x2.ScaledValue}  RawInt=>{t1x2.RawInt}  RawFloat=>{t1x2.RawFloat} RawDouble=>{t1x2.RawDouble}");
+        RLog.Log($"【0.120 /  -1.530】{t1xx2.ScaledValue}  RawInt=>{t1xx2.RawInt}  RawFloat=>{t1xx2.RawFloat} RawDouble=>{t1xx2.RawDouble}");
+        RLog.Log("");
+        RLog.Log(" acosTable.count=> " + RAcosTable.Table.Length + " acosTable.IndexCount=> " + RAcosTable.IndexCount);
+        RLog.Log("");
+
+
+
+
+        RLog.Log("");
+
+
+
+
+        RLog.Log("");
+
+
+
+    }
+
 }
+
 

@@ -287,7 +287,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 9f9c43e147c9b447988e391fc1bc5530, type: 3}
+      m_Icon: {fileID: 2800000, guid: 84c0576c48590fc40ab1b099e4beff3d, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -927,7 +927,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0

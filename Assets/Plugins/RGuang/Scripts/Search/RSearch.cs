@@ -8,7 +8,7 @@ namespace RGuang
     /// 查找类
     /// 
     /// </summary>
-    public sealed class Search
+    public sealed class RSearch
     {
         /// <summary>
         /// 从一组中随机选一个元素

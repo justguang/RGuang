@@ -97,6 +97,12 @@ namespace RGuang
         /// </summary>
         /// <returns></returns>
         public static string GetABOutPath() => StreamingAssetPath + GetPlatformForAssetBundles(UnityEngine.Application.platform);
+        /// <summary>
+        /// 获得 AB 包输出路径
+        /// 【StreamingAssetPath/Windows】
+        /// </summary>
+        /// <returns></returns>
+        public static string GetABOutPath2Windows() => StreamingAssetPath + GetPlatformForAssetBundles(RuntimePlatform.WindowsPlayer);
 
         /// <summary>
         /// 返回 WWW 下载 AB 包加载路径

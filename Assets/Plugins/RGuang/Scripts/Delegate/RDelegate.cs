@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace RGuang
 {
-    public static class RDelegate
+    public sealed class RDelegate
     {
         /// <summary>
         /// 如果不存在添加一个

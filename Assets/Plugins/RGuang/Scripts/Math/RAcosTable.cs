@@ -11,7 +11,7 @@ namespace RGuang
     /// Acos数值查寻表
     /// 
     /// </summary>
-    public class RAcosTable
+    public sealed class RAcosTable
     {
         /// <summary>
         /// 查询表

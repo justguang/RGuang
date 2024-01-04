@@ -8,7 +8,7 @@ namespace RGuang
     /// 图片加载 类
     /// 
     /// </summary>
-    public sealed class LoadImg
+    public sealed class RLoadImg
     {
         public enum ImageType
         {
@@ -64,7 +64,7 @@ namespace RGuang
         private static byte[] _buffer = null;
         private static void FileInfo(string filePath, out byte[] bytes, out UnityEngine.Vector2 size)
         {
-            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath is Null");
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("无效的文件路径");
 
             size = UnityEngine.Vector2.zero;
             FileStream stream;

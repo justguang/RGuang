@@ -57,7 +57,7 @@ namespace RGuang
         /// 获得一串随机字符串【字符串包含大小写字母和数字】
         /// </summary>
         /// <param name="str_len">参数str_len指定获取的长度</param>
-        public static string Rand_Str(uint str_len)
+        public static string GetRandStrByLength(uint str_len)
         {
             byte[] b = new byte[4];
             new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);

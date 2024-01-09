@@ -55,8 +55,7 @@ namespace RGuang
                 }
             }
 
-            arr = handlers.GetInvocationList();
-            if (arr.Length == 0) handlers = default(T);
+            if (handlers == null || handlers.GetInvocationList().Length == 0) handlers = default(T);
         }
 
         /// <summary>

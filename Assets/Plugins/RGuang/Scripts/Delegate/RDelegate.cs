@@ -54,8 +54,6 @@ namespace RGuang
                     UnityEngine.Debug.LogError($"移除错误：{e.Message}");
                 }
             }
-
-            if (handlers == null || handlers.GetInvocationList().Length == 0) handlers = default(T);
         }
 
         /// <summary>
@@ -80,7 +78,6 @@ namespace RGuang
                     UnityEngine.Debug.LogError($"移除错误：{e.Message}");
                 }
             }
-            handlers = default(T);
         }
 
 

@@ -17,12 +17,13 @@ namespace RGuang
         /// <summary>
         /// 出栈：获取一个List对象
         /// </summary>
+        /// <param name="capacity">初始容量【默认8】</param>
         /// <returns></returns>
-        public static List<T> Get()
+        public static List<T> Get(int capacity = 8)
         {
             if (_listStack.Count == 0)
             {
-                return new List<T>(8);
+                return new List<T>(capacity);
             }
             return _listStack.Pop();
         }
@@ -30,7 +31,7 @@ namespace RGuang
         /// <summary>
         /// 入栈：将List对象Clear并回收到栈中
         /// </summary>
-        /// <param name="toRelease"></param>
+        /// <param name="toRelease">回收对象</param>
         public static void Release(List<T> toRelease)
         {
             if (toRelease == null) return;

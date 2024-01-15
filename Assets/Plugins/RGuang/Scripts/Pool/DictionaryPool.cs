@@ -17,12 +17,13 @@ namespace RGuang
         /// <summary>
         /// 出栈：从栈中获取某个字典数据
         /// </summary>
+        /// <param name="capacity">初始容量【默认8】</param>
         /// <returns></returns>
-        public static Dictionary<TKey, TValue> Get()
+        public static Dictionary<TKey, TValue> Get(int capacity = 8)
         {
             if (_listStack.Count == 0)
             {
-                return new Dictionary<TKey, TValue>(8);
+                return new Dictionary<TKey, TValue>(capacity);
             }
             return _listStack.Pop();
         }
@@ -30,7 +31,7 @@ namespace RGuang
         /// <summary>
         /// 入栈：将字典Clear并存储到栈中 
         /// </summary>
-        /// <param name="toRelease"></param>
+        /// <param name="toRelease">回收对象</param>
         public static void Release(Dictionary<TKey, TValue> toRelease)
         {
             if (toRelease == null) return;
@@ -54,10 +55,10 @@ namespace RGuang
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
-        /// <param name="toRelease"></param>
-        public static void Release2Pool<TKey, TValue>(this Dictionary<TKey, TValue> toRelease)
+        /// <param name="self"></param>
+        public static void Release2Pool<TKey, TValue>(this Dictionary<TKey, TValue> self)
         {
-            DictionaryPool<TKey, TValue>.Release(toRelease);
+            DictionaryPool<TKey, TValue>.Release(self);
         }
     }
 

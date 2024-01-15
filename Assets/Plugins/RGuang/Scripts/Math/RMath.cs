@@ -54,6 +54,7 @@ namespace RGuang
         #endregion
 
 
+        #region RInt
 
         /// <summary>
         /// 如果值小于(大于) 最小(最大)限定值 就返回最小(最大)限定值，否直返回值本身
@@ -78,6 +79,17 @@ namespace RGuang
         /// <param name="max">限定最大值</param>
         /// <returns>如果值大于限定最大值返回限定最小值，否则返回值本身</returns>
         public static RInt Max(RInt value, RInt max) => RInt.Max(value, max);
+        #endregion
+
+        /// <summary>
+        /// 随机 1 or -1
+        /// </summary>
+        public static int GetOneOrMinuseOne => UnityEngine.Random.Range(0, 2) * 2 - 1;
+
+        /// <summary>
+        /// 随机 true or false
+        /// </summary>
+        public static bool GetTrueOrFalse => UnityEngine.Random.Range(0, 2) == 1;
 
     }
 

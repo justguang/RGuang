@@ -8,7 +8,7 @@ namespace RGuang
     /// 读取excel
     /// 
     /// </summary>
-    public sealed class RExcel
+    public static class RExcel
     {
         /// <summary>
         /// 读取excel文件内容

@@ -8,7 +8,7 @@ namespace RGuang
     /// 图片加载 类
     /// 
     /// </summary>
-    public sealed class RLoadImg
+    public static class RLoadImg
     {
         public enum ImageType
         {

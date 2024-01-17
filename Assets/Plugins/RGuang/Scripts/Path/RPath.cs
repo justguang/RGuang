@@ -9,7 +9,7 @@ namespace RGuang
     /// 路径类
     /// 
     /// </summary>
-    public sealed class RPath
+    public static class RPath
     {
 
         /// <summary>

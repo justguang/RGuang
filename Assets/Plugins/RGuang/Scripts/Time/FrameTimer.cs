@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace RGuang
 {
-    public class FrameTimer : RTimer
+    public sealed class FrameTimer : RTimer
     {
         private ulong currentFrame = 0;//当前处于多少帧
         private readonly Dictionary<int, FrameTask> taskDic;
@@ -27,6 +27,7 @@ namespace RGuang
             currentFrame = frameID;
             taskDic = new Dictionary<int, FrameTask>();
             tidCompleteList = new List<int>();
+
         }
 
         /// <summary>

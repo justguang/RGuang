@@ -7,7 +7,7 @@ namespace RGuang
     /// 贝塞尔曲线
     /// 
     /// </summary>
-    public sealed class RBezierCurve
+    public static class RBezierCurve
     {
         /// <summary>
         /// bezier

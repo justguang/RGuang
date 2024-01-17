@@ -3,7 +3,7 @@ using System;
 
 namespace RGuang
 {
-    public sealed class RMath
+    public static class RMath
     {
         #region 四舍五入
         /*

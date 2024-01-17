@@ -7,7 +7,7 @@ namespace RGuang
     /// 随机类
     /// 
     /// </summary>
-    public sealed class Random
+    public static class Random
     {
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace RGuang
             if (arr == null) throw new ArgumentNullException();
 
             System.Random rand = new System.Random();
-            for (int i = arr.Length- 1; i >= 0; i--)
+            for (int i = arr.Length - 1; i >= 0; i--)
             {
                 int j = rand.Next(i + 1);
                 T tmp = arr[i];

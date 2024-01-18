@@ -6,7 +6,7 @@ namespace RGuang
     /// <summary>
     /// 对象工厂
     /// </summary>
-    public class ObjectFactory
+    public static class ObjectFactory
     {
         /// <summary>
         /// 动态创建类的实例：创建有参的构造函数

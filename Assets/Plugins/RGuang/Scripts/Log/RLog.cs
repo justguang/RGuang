@@ -82,13 +82,13 @@ namespace RGuang
         /// </summary>
         public string logPrefix = "#";
         /// <summary>
-        /// 是否显示时间标记【默认true，显示】
-        /// </summary>
-        public bool enableTime = true;
-        /// <summary>
         /// 标记与日志具体内容间隔符号【默认 >>】
         /// </summary>
         public string logSeparate = ">";
+        /// <summary>
+        /// 是否显示时间标记【默认true，显示】
+        /// </summary>
+        public bool enableTime = true;
         /// <summary>
         /// 是否显示线程ID【默认true，显示】
         /// </summary>

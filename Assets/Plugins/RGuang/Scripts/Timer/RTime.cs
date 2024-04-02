@@ -7,7 +7,7 @@ namespace RGuang
     /// 时间类
     /// 
     /// </summary>
-    public sealed class RTime
+    public static class RTime
     {
 
 

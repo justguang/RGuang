@@ -1,6 +1,5 @@
 ///********************************************
 /// ClassName    ：  IOCPTokenPool
-/// Author       ：  LCG
 /// Description  ：  IOCP会话连接token缓存池
 ///********************************************/
 /// </summary>

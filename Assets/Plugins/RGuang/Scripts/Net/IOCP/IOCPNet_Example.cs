@@ -1,7 +1,6 @@
 /// <summary>
 ///********************************************
 /// ClassName    ：  UIOCPNet_Example
-/// Author       ：  LCG
 /// Description  ：  Example
 ///********************************************/
 /// </summary>

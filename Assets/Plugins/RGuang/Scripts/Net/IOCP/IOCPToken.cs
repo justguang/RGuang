@@ -1,8 +1,6 @@
 /// <summary>
 ///********************************************
 /// ClassName    ：  IOCPToken
-/// Author       ：  LCG
-/// CreateTime   ：  2022/6/20 星期一
 /// Description  ：  IOCP连接会话Token(session)
 ///********************************************/
 /// </summary>

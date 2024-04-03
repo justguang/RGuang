@@ -1,13 +1,12 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.CSharp;
 
 namespace RGuang.Operation
 {
     public static class Dynamic
     {
+
         /// <summary>
         /// 动态读取指定路径下所有脚本文件，编译并加载
         /// </summary>
@@ -16,20 +15,37 @@ namespace RGuang.Operation
         /// <param name="errorCallback">编译加载失败的回调</param>
         /// <param name="fileNamePrefix">加载的文件名字前几个字符限制要求，默认空</param>
         /// <param name="fileNameSuffix">加载的文件名字后缀几个字符限制要求，默认空</param>
-        public static void DynamicLoadCSharpScripts(string filePath, 
-                                                Action<Type[]> loadTypeCallback, Action<object> errorCallback,
-                                                string fileNamePrefix = null, string fileNameSuffix = null)
+        /// <param name="addReferencedAssemblies">
+        /// 编译需要引入的程序集
+        /// eg:new string[]
+        /// {
+        ///     "UnityEngine.CoreModule.dll",
+        ///     typeof(TEnum.BuffEnum).Assembly.Location,
+        ///     typeof(BUFFAttribute).Assembly.Location
+        /// }
+        /// </param>
+        public static void DynamicLoadCSharpScripts(string filePath,
+                                                        Action<Type[]> loadTypeCallback, Action<object> errorCallback,
+                                                        string fileNamePrefix = null, string fileNameSuffix = null, params string[] addReferencedAssemblies)
         {
+
+
             // 创建CSharpCodeProvider对象
-            CSharpCodeProvider provider = new CSharpCodeProvider();
+            Microsoft.CSharp.CSharpCodeProvider provider = new Microsoft.CSharp.CSharpCodeProvider();
 
             // 编译参数
-            CompilerParameters compilerParams = new CompilerParameters();
+            System.CodeDom.Compiler.CompilerParameters compilerParams = new System.CodeDom.Compiler.CompilerParameters();
             compilerParams.GenerateInMemory = true;  // 在内存中生成编译结果
 
             //引入需要的程序集
-            compilerParams.ReferencedAssemblies.Add("mscorlib.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Core.dll");
+            compilerParams.ReferencedAssemblies.AddRange(new string[] { "mscorlib.dll", "System.Core.dll" });
+            if (addReferencedAssemblies != null && addReferencedAssemblies.Length > 0)
+            {
+                compilerParams.ReferencedAssemblies.AddRange(addReferencedAssemblies);
+            }
+
+            //compilerParams.ReferencedAssemblies.Add("mscorlib.dll");
+            //compilerParams.ReferencedAssemblies.Add("System.Core.dll");
             //compilerParams.ReferencedAssemblies.Add("UnityEngine.CoreModule.dll");
 
             var dir = new DirectoryInfo(filePath);
@@ -49,7 +65,8 @@ namespace RGuang.Operation
                 fullNameLst.Add(tmpFullName);
             }
 
-            CompilerResults resultArr = provider.CompileAssemblyFromFile(compilerParams, fullNameLst.ToArray());
+
+            System.CodeDom.Compiler.CompilerResults resultArr = provider.CompileAssemblyFromFile(compilerParams, fullNameLst.ToArray());
 
 
             if (resultArr.Errors.HasErrors)
@@ -75,6 +92,8 @@ namespace RGuang.Operation
                 */
 
             }
+
+
         }
 
     }

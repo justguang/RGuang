@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c8a4749d0c3e048ba7e6c513783278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_logLevel: -1
+  m_logLevel: 22
   m_logPrefix: '#'
   m_logSeparate: '>>'
   m_enableTime: 1
@@ -395,9 +395,9 @@ MonoBehaviour:
   m_enableTrace: 0
   m_enableSave: 1
   m_enableSaveCover: 1
-  m_saveFilePath: D:/workspace/RGuang/Assets/StreamingAssets/RLog/
-  m_saveFileName: log.txt
-  img: {fileID: 1680484767}
+  m_saveFilePath: 
+  m_saveFileName: 
+  img: {fileID: 0}
 --- !u!1 &2076821547
 GameObject:
   m_ObjectHideFlags: 0

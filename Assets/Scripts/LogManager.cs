@@ -1,6 +1,4 @@
 ///****************************************************************************
-/// @author  	：                                                          
-/// @date    	：                                                                 
 /// @fileName   ： LogManager.cs                                                                
 /// @description： 日志配置管理                                                                                      
 ///****************************************************************************
@@ -8,18 +6,25 @@ using UnityEngine;
 using RGuang;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 {
     [Header("启用日志等级"), SerializeField] RLoggerLevel m_logLevel;
-    [Header("日志内容显示时间"), SerializeField] bool m_enableTime;
-    [Header("日志内容显示线程ID"), SerializeField] bool m_enableThreadID;
-    [Header("日志内容保存到文件"), SerializeField] bool m_enableSave;
-    [Header("日志文件新内容覆盖原有内容"), SerializeField] bool m_enableSaveCover;
+    [Header("日志内容前缀标记字符"), SerializeField] string m_logPrefix = "#";
+    [Header("日志内容前缀标记字符与日志内容间隔符号"), SerializeField] string m_logSeparate = ">>";
+    [Header("日志内容显示时间"), SerializeField] bool m_enableTime = true;
+    [Header("日志内容显示线程ID"), SerializeField] bool m_enableThreadID = true;
+    [Header("日志内容显示堆栈信息"), SerializeField] bool m_enableTrace = false;
+
+    [Header("日志内容保存成日志文件"), SerializeField] bool m_enableSave = false;
+    [Header("日志文件新内容覆盖原有内容"), SerializeField] bool m_enableSaveCover = true;
+    [Header("日志文件保存路劲"), SerializeField] string m_saveFilePath = RGuang.RPath.StreamingAssetPath + "RLog/";
     [Header("日志文件名"), SerializeField] string m_saveFileName = "log.txt";
-    [Header("日志文件保存路劲"), SerializeField] string m_saveFilePath = @"D:\workspace\RGuang\Logs\RLog\";
 
     readonly RLoggerType m_loggerType = RLoggerType.Unity;
+
+
 
 
     protected override void Awake()
@@ -29,7 +34,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 #if UNITY_EDITOR
         if (!System.IO.Directory.Exists(m_saveFilePath)) System.IO.Directory.CreateDirectory(m_saveFilePath);
 #else
-        string logPath = PathUtils.Path_StreamingAssets + "/RLog/";
+        string logPath = RGuang.RPath.StreamingAssetPath + "RLog/";
         if (!System.IO.Directory.Exists(logPath)) System.IO.Directory.CreateDirectory(logPath);
 #endif
 
@@ -37,13 +42,16 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         RLogConfig cfg = new RLogConfig
         {
             logLevel = m_logLevel,
+            logPrefix = m_logPrefix,
+            logSeparate = m_logSeparate,
 
             enableTime = m_enableTime,
             enableThreadID = m_enableThreadID,
 
-            saveName = m_saveFileName,
+            enableTrace = m_enableTrace,
             enableSave = m_enableSave,
             enableCover = m_enableSaveCover,
+            saveName = m_saveFileName,
 
 #if UNITY_EDITOR
             savePath = m_saveFilePath,
@@ -65,10 +73,27 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     private void Start()
     {
         Test();
+        TestLoadImg();
     }
+
+    #region 测试加载图片
+    [SerializeField] private UnityEngine.SpriteRenderer img;
+    void TestLoadImg()
+    {
+        if (img == null) return;
+        string _path = @"E:\My\Image\jg2.png";
+        var testImg = RGuang.RLoadImg.GetSpriteFromFile(_path);
+        img.sprite = testImg;
+
+    }
+
+    #endregion
+
 
     void Test()
     {
+
+
         float _014 = 0.14f;
         float _015 = 0.15f;
         float _016 = 0.16f;
@@ -118,7 +143,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         var t1_2 = t1 - t2;
         var t1x2 = t1 * t2;
         var t1xx2 = t1 / t2;
-        
+
         RLog.Log($"【0.120 +  -1.530】{t1__2.ScaledValue}  RawInt=>{t1__2.RawInt}  RawFloat=>{t1__2.RawFloat} RawDouble=>{t1__2.RawDouble}");
         RLog.Log($"【0.120 -  -1.530】{t1_2.ScaledValue}  RawInt=>{t1_2.RawInt}  RawFloat=>{t1_2.RawFloat} RawDouble=>{t1_2.RawDouble}");
         RLog.Log($"【0.120 *  -1.530】{t1x2.ScaledValue}  RawInt=>{t1x2.RawInt}  RawFloat=>{t1x2.RawFloat} RawDouble=>{t1x2.RawDouble}");

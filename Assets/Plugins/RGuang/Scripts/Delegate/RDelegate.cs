@@ -14,12 +14,15 @@ namespace RGuang
         /// <param name="addError"></param>
         public static void AddHandlerIfNotExists<T>(ref T handlers, T addHandler, Action<string> addError = null) where T : Delegate
         {
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             if (addHandler == null) throw new ArgumentNullException(nameof(addHandler));
+            if (handlers == null)
+            {
+                handlers = addHandler;
+                return;
+            }
 
             var arr = handlers.GetInvocationList();
-
-            if (arr.Length > 0 && !arr.Contains(addHandler))
+            if (!arr.Contains(addHandler))
             {
                 try
                 {
@@ -45,7 +48,7 @@ namespace RGuang
 
             var arr = handlers.GetInvocationList();
 
-            if (arr.Length > 0 && arr.Contains(removeHandler))
+            if (arr.Contains(removeHandler))
             {
                 try
                 {
@@ -66,7 +69,7 @@ namespace RGuang
         /// <param name="removeAllError"></param>
         public static void RemoveAllHandlerFromDelegate<T>(ref T handlers, Action<string> removeAllError) where T : Delegate
         {
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
+            if (handlers == null) return;
 
             var arr = handlers.GetInvocationList();
 

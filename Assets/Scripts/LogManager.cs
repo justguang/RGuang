@@ -7,7 +7,6 @@ using RGuang;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using RGuang.Operation;
 
 public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 {
@@ -75,7 +74,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     private void Start()
     {
         string _path = @"D:\workspace\Creator\Build\Data_Comm\";
-        Dynamic.DynamicLoadCSharpScripts(_path, null, null);
+        //Dynamic.DynamicLoadCSharpScripts(_path, null, null);
         Test();
         //TestLoadImg();
     }

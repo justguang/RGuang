@@ -11,7 +11,8 @@ namespace RGuang
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
         /// <param name="addHandler"></param>
-        public static void AddHandlerIfNotExists<T>(ref T handlers, T addHandler) where T : Delegate
+        /// <param name="addError"></param>
+        public static void AddHandlerIfNotExists<T>(ref T handlers, T addHandler, Action<string> addError = null) where T : Delegate
         {
             if (handlers == null) throw new ArgumentNullException(nameof(handlers));
             if (addHandler == null) throw new ArgumentNullException(nameof(addHandler));
@@ -26,7 +27,7 @@ namespace RGuang
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogError($"添加错误：{e.Message}");
+                    addError?.Invoke(e.Message);
                 }
             }
         }
@@ -37,7 +38,8 @@ namespace RGuang
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
         /// <param name="removeHandler"></param>
-        public static void RemoveHandlerIfExists<T>(ref T handlers, T removeHandler) where T : Delegate
+        /// <param name="removeError"></param>
+        public static void RemoveHandlerIfExists<T>(ref T handlers, T removeHandler, Action<string> removeError = null) where T : Delegate
         {
             if (handlers == null) throw new ArgumentNullException(nameof(handlers));
 
@@ -51,7 +53,7 @@ namespace RGuang
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogError($"移除错误：{e.Message}");
+                    removeError?.Invoke(e.Message);
                 }
             }
         }
@@ -61,7 +63,8 @@ namespace RGuang
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
-        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers) where T : Delegate
+        /// <param name="removeAllError"></param>
+        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers, Action<string> removeAllError) where T : Delegate
         {
             if (handlers == null) throw new ArgumentNullException(nameof(handlers));
 
@@ -75,7 +78,7 @@ namespace RGuang
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogError($"移除错误：{e.Message}");
+                    removeAllError?.Invoke(e.Message);
                 }
             }
         }

@@ -19,7 +19,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     [Header("日志内容显示堆栈信息"), SerializeField] bool m_enableTrace = false;
 
     [Header("日志内容保存成日志文件"), SerializeField] bool m_enableSave = false;
-    [Header("日志文件新内容覆盖原有内容"), SerializeField] bool m_enableSaveCover = true;
+    [Header("日志文件新内容覆盖原有内容"), SerializeField] bool m_enableSaveCover = false;
     [Header("日志文件保存路劲"), SerializeField] string m_saveFilePath = string.Empty;
     [Header("日志文件名"), SerializeField] string m_saveFileName = string.Empty;
 
@@ -32,20 +32,17 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     {
         base.Awake();
 
+#if UNITY_EDITOR
         if (string.IsNullOrWhiteSpace(m_saveFilePath))
         {
             int index = RGuang.RPath.StreamingAssetPath.LastIndexOf("/", RGuang.RPath.StreamingAssetPath.Length - 20);
             m_saveFilePath = RGuang.RPath.StreamingAssetPath.Substring(0, index) + "/Logs/RLog/";
         }
-
-        if (string.IsNullOrWhiteSpace(m_saveFileName)) m_saveFileName = "log.txt";
-
-#if UNITY_EDITOR
-        if (!System.IO.Directory.Exists(m_saveFilePath)) System.IO.Directory.CreateDirectory(m_saveFilePath);
 #else
-        string logPath = RGuang.RPath.StreamingAssetPath. + "/RLog/";
-        if (!System.IO.Directory.Exists(logPath)) System.IO.Directory.CreateDirectory(logPath);
+        if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = RGuang.RPath.StreamingAssetPath + "RLog/";
 #endif
+        if (string.IsNullOrWhiteSpace(m_saveFileName)) m_saveFileName = "log.txt";
+        if (!System.IO.Directory.Exists(m_saveFilePath)) System.IO.Directory.CreateDirectory(m_saveFilePath);
 
 
         RLogConfig cfg = new RLogConfig
@@ -62,11 +59,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
             enableCover = m_enableSaveCover,
             saveName = m_saveFileName,
 
-#if UNITY_EDITOR
             savePath = m_saveFilePath,
-#else
-            savePath = logPath,
-#endif
             loggerType = m_loggerType,
         };
 
@@ -84,7 +77,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
         string _path = @"D:\workspace\Creator\Build\Data_Comm\";
         Dynamic.DynamicLoadCSharpScripts(_path, null, null);
         Test();
-        TestLoadImg();
+        //TestLoadImg();
     }
 
     #region 测试加载图片
@@ -100,11 +93,8 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 
     #endregion
 
-
     void Test()
     {
-
-
         float _014 = 0.14f;
         float _015 = 0.15f;
         float _016 = 0.16f;

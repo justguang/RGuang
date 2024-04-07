@@ -20,7 +20,7 @@ namespace RGuang
         /// </summary>
         /// <param name="path"></param>
         /// <param name="EncrptyKey"></param>
-        public static void AESFileEncrypt(string path, string EncrptyKey)
+        public static void AESFileEncrypt(string path, string EncrptyKey, Action<string> logCallback = null, Action<string> errorCallback = null)
         {
             if (!File.Exists(path))
                 return;
@@ -37,9 +37,7 @@ namespace RGuang
                         string headTag = Encoding.UTF8.GetString(headBuff);
                         if (headTag == AESHead)
                         {
-#if UNITY_EDITOR
-                            Debug.Log(path + "已经加密过了！");
-#endif
+                            errorCallback?.Invoke(path + "已经加密过了！");
                             return;
                         }
                         //加密并且写入字节头
@@ -52,13 +50,13 @@ namespace RGuang
                         fs.Write(headBuffer, 0, headBuffer.Length);
                         byte[] EncBuffer = AESEncrypt(buffer, EncrptyKey);
                         fs.Write(EncBuffer, 0, EncBuffer.Length);
-                        Debug.Log(fs.Length);
+                        logCallback?.Invoke(fs.Length.ToString());
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                errorCallback?.Invoke(e.Message);
             }
         }
 
@@ -67,7 +65,7 @@ namespace RGuang
         /// </summary>
         /// <param name="path"></param>
         /// <param name="EncrptyKey"></param>
-        public static void AESFileDecrypt(string path, string EncrptyKey)
+        public static void AESFileDecrypt(string path, string EncrptyKey, Action<string> logCallback = null, Action<string> errorCallback = null)
         {
             if (!File.Exists(path))
             {
@@ -90,14 +88,14 @@ namespace RGuang
                             fs.SetLength(0);
                             byte[] DecBuffer = AESDecrypt(buffer, EncrptyKey);
                             fs.Write(DecBuffer, 0, DecBuffer.Length);
-                            Debug.Log(fs.Length);
+                            logCallback?.Invoke(fs.Length.ToString());
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                errorCallback?.Invoke(e.Message);
             }
         }
 
@@ -105,7 +103,7 @@ namespace RGuang
         /// 文件界面，传入文件路径，返回字节
         /// </summary>
         /// <returns></returns>
-        public static byte[] AESFileByteDecrypt(string path, string EncrptyKey)
+        public static byte[] AESFileByteDecrypt(string path, string EncrptyKey, Action<string> logCallback = null, Action<string> errorCallback = null)
         {
             if (!File.Exists(path))
             {
@@ -131,7 +129,7 @@ namespace RGuang
                         }
                         else
                         {
-                            Debug.Log(headTag + "||||" + AESHead);
+                            logCallback?.Invoke(headTag + "||||" + AESHead);
                         }
                     }
 
@@ -141,7 +139,7 @@ namespace RGuang
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                errorCallback?.Invoke(e.Message);
             }
 
             return DecBuffer;

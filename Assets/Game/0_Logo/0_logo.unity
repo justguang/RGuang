@@ -394,7 +394,7 @@ MonoBehaviour:
   m_enableThreadID: 1
   m_enableTrace: 0
   m_enableSave: 1
-  m_enableSaveCover: 1
+  m_enableSaveCover: 0
   m_saveFilePath: 
   m_saveFileName: 
   img: {fileID: 0}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -58,7 +59,7 @@ namespace RGuang
         /// </summary>
         /// <param name="platform"></param>
         /// <returns></returns>
-        public static string GetPlatformForAssetBundles(RuntimePlatform platform)
+        public static string GetPlatformForAssetBundles(RuntimePlatform platform, Action<string> getError = null)
         {
             switch (platform)
             {
@@ -84,7 +85,7 @@ namespace RGuang
                 // Add more build targets for your own.
                 // If you add more targets, don't forget to add the same platforms to GetPlatformForAssetBundles(RuntimePlatform) function.
                 default:
-                    UnityEngine.Debug.LogError($"未处理的运行平台：{platform}");
+                    getError?.Invoke($"未处理的运行平台：{platform}");
                     return null;
             }
         }

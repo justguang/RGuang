@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,12 +16,12 @@ namespace RGuang
         /// <param name="t"></param>
         /// <param name="controlP">0：起始点 1：控制点1 2：控制点2 3：重点</param>
         /// <returns></returns>
-        private static Vector2 ThirdOrderBezierCurve(float t, Vector2[] controlP)
+        private static Vector2 ThirdOrderBezierCurve(float t, Vector2[] controlP, Action<string> errorCallback = null)
         {
             Vector2 res = new Vector2();
             if (controlP.Length != 4)
             {
-                Debug.LogWarning("三阶贝塞尔坐标需要4个点。");
+                errorCallback?.Invoke("三阶贝塞尔坐标需要4个点。");
                 return res;
             }
 
@@ -48,11 +49,11 @@ namespace RGuang
         /// </summary>
         /// <param name="originPoint">0：起始点 1：控制点 2：终点</param>
         /// <param name="stepNum">需要获取Vector的数量</param>
-        public static void GetBezierCurveForThirdOrder(Vector2[] originPoint, int stepNum, ref List<Vector2> result)
+        public static void GetBezierCurveForThirdOrder(Vector2[] originPoint, int stepNum, ref List<Vector2> result, Action<string> errorCallback = null)
         {
             if (originPoint.Length != 4)
             {
-                Debug.LogWarning("三阶贝塞尔坐标需要4个点。");
+                errorCallback?.Invoke("三阶贝塞尔坐标需要4个点。");
                 return;
             }
 

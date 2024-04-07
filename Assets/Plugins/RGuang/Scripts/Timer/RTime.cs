@@ -14,7 +14,7 @@ namespace RGuang
         /// <summary>
         /// 获取单位为秒的 时间戳【获取失败返回-1】
         /// </summary>
-        public static long GetTimeStampSecond()
+        public static long GetTimeStampSecond(Action<string> errorCallback = null)
         {
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             try
@@ -23,14 +23,14 @@ namespace RGuang
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                errorCallback?.Invoke(e.Message);
                 return -1;
             }
         }
         /// <summary>
         /// 获取单位为毫秒的 时间戳【获取失败返回-1】
         /// </summary>
-        public static long GetTimeStampMilliSecond()
+        public static long GetTimeStampMilliSecond(Action<string> errorCallback = null)
         {
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             try
@@ -39,7 +39,7 @@ namespace RGuang
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                errorCallback?.Invoke(e.Message);
                 return -1;
             }
         }

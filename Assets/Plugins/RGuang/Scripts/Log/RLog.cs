@@ -643,10 +643,13 @@ namespace RGuang
         {
             if (!cfg.enableSave) return;
 
+
             //覆盖原有日志
             if (cfg.enableCover)
             {
-                string coverPath = cfg.savePath + cfg.saveName;
+                string prefix = DateTime.Now.ToString("yyyy-MM-dd@");
+                string fileName = prefix + cfg.saveName;
+                string coverPath = cfg.savePath + fileName;
                 try
                 {
                     if (Directory.Exists(cfg.savePath))
@@ -670,10 +673,9 @@ namespace RGuang
             }
             else
             {
-                //不覆盖原有日志内容
-
-                string prefix = DateTime.Now.ToString("yyyy-MM-dd@");
+                string prefix = DateTime.Now.ToString("yyyy-MM-dd[HH]@");
                 string fileName = prefix + cfg.saveName;
+                //不覆盖原有日志内容
                 try
                 {
                     if (!Directory.Exists(cfg.savePath))

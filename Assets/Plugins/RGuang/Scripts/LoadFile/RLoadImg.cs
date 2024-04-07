@@ -24,14 +24,14 @@ namespace RGuang
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>可能为null</returns>
-        public static UnityEngine.Texture2D GetTexture2DFromFile(string filePath)
+        public static UnityEngine.Texture2D GetTexture2DFromFile(string filePath, Action<string> errorCallback = null)
         {
             byte[] bytes;
             UnityEngine.Vector2 size;
             FileInfo(filePath, out bytes, out size);
             if (bytes == null || size.Equals(UnityEngine.Vector2.zero))
             {
-                Debug.LogError($"filePath:{filePath} 加载失败,请确认目标资源存在,且格式为png");
+                errorCallback?.Invoke($"filePath:{filePath} 加载失败,请确认目标资源存在,且格式为png");
                 return null;
             }
 

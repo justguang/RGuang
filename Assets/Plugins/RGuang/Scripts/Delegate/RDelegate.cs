@@ -14,7 +14,13 @@ namespace RGuang
         /// <param name="addError"></param>
         public static void AddHandlerIfNotExists<T>(ref T handlers, T addHandler, Action<string> addError = null) where T : Delegate
         {
-            if (addHandler == null) throw new ArgumentNullException(nameof(addHandler));
+            if (addHandler == null)
+            {
+                addError?.Invoke($"添加错误，要添加项不可为空：{typeof(T)}");
+
+                return;
+            }
+
             if (handlers == null)
             {
                 handlers = addHandler;
@@ -44,7 +50,13 @@ namespace RGuang
         /// <param name="removeError"></param>
         public static void RemoveHandlerIfExists<T>(ref T handlers, T removeHandler, Action<string> removeError = null) where T : Delegate
         {
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
+            if (handlers == null)
+            {
+                removeError?.Invoke($"移除错误，移除源为空：{typeof(T)}");
+
+                return;
+            }
+
 
             var arr = handlers.GetInvocationList();
 
@@ -67,9 +79,15 @@ namespace RGuang
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
         /// <param name="removeAllError"></param>
-        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers, Action<string> removeAllError) where T : Delegate
+        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers, Action<string> removeAllError = null) where T : Delegate
         {
-            if (handlers == null) return;
+            if (handlers == null)
+            {
+                removeAllError?.Invoke($"移除错误，移除源为空：{typeof(T)}");
+
+                return;
+            }
+
 
             var arr = handlers.GetInvocationList();
 

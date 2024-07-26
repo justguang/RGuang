@@ -47,7 +47,7 @@ namespace RGuang
         /// <param name="id">状态id</param>
         /// <param name="state">状态</param>
         /// <returns>添加成功返回true，如果id已存在则不添加并返回false</returns>
-        public bool TryAdd(T id, IState state) => m_States.TryAdd(id, state);
+        public bool TryAddState(T id, IState state) => m_States.TryAdd(id, state);
 
         /// <summary>
         /// 检测是否存在指定状态
@@ -108,7 +108,7 @@ namespace RGuang
             }
         }
         /// <summary>
-        /// 状态切换
+        /// 状态切换到目标状态
         /// ps：如果当前状态等于目标状态 || 不存在的目标状态ID || 当前状态==null || 目标状态的Condition返回false，则不做任何操作
         /// </summary>
         /// <param name="targetID">从当前状态要切换的目标状态ID</param>

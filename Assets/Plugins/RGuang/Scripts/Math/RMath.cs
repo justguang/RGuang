@@ -8,6 +8,8 @@ namespace RGuang
     {
         #region 四舍五入
         /*
+         
+
         在C#中，Math.Round()函数默认使用的是银行家舍入法（Banker's rounding）
         按照【银行家舍入法（Banker's rounding）】规则如下：
 
@@ -23,9 +25,12 @@ namespace RGuang
 
                     遇到5需要舍去的情况只有一种，即5是最后一位有效数且前一位数是偶数。
 
-                    
-        虽然Math.Round提供了MidpointRounding参数，但是在处理小数时还是不能达到我们想要的想要四舍五入结果，
-                所以实现四舍五入时建议自己实现。
+
+
+        解决：
+        使用Marh.Round 中第三个参数【MidpointRounding.AwayFromZero】枚举值
+
+        官方链接：【https://learn.microsoft.com/zh-cn/dotnet/api/system.midpointrounding?view=net-7.0】            
 
         */
 

@@ -1,0 +1,11 @@
+using System;
+
+namespace MyNamespace
+{
+	public interface I#SCRIPTNAME#
+	{
+		//need代码
+		#NOTRIM#
+	}
+
+}

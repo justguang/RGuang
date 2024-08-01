@@ -1,0 +1,16 @@
+using System;
+using UnityEngine;
+
+namespace MyNamespace
+{
+	public class #SCRIPTNAME# : MonoBehaviour
+	{
+		void Start()
+		{
+			//need代码
+			#NOTRIM#
+		}
+
+	}
+
+}

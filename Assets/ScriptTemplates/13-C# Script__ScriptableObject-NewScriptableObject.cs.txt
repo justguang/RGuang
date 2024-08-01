@@ -1,0 +1,12 @@
+using UnityEngine;
+
+namespace MyNamespace
+{
+	[CreateAssetMenu(menuName=(""),fileName=(""))]
+	public class #SCRIPTNAME# : ScriptableObject
+	{
+		//need代码
+		#NOTRIM#
+	}
+
+}

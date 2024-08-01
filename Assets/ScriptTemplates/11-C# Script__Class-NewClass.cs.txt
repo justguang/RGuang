@@ -1,0 +1,10 @@
+using System;
+
+namespace MyNamespace
+{
+	public class #SCRIPTNAME#
+	{
+		//need代码
+	}
+
+}

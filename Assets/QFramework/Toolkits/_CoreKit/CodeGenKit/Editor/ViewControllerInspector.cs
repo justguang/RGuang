@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  * Copyright (c) 2017 xiaojun
- * Copyright (c) 2015 ~ 2022 liangxiegame UNDER MIT LICENSE
+ * Copyright (c) 2015 ~ 2024 liangxiegame UNDER MIT LICENSE
  * 
  * https://qframework.cn
  * https://github.com/liangxiegame/QFramework
@@ -100,6 +100,9 @@ namespace QFramework
             
             mArchitectureTypes = SearchAllArchitectureTypes();
             mArchitectureTypeMenus = mArchitectureTypes.Select(t => t.FullName).Append("None").ToArray();
+            mViewControllerTypes = SearchAllViewControllerTypes();
+            mViewControllerTypeMenus = mViewControllerTypes.Select(t => t.FullName).Append("QFramework.ViewController").ToArray();
+
         }
 
         private static Type[] SearchAllArchitectureTypes()
@@ -110,9 +113,21 @@ namespace QFramework
                 .SelectMany(a => a.GetTypes())
                 .Where(type => !type.IsAbstract && architectureType.IsAssignableFrom(type)).ToArray();
         }
+        
+        private static Type[] SearchAllViewControllerTypes()
+        {
+            var viewControllerType = typeof(ViewController);
+
+            return AppDomain.CurrentDomain.GetAssemblies().Where(a =>
+                    !a.FullName.Contains("UnityEngine"))
+                .SelectMany(a => a.GetTypes())
+                .Where(type => type.GetAttribute<ViewControllerChildAttribute>() != null && viewControllerType.IsAssignableFrom(type)).ToArray();
+        }
 
         private Type[] mArchitectureTypes;
+        private Type[] mViewControllerTypes;
         private string[] mArchitectureTypeMenus;
+        private string[] mViewControllerTypeMenus;
 
         private readonly ViewControllerInspectorStyle mStyle = new ViewControllerInspectorStyle();
 
@@ -151,7 +166,33 @@ namespace QFramework
                 }
                 GUILayout.EndHorizontal();
             }
+            if (mViewControllerTypes.Length > 0)
+            {
+                var index = Array.FindIndex(mViewControllerTypes,
+                    (t) => t.FullName == ViewController.ViewControllerFullTypeName);
+                if (index == -1)
+                {
+                    index = mViewControllerTypeMenus.Length - 1;
+                }
 
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(mLocaleText.ViewControllerType, GUILayout.Width(150));
+                EditorGUI.BeginChangeCheck();
+                index = EditorGUILayout.Popup(index, mViewControllerTypeMenus);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (index == mViewControllerTypeMenus.Length - 1)
+                    {
+                        ViewController.ViewControllerFullTypeName = string.Empty;
+                    }
+                    else
+                    {
+                        ViewController.ViewControllerFullTypeName = mViewControllerTypes[index].FullName;
+                    }
+                }
+
+                GUILayout.EndHorizontal();
+            }
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(mLocaleText.Namespace, GUILayout.Width(150));
@@ -165,9 +206,13 @@ namespace QFramework
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(mLocaleText.ScriptsFolder, GUILayout.Width(150));
-            ViewController.ScriptsFolder =
-                EditorGUILayout.TextArea(ViewController.ScriptsFolder, GUILayout.Height(30));
-
+            EditorGUILayout.TextArea(ViewController.ScriptsFolder);
+            if (GUILayout.Button("...",GUILayout.Width(30)))
+            {
+                var folderPath = Application.dataPath.Replace("Assets", ViewController.ScriptsFolder);
+                folderPath = EditorUtility.OpenFolderPanel("Select Folder", folderPath, string.Empty);
+                ViewController.ScriptsFolder = folderPath.Replace(Application.dataPath, "Assets");
+            }
             GUILayout.EndHorizontal();
 
 
@@ -269,6 +314,24 @@ namespace QFramework
                 if (GUILayout.Button(mLocaleText.SelectScript, GUILayout.Height(30)))
                 {
                     Selection.activeObject = scriptObject;
+                }
+            }
+            else
+            {
+                if (ViewController.GetType() != typeof(ViewController))
+                {
+                    var scriptPath = AssetDatabase
+                        .FindAssets($"t:{nameof(MonoScript)}")
+                        .Select(guid => AssetDatabase.GUIDToAssetPath(guid))
+                        .Where(path =>
+                            path.Contains(ViewController.GetType().Name) && !path.EndsWith("Designer.cs"))
+                        .FirstOrDefault(path => AssetDatabase.LoadAssetAtPath<MonoScript>(path).GetClass() == ViewController.GetType());
+
+                    if (scriptPath != null)
+                    {
+                        ViewController.ScriptsFolder = scriptPath.GetFolderPath();
+                    }
+
                 }
             }
 

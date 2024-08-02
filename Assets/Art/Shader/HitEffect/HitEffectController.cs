@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-namespace CardGame.IEffect
+namespace RGuang.IEffect
 {
     /// <summary>
     /// 受击特效

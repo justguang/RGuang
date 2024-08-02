@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CardGame.IEffect
+namespace RGuang.IEffect
 {
     /// <summary>
     /// 水特效

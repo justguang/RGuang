@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CardGame.IView
+namespace RGuang.IEffect
 {
     /// <summary>
     /// 旗帜飘扬特效

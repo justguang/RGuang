@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CardGame.IEffect
+namespace RGuang.IEffect
 {
     /// <summary>
     /// 溶解特效

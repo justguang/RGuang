@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-namespace CardGame.IView
+namespace RGuang.IEffect
 {
     /// <summary>
     /// 像素化特效

@@ -613,7 +613,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "286c786c208342359c10ddea976c41f3",
     "m_Id": 0,
-    "m_DisplayName": "Cell_Density",
+    "m_DisplayName": "RefractedLightDensity",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -635,10 +635,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1193.8868408203125,
-            "y": 219.0059814453125,
-            "width": 0.0,
-            "height": 0.0
+            "x": 1157.0,
+            "y": 223.0,
+            "width": 192.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -1275,10 +1275,10 @@
     "m_Guid": {
         "m_GuidSerialized": "12a41262-3c38-4f1e-a83f-ec9c6baf436a"
     },
-    "m_Name": "Cell_Density",
+    "m_Name": "RefractedLightDensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Cell_Density",
-    "m_DefaultReferenceName": "_Cell_Density",
+    "m_RefNameGeneratedByDisplayName": "RefractedLightDensity",
+    "m_DefaultReferenceName": "_RefractedLightDensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

@@ -5,23 +5,50 @@ using UnityEngine;
 namespace RGuang
 {
     /// <summary>
-    /// 贝塞尔曲线
+    /// 贝塞er
     /// 
     /// </summary>
-    public static class RBezierCurve
+    public static class BezierKit
     {
+
+        /// <summary>
+        /// [三阶] Bezier
+        /// </summary>
+        /// <param name="originPoint">0：起始点 1：控制点 2：终点</param>
+        /// <param name="stepNum">需要获取Vector的数量</param>
+        public static void GetBezierForThirdOrder(Vector2[] originPoint, int stepNum, ref List<Vector2> result, Action<string> errorCallback = null)
+        {
+            if (originPoint.Length != 4)
+            {
+                errorCallback?.Invoke("需要4个点");
+                return;
+            }
+
+            float u = 1;
+            float CurveStep = 1 / (float)stepNum;
+            result.Clear();
+            while (u > 0)
+            {
+                Vector2 Point = ThirdOrderBezier(u, originPoint);
+                u = u - CurveStep;
+                result.Add(Point);
+            }
+            result.Add(originPoint[0]);
+        }
+
+
         /// <summary>
         /// bezier
         /// </summary>
         /// <param name="t"></param>
         /// <param name="controlP">0：起始点 1：控制点1 2：控制点2 3：重点</param>
         /// <returns></returns>
-        private static Vector2 ThirdOrderBezierCurve(float t, Vector2[] controlP, Action<string> errorCallback = null)
+        private static Vector2 ThirdOrderBezier(float t, Vector2[] controlP, Action<string> errorCallback = null)
         {
             Vector2 res = new Vector2();
             if (controlP.Length != 4)
             {
-                errorCallback?.Invoke("三阶贝塞尔坐标需要4个点。");
+                errorCallback?.Invoke("需要4个Pos");
                 return res;
             }
 
@@ -42,31 +69,6 @@ namespace RGuang
             res.y = y;
 
             return res;
-        }
-
-        /// <summary>
-        /// [三阶] Bezier
-        /// </summary>
-        /// <param name="originPoint">0：起始点 1：控制点 2：终点</param>
-        /// <param name="stepNum">需要获取Vector的数量</param>
-        public static void GetBezierCurveForThirdOrder(Vector2[] originPoint, int stepNum, ref List<Vector2> result, Action<string> errorCallback = null)
-        {
-            if (originPoint.Length != 4)
-            {
-                errorCallback?.Invoke("三阶贝塞尔坐标需要4个点。");
-                return;
-            }
-
-            float u = 1;
-            float CurveStep = 1 / (float)stepNum;
-            result.Clear();
-            while (u > 0)
-            {
-                Vector2 Point = ThirdOrderBezierCurve(u, originPoint);
-                u = u - CurveStep;
-                result.Add(Point);
-            }
-            result.Add(originPoint[0]);
         }
 
 

@@ -11,7 +11,7 @@ namespace RGuang
     /// Acos数值查寻表
     /// 
     /// </summary>
-    public sealed class RAcosTable
+    public sealed class AcosTable
     {
         /// <summary>
         /// 查询表
@@ -25,7 +25,7 @@ namespace RGuang
         /// 查询表的中间索引
         /// </summary>
         public static readonly int HalfIndexCount;
-        static RAcosTable()
+        static AcosTable()
         {
             IndexCount = 1024;
             HalfIndexCount = 512;

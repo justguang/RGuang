@@ -10,7 +10,7 @@ namespace RGuang
     /// 路径类
     /// 
     /// </summary>
-    public static class RPath
+    public static class PathKit
     {
 
         /// <summary>

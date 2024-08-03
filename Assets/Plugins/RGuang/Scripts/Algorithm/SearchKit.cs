@@ -8,7 +8,7 @@ namespace RGuang
     /// 查找
     /// 
     /// </summary>
-    public static class RSearch
+    public static class SearchKit
     {
         #region 线性搜索
         /// <summary>

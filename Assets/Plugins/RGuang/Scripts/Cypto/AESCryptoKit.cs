@@ -11,7 +11,7 @@ namespace RGuang
     /// AES加解密
     /// 
     /// </summary>
-    public static class AESCrypto
+    public static class AESCryptoKit
     {
         public static string AESHead = "AESEncrypt";
 

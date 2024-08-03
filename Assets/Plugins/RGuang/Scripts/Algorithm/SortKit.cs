@@ -6,7 +6,7 @@ namespace RGuang
     /// <summary>
     /// 排序
     /// </summary>
-    public static class RSort
+    public static class SortKit
     {
         static void Swap(ref int a, ref int b)
         {

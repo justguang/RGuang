@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RGuang
 {
-    public static class RMath
+    public static class MathKit
     {
 
 

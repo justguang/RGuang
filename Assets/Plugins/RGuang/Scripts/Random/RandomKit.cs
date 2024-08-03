@@ -7,7 +7,7 @@ namespace RGuang
     /// 随机类
     /// 
     /// </summary>
-    public static class Random
+    public static class RandomKit
     {
 
         /// <summary>

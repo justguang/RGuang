@@ -8,11 +8,11 @@ using System.Collections.Generic;
 
 namespace RGuang
 {
-    public sealed class RPriorityQueue<T> where T : IComparable<T>
+    public sealed class PriorityQueue<T> where T : IComparable<T>
     {
         public List<T> lst = null;
         public int Count { get => lst.Count; }
-        public RPriorityQueue(int capacity = 4)
+        public PriorityQueue(int capacity = 4)
         {
             lst = new List<T>(capacity);
         }

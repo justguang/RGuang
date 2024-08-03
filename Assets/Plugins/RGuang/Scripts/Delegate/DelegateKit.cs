@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace RGuang
 {
-    public static class RDelegate
+    public static class DelegateKit
     {
         /// <summary>
         /// 添加一项【可重复添加相同项】

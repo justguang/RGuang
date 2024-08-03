@@ -6,6 +6,10 @@ namespace RGuang
 {
     public static class RMath
     {
+
+
+
+
         #region 四舍五入
         /*
          

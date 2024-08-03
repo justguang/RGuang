@@ -6,7 +6,25 @@ namespace RGuang
     public static class RDelegate
     {
         /// <summary>
-        /// 如果不存在添加一个
+        /// 添加一项【可重复添加相同项】
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="handlers"></param>
+        /// <param name="addHandler"></param>
+        public static void AddHandler<T>(ref T handlers, T addHandler, Action<string> errorCallback = null) where T : Delegate
+        {
+            try
+            {
+                handlers = (T)Delegate.Combine(handlers, addHandler);
+            }
+            catch (Exception e)
+            {
+                errorCallback?.Invoke(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 添加一项【唯一，避免重复添加】
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
@@ -16,7 +34,7 @@ namespace RGuang
         {
             if (addHandler == null)
             {
-                addError?.Invoke($"添加错误，要添加项不可为空：{typeof(T)}");
+                addError?.Invoke($"添加错误，要添加项为空：{typeof(T)}");
 
                 return;
             }
@@ -46,13 +64,13 @@ namespace RGuang
         }
 
         /// <summary>
-        /// 移除一个如果存在
+        /// 移除一项
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="handlers"></param>
         /// <param name="removeHandler"></param>
         /// <param name="removeError"></param>
-        public static void RemoveHandlerIfExists<T>(ref T handlers, T removeHandler, Action<string> removeError = null) where T : Delegate
+        public static void RemoveHandler<T>(ref T handlers, T removeHandler, Action<string> removeError = null) where T : Delegate
         {
             if (handlers == null)
             {
@@ -64,43 +82,13 @@ namespace RGuang
             try
             {
                 handlers = (T)Delegate.Remove(handlers, removeHandler);
+
             }
             catch (Exception e)
             {
                 removeError?.Invoke(e.Message);
             }
         }
-
-        /// <summary>
-        /// 移除所有
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="handlers"></param>
-        /// <param name="removeAllError"></param>
-        public static void RemoveAllHandlerFromDelegate<T>(ref T handlers, Action<string> removeAllError = null) where T : Delegate
-        {
-            if (handlers == null)
-            {
-                removeAllError?.Invoke($"移除错误，移除源为空：{typeof(T)}");
-
-                return;
-            }
-
-            var arr = handlers.GetInvocationList();
-
-            for (int i = 0; i < arr.Length; i++)
-            {
-                try
-                {
-                    handlers = (T)Delegate.Remove(handlers, arr[i]);
-                }
-                catch (Exception e)
-                {
-                    removeAllError?.Invoke(e.Message);
-                }
-            }
-        }
-
 
 
     }

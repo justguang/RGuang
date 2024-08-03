@@ -10,29 +10,28 @@ namespace RGuang
         /// <summary>
         /// 静态实例
         /// </summary>
-        protected static T _instance;
+        protected static T m_ins;
 
         /// <summary>
-        /// 标签锁：确保当一个线程位于代码的临界区时，另一个线程不进入临界区。
-        /// 如果其他线程试图进入锁定的代码，则它将一直等待（即被阻止），直到该对象被释放
+        /// 标签锁：确保线程安全
         /// </summary>
-        static readonly object _lock = new object();
+        static readonly object m_lock = new object();
 
         public static T Instance
         {
             get
             {
-                if (_instance == null)
+                if (m_ins == null)
                 {
-                    lock (_lock)
+                    lock (m_lock)
                     {
-                        if (_instance == null)
+                        if (m_ins == null)
                         {
-                            _instance = SingletonCreator.CreateSingleton<T>();
+                            m_ins = SingletonCreator.CreateSingleton<T>();
                         }
                     }
                 }
-                return _instance;
+                return m_ins;
             }
         }
 
@@ -41,7 +40,7 @@ namespace RGuang
         /// </summary>
         public virtual void Dispose()
         {
-            _instance = null;
+            m_ins = null;
         }
 
         /// <summary>

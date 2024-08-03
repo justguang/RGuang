@@ -3,7 +3,7 @@
 /// @description： 日志配置管理                                                                                      
 ///****************************************************************************
 using UnityEngine;
-using RGuang;
+using RGuang.Kit;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -34,11 +34,11 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
 #if UNITY_EDITOR
         if (string.IsNullOrWhiteSpace(m_saveFilePath))
         {
-            int index = RGuang.PathKit.StreamingAssetPath.LastIndexOf("/", RGuang.PathKit.StreamingAssetPath.Length - 20);
-            m_saveFilePath = RGuang.PathKit.StreamingAssetPath.Substring(0, index) + "/Logs/RLog/";
+            int index = PathKit.StreamingAssetPath.LastIndexOf("/", PathKit.StreamingAssetPath.Length - 20);
+            m_saveFilePath = PathKit.StreamingAssetPath.Substring(0, index) + "/Logs/RLog/";
         }
 #else
-        if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = RGuang.PathKit.StreamingAssetPath + "RLog/";
+        if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = PathKit.StreamingAssetPath + "RLog/";
 #endif
         if (string.IsNullOrWhiteSpace(m_saveFileName)) m_saveFileName = "log.txt";
         if (!System.IO.Directory.Exists(m_saveFilePath)) System.IO.Directory.CreateDirectory(m_saveFilePath);
@@ -85,7 +85,7 @@ public class LogManager : QFramework.PersistentMonoSingleton<LogManager>
     {
         if (img == null) return;
         string _path = @"E:\My\Image\jg2.png";
-        var testImg = RGuang.ImageKit.GetSpriteFromFile(_path);
+        var testImg = ImageKit.GetSpriteFromFile(_path);
         img.sprite = testImg;
 
     }

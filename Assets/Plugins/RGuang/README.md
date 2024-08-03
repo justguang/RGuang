@@ -17,7 +17,7 @@
 	
 
 ## 导入错误或可能出现的异常：
-	RGuang包中有引入第三方dll库文件，路径在【Plugins/RGuang/Scripts/LoadFile/Dll/】文件夹下。
+	RGuang包中有引入第三方dll库文件，路径在【Plugins/RGuang/Scripts/Kit/File/Dll/】文件夹下。
 	引入的第三方dll库文件有：
 	EPPlus.dll
 	Excel.dll

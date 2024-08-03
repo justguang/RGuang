@@ -28,7 +28,7 @@ namespace RGuang
         {
             byte[] bytes;
             UnityEngine.Vector2 size;
-            FileInfo(filePath, out bytes, out size);
+            FileInfo(filePath, out bytes, out size, errorCallback);
             if (bytes == null || size.Equals(UnityEngine.Vector2.zero))
             {
                 errorCallback?.Invoke($"filePath:{filePath} 加载失败,请确认目标资源存在,且格式为png");
@@ -48,9 +48,9 @@ namespace RGuang
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static UnityEngine.Sprite GetSpriteFromFile(string filePath)
+        public static UnityEngine.Sprite GetSpriteFromFile(string filePath, Action<string> errorCallback = null)
         {
-            var texture2D = GetTexture2DFromFile(filePath);
+            var texture2D = GetTexture2DFromFile(filePath, errorCallback);
             if (texture2D == null) return null;
 
             var sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
@@ -62,11 +62,17 @@ namespace RGuang
 
         private static byte[] _header = null;
         private static byte[] _buffer = null;
-        private static void FileInfo(string filePath, out byte[] bytes, out UnityEngine.Vector2 size)
+        private static void FileInfo(string filePath, out byte[] bytes, out UnityEngine.Vector2 size, Action<string> errorCallabck = null)
         {
-            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("无效的文件路径");
-
+            bytes = null;
             size = UnityEngine.Vector2.zero;
+
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                errorCallabck?.Invoke("无效的文件路径");
+                return;
+            }
+
             FileStream stream;
             try
             {
@@ -74,8 +80,7 @@ namespace RGuang
             }
             catch (Exception e)
             {
-                bytes = null;
-                size = Vector2.zero;
+                errorCallabck?.Invoke(e.Message);
                 return;
             }
             stream.Seek(0, SeekOrigin.Begin);
@@ -213,8 +218,6 @@ namespace RGuang
                 *
                 */
                 default:
-                    bytes = null;
-                    size = UnityEngine.Vector2.zero;
                     break;
             }
 

@@ -39,6 +39,10 @@ namespace RGuang
                     addError?.Invoke(e.Message);
                 }
             }
+            else
+            {
+                addError?.Invoke($"重复添加[{addHandler}]");
+            }
         }
 
         /// <summary>
@@ -57,19 +61,13 @@ namespace RGuang
                 return;
             }
 
-
-            var arr = handlers.GetInvocationList();
-
-            if (arr.Contains(removeHandler))
+            try
             {
-                try
-                {
-                    handlers = (T)Delegate.Remove(handlers, removeHandler);
-                }
-                catch (Exception e)
-                {
-                    removeError?.Invoke(e.Message);
-                }
+                handlers = (T)Delegate.Remove(handlers, removeHandler);
+            }
+            catch (Exception e)
+            {
+                removeError?.Invoke(e.Message);
             }
         }
 
@@ -87,7 +85,6 @@ namespace RGuang
 
                 return;
             }
-
 
             var arr = handlers.GetInvocationList();
 

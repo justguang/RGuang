@@ -33,7 +33,7 @@ namespace RGuang.Kit
     /// <summary>
     /// 日志输出颜色
     /// </summary>
-    public enum LogColor
+    public enum ColorLog
     {
         None,
         Red,
@@ -62,7 +62,7 @@ namespace RGuang.Kit
     #region ILogger 接口， log配置
     interface ILogger
     {
-        void Log(string msg, LogColor logColor = LogColor.None);
+        void Log(string msg, ColorLog logColor = ColorLog.None);
 
         void Warn(string msg);
         void Error(string msg);
@@ -76,39 +76,35 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志启用等级
         /// </summary>
-        public LoggerLevel logLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error;
+        public LoggerLevel LogLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error;
         /// <summary>
         /// 前缀标记【默认 #】
         /// </summary>
-        public string logPrefix = "#";
+        public string LogPrefix = "#";
         /// <summary>
         /// 标记与日志具体内容间隔符号【默认 >>】
         /// </summary>
-        public string logSeparate = ">";
+        public string LogSeparate = ">";
         /// <summary>
         /// 是否显示时间标记【默认true，显示】
         /// </summary>
-        public bool enableTime = true;
+        public bool EnableTime = true;
         /// <summary>
         /// 是否显示线程ID【默认true，显示】
         /// </summary>
-        public bool enableThreadID = true;
+        public bool EnableThreadID = true;
         /// <summary>
         /// 是否显示具体堆栈的消息【默认true，显示】
         /// </summary>
-        public bool enableTrace = true;
+        public bool EnableTrace = false;
         /// <summary>
         /// 是否将日志保存下来【默认true，保存】
         /// </summary>
-        public bool enableSave = true;
-        /// <summary>
-        /// 是否覆盖原有保存的日志【默认true，覆盖】
-        /// </summary>
-        public bool enableCover = true;
+        public bool EnableSave = true;
         /// <summary>
         /// 日志类型【默认LoggerType.Console】
         /// </summary>
-        public LoggerType loggerType = LoggerType.Console;
+        public LoggerType LoggerType = LoggerType.Console;
         /// <summary>
         /// 日志保存的路径【默认当前运行程序的更目录下Logs文件夹下】
         /// </summary>
@@ -116,13 +112,13 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志文件保存路径
         /// </summary>
-        public string savePath
+        public string SavePath
         {
             get
             {
                 if (_savePath == null)
                 {
-                    if (loggerType == LoggerType.Unity)
+                    if (LoggerType == LoggerType.Unity)
                     {
                         Type type = Type.GetType("UnityEngine.Application, UnityEngine");
                         _savePath = type.GetProperty("persistentDataPath").GetValue(null).ToString() + "/RLog/";
@@ -142,9 +138,49 @@ namespace RGuang.Kit
 
         /// <summary>
         /// 日志文件保存的名字
+        /// 新日志数据覆盖文件内原数据 =》日志文件名【年-月-日@文件名】
+        /// 新日志数据不覆盖文件内原数据 =》日志文件名【年-月-日[时]@文件名】
         /// </summary>
-        public string saveName = "RLog.txt";
+        public string SaveName
+        {
+            get => _saveName;
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _saveName = SaveName;
+                }
+            }
+        }
+        private string _saveName = "Rlog.txt";
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"日志类型 [{LoggerType}]");
+            sb.Append($"\n日志启用等级：");
+            if ((LogLevel & LoggerLevel.Log) != 0)
+                sb.Append("Log、");
+            if ((LogLevel & LoggerLevel.Warn) != 0)
+                sb.Append("Warn、");
+            if ((LogLevel & LoggerLevel.Error) != 0)
+                sb.Append("Error、");
+            if ((LogLevel & LoggerLevel.Trace) != 0)
+                sb.Append("Trace、");
+            if ((LogLevel & LoggerLevel.None) != 0)
+                sb.Append("None");
+
+            sb.Append($"\n日志显示时间 [{EnableTime}]");
+            sb.Append($"\n日志显示显示线程ID [{EnableThreadID}]");
+            sb.Append($"\n日志显示具体堆栈信息 [{EnableTrace}]");
+            sb.Append($"\n日志内容前缀标记 [{LogPrefix}]");
+            sb.Append($"\n日志前缀与具体内容分割符号 [{LogSeparate}]");
+            sb.Append($"\n日志是否保存到日志文件 [{EnableSave}]");
+            sb.Append($"\n日志文件保存路径 [{SavePath}]");
+            sb.Append($"\n日志保存的文件名 [{DateTime.Now.ToString("yyyy-MM-dd[HH]@") + SaveName}]");
+
+            return sb.ToString();
+        }
     }
     #endregion
 
@@ -179,7 +215,7 @@ namespace RGuang.Kit
         /// <param name="color">设置内容显示的颜色</param>
         /// <param name="log">要打印的内容</param>
         /// <param name="args">格式化的参数</param>
-        public static void ColorLog(this object obj, LogColor color, string log, params object[] args)
+        public static void ColorLog(this object obj, ColorLog color, string log, params object[] args)
         {
             RGuang.Kit.LogKit.ColorLog(color, string.Format(log, args));
         }
@@ -188,7 +224,7 @@ namespace RGuang.Kit
         /// </summary>
         /// <param name="color">设置内容显示的颜色</param>
         /// <param name="log">要打印的内容</param>
-        public static void ColorLog(this object obj, LogColor color, object log)
+        public static void ColorLog(this object obj, ColorLog color, object log)
         {
             RGuang.Kit.LogKit.ColorLog(color, log);
         }
@@ -262,9 +298,9 @@ namespace RGuang.Kit
         class UnityLogger : ILogger
         {
             Type type = Type.GetType("UnityEngine.Debug, UnityEngine");
-            public void Log(string msg, LogColor logColor)
+            public void Log(string msg, ColorLog logColor)
             {
-                if (logColor != LogColor.None)
+                if (logColor != Kit.ColorLog.None)
                 {
                     msg = UnityLogColor(msg, logColor);
                 }
@@ -273,39 +309,39 @@ namespace RGuang.Kit
 
             public void Warn(string msg)
             {
-                msg = UnityLogColor(msg, LogColor.Yellow);
+                msg = UnityLogColor(msg, Kit.ColorLog.Yellow);
                 type.GetMethod("LogWarning", new Type[] { typeof(object) }).Invoke(null, new object[] { msg });
             }
 
             public void Error(string msg)
             {
-                msg = UnityLogColor(msg, LogColor.Red);
+                msg = UnityLogColor(msg, Kit.ColorLog.Red);
                 type.GetMethod("LogError", new Type[] { typeof(object) }).Invoke(null, new object[] { msg });
             }
 
-            private string UnityLogColor(string msg, LogColor color)
+            private string UnityLogColor(string msg, ColorLog color)
             {
                 switch (color)
                 {
-                    case LogColor.Red:
+                    case Kit.ColorLog.Red:
                         msg = string.Format("<color=#FF0000>{0}</color>", msg);
                         break;
-                    case LogColor.Green:
+                    case Kit.ColorLog.Green:
                         msg = string.Format("<color=#00FF00>{0}</color>", msg);
                         break;
-                    case LogColor.Blue:
+                    case Kit.ColorLog.Blue:
                         msg = string.Format("<color=#0000FF>{0}</color>", msg);
                         break;
-                    case LogColor.Cyan:
+                    case Kit.ColorLog.Cyan:
                         msg = string.Format("<color=#00FFFF>{0}</color>", msg);
                         break;
-                    case LogColor.Magenta:
+                    case Kit.ColorLog.Magenta:
                         msg = string.Format("<color=#FF00FF>{0}</color>", msg);
                         break;
-                    case LogColor.Yellow:
+                    case Kit.ColorLog.Yellow:
                         msg = string.Format("<color=#FFFF00>{0}</color>", msg);
                         break;
-                    case LogColor.None:
+                    case Kit.ColorLog.None:
                     default:
                         msg = string.Format("<color=#FF0000>{0}</color>", msg);
                         break;
@@ -319,53 +355,53 @@ namespace RGuang.Kit
         /// </summary>
         class ConsoleLogger : ILogger
         {
-            public void Log(string msg, LogColor logColor)
+            public void Log(string msg, ColorLog logColor)
             {
                 WriteConsoleLog(msg, logColor);
             }
             public void Warn(string msg)
             {
-                WriteConsoleLog(msg, LogColor.Yellow);
+                WriteConsoleLog(msg, Kit.ColorLog.Yellow);
             }
             public void Error(string msg)
             {
-                WriteConsoleLog(msg, LogColor.Red);
+                WriteConsoleLog(msg, Kit.ColorLog.Red);
             }
-            private void WriteConsoleLog(string msg, LogColor color)
+            private void WriteConsoleLog(string msg, ColorLog color)
             {
                 switch (color)
                 {
-                    case LogColor.Red:
+                    case Kit.ColorLog.Red:
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.Green:
+                    case Kit.ColorLog.Green:
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.Blue:
+                    case Kit.ColorLog.Blue:
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.Cyan:
+                    case Kit.ColorLog.Cyan:
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.Magenta:
+                    case Kit.ColorLog.Magenta:
                         Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.Yellow:
+                    case Kit.ColorLog.Yellow:
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine(msg);
                         Console.ForegroundColor = ConsoleColor.Gray;
                         break;
-                    case LogColor.None:
+                    case Kit.ColorLog.None:
                     default:
                         Console.WriteLine(msg);
                         break;
@@ -378,16 +414,19 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志配置
         /// </summary>
-        public static LogConfig cfg;
+        public static LogConfig Cfg;
         /// <summary>
         /// 日志输出
         /// </summary>
-        private static ILogger logger;
+        private static ILogger Logger;
         /// <summary>
-        /// 日志写入文件
+        /// 日志写入文件 StreamWriter
         /// </summary>
         private static StreamWriter logFileWriter = null;
-
+        /// <summary>
+        /// 日志写入文件 FileStream
+        /// </summary>
+        private static FileStream logFileStream = null;
 
         /// <summary>
         /// 日志初始化
@@ -399,17 +438,17 @@ namespace RGuang.Kit
             {
                 logConfig = new LogConfig();
             }
-            RGuang.Kit.LogKit.cfg = logConfig;
+            RGuang.Kit.LogKit.Cfg = logConfig;
 
 
             //unity或控制台类型的日志
-            if (cfg.loggerType == LoggerType.Console)
+            if (Cfg.LoggerType == LoggerType.Console)
             {
-                logger = new ConsoleLogger();
+                Logger = new ConsoleLogger();
             }
             else
             {
-                logger = new UnityLogger();
+                Logger = new UnityLogger();
             }
 
         }
@@ -424,11 +463,11 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Log(string msg, params object[] args)
         {
-            if ((cfg.logLevel & LoggerLevel.Log) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Log) == 0) return;
 
             msg = DecorateLog(string.Format(msg, args));
-            logger.Log(msg);
-            if (cfg.enableSave)
+            Logger.Log(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Log] {0}", msg));
             }
@@ -439,11 +478,11 @@ namespace RGuang.Kit
         /// <param name="obj">要打印的内容</param>
         public static void Log(object obj)
         {
-            if ((cfg.logLevel & LoggerLevel.Log) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Log) == 0) return;
 
             string msg = DecorateLog(obj.ToString());
-            logger.Log(msg);
-            if (cfg.enableSave)
+            Logger.Log(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Log] {0}", msg));
             }
@@ -455,13 +494,13 @@ namespace RGuang.Kit
         /// <param name="color">设置内容颜色</param>
         /// <param name="msg">要打印的内容</param>
         /// <param name="args">格式化的参数</param>
-        public static void ColorLog(LogColor color, string msg, params object[] args)
+        public static void ColorLog(ColorLog color, string msg, params object[] args)
         {
-            if ((cfg.logLevel & LoggerLevel.Log) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Log) == 0) return;
 
             msg = DecorateLog(string.Format(msg, args));
-            logger.Log(msg, color);
-            if (cfg.enableSave)
+            Logger.Log(msg, color);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Log] {0}", msg));
             }
@@ -471,13 +510,13 @@ namespace RGuang.Kit
         /// </summary>
         /// <param name="color">设置内容颜色</param>
         /// <param name="obj">要打印的内容</param>
-        public static void ColorLog(LogColor color, object obj)
+        public static void ColorLog(ColorLog color, object obj)
         {
-            if ((cfg.logLevel & LoggerLevel.Log) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Log) == 0) return;
 
             string msg = DecorateLog(obj.ToString());
-            logger.Log(msg, color);
-            if (cfg.enableSave)
+            Logger.Log(msg, color);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Log] {0}", msg));
             }
@@ -490,11 +529,11 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Warn(string msg, params object[] args)
         {
-            if ((cfg.logLevel & LoggerLevel.Warn) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Warn) == 0) return;
 
             msg = DecorateLog(string.Format(msg, args));
-            logger.Warn(msg);
-            if (cfg.enableSave)
+            Logger.Warn(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Warning] {0}", msg));
             }
@@ -505,11 +544,11 @@ namespace RGuang.Kit
         /// <param name="obj">要打印的内容</param>
         public static void Warn(object obj)
         {
-            if ((cfg.logLevel & LoggerLevel.Warn) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Warn) == 0) return;
 
             string msg = DecorateLog(obj.ToString());
-            logger.Warn(msg);
-            if (cfg.enableSave)
+            Logger.Warn(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Warning] {0}", msg));
             }
@@ -522,11 +561,11 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Error(string msg, params object[] args)
         {
-            if ((cfg.logLevel & LoggerLevel.Error) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Error) == 0) return;
 
             msg = DecorateLog(string.Format(msg, args), true);
-            logger.Error(msg);
-            if (cfg.enableSave)
+            Logger.Error(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Error] {0}", msg));
             }
@@ -537,11 +576,11 @@ namespace RGuang.Kit
         /// <param name="obj">要打印的内容</param>
         public static void Error(object obj)
         {
-            if ((cfg.logLevel & LoggerLevel.Error) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Error) == 0) return;
 
             string msg = DecorateLog(obj.ToString(), true);
-            logger.Error(msg);
-            if (cfg.enableSave)
+            Logger.Error(msg);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Error] {0}", msg));
             }
@@ -554,11 +593,11 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Trace(string msg, params object[] args)
         {
-            if ((cfg.logLevel & LoggerLevel.Trace) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Trace) == 0) return;
 
             msg = DecorateLog(string.Format(msg, args), true);
-            logger.Log(msg, LogColor.Magenta);
-            if (cfg.enableSave)
+            Logger.Log(msg, Kit.ColorLog.Magenta);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Stack Trace] {0}", msg));
             }
@@ -569,11 +608,11 @@ namespace RGuang.Kit
         /// <param name="obj">要打印的内容</param>
         public static void Trace(object obj)
         {
-            if ((cfg.logLevel & LoggerLevel.Trace) == 0) return;
+            if ((Cfg.LogLevel & LoggerLevel.Trace) == 0) return;
 
             string msg = DecorateLog(obj.ToString(), true);
-            logger.Log(msg, LogColor.Magenta);
-            if (cfg.enableSave)
+            Logger.Log(msg, Kit.ColorLog.Magenta);
+            if (Cfg.EnableSave)
             {
                 WriteToFile(string.Format("[Stack Trace] {0}", msg));
             }
@@ -590,18 +629,18 @@ namespace RGuang.Kit
         /// <param name="isTrace">是否显示堆栈【默认false不显示】</param>
         private static string DecorateLog(string msg, bool isTrace = false)
         {
-            StringBuilder sb = new StringBuilder(cfg.logPrefix, 100);
-            if (cfg.enableTime)
+            StringBuilder sb = new StringBuilder(Cfg.LogPrefix, 100);
+            if (Cfg.EnableTime)
             {
                 //时间格式   时：分：秒.毫秒
                 sb.AppendFormat(" {0}", DateTime.Now.ToString("HH:mm:ss.ffff"));
             }
-            if (cfg.enableThreadID)
+            if (Cfg.EnableThreadID)
             {
                 sb.AppendFormat(" {0}", GetThreadID());
             }
 
-            sb.AppendFormat(" {0} {1}", cfg.logSeparate, msg);
+            sb.AppendFormat(" {0} {1}", Cfg.LogSeparate, msg);
             if (isTrace)
             {
                 sb.AppendFormat(" \nStackTrace:{0}", GetLogTrace());
@@ -641,55 +680,13 @@ namespace RGuang.Kit
         /// <param name="msg">要写的内容</param>
         private static void WriteToFile(string msg)
         {
-            if (!cfg.enableSave) return;
+            string prefix = DateTime.Now.ToString("yyyy-MM-dd[HH]@");
+            string fileName = prefix + Cfg.SaveName;
+            string path = Cfg.SavePath + fileName;
 
-
-            //覆盖原有日志
-            if (cfg.enableCover)
-            {
-                string prefix = DateTime.Now.ToString("yyyy-MM-dd@");
-                string fileName = prefix + cfg.saveName;
-                string coverPath = cfg.savePath + fileName;
-                try
-                {
-                    if (Directory.Exists(cfg.savePath))
-                    {
-                        if (File.Exists(coverPath))
-                        {
-                            File.Delete(coverPath);
-                        }
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(cfg.savePath);
-                    }
-
-                    File.AppendAllText(coverPath, msg + "\n", Encoding.UTF8);
-                }
-                catch (Exception e)
-                {
-                    //
-                }
-            }
-            else
-            {
-                string prefix = DateTime.Now.ToString("yyyy-MM-dd[HH]@");
-                string fileName = prefix + cfg.saveName;
-                //不覆盖原有日志内容
-                try
-                {
-                    if (!Directory.Exists(cfg.savePath))
-                    {
-                        Directory.CreateDirectory(cfg.savePath);
-                    }
-
-                    File.AppendAllText(cfg.savePath + fileName, msg + "\n", Encoding.UTF8);
-                }
-                catch (Exception e)
-                {
-                    //
-                }
-            }
+            //FileKit.WriteFileByFileClass(path, msg + "\n", Encoding.UTF8, true, null);
+            FileKit.WriteFileByFileWriter(path, msg + "\n", Encoding.UTF8, true);
+            //FileKit.WriteFileByFileStream(path, msg + "\n", true, null);
 
         }
         #endregion

@@ -3,6 +3,7 @@ namespace RGuang.Kit
 {
     /// <summary>
     /// 通过属性实现的 Singleton
+    /// 懒汉单例，通过lock锁，访问线程安全
     /// </summary>
     public static class SingletonProperty<T> where T:class,ISingleton
     {

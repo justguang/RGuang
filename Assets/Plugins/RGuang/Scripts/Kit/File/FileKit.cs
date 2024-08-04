@@ -254,12 +254,13 @@ namespace RGuang.Kit
 
         #region 通过文件流写入数据
         /// <summary>
-        /// 写入数据【用FileStream类字节流形式写入，默认utf8编码】
+        /// 写入数据自动创建文件【用FileStream类字节流形式写入，默认utf8编码】
         /// </summary>
         /// <param name="path">文件路径</param>
         /// <param name="context">数据</param>
+        /// <param name="append">true覆盖文件内原数据</param>
         /// <param name="errorCallback">异常回调</param>
-        public static void WriteFileByFileStream(string path, string context, Action<string> errorCallback = null)
+        public static void WriteFileByFileStream(string path, string context, bool append, Action<string> errorCallback = null)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -267,14 +268,20 @@ namespace RGuang.Kit
                 return;
             }
 
+            bool fileExist = File.Exists(path);
+
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+                FileMode fm = fileExist ? (append ? FileMode.Append : FileMode.Open) : FileMode.Create;
+
+                using (FileStream fs = new FileStream(path, fm, FileAccess.Write))
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(context);
+
                     fs.Write(bytes, 0, bytes.Length);
                     fs.Close();
                 }
+
             }
             catch (Exception e)
             {
@@ -283,7 +290,7 @@ namespace RGuang.Kit
 
         }
         /// <summary>
-        /// 写入数据到已存在的文件中【用StreamWriter类写入】
+        /// 写入数据自动创建文件【用StreamWriter类写入】
         /// </summary>
         /// <param name="path">文件路径</param>
         /// <param name="context">数据</param>
@@ -300,8 +307,9 @@ namespace RGuang.Kit
 
             if (File.Exists(path) == false)
             {
-                errorCallback?.Invoke("写入文件失败！文件不存在");
-                return;
+                var fs = File.Create(path);
+                fs.Close();
+                fs.Dispose();
             }
 
             try

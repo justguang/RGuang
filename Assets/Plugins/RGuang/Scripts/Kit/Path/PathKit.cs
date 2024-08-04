@@ -16,25 +16,25 @@ namespace RGuang.Kit
         /// <summary>
         /// 持久化数据路径【外部目录】
         /// </summary>
-        private static string _persistentDataPath;
+        private static string m_persistentDataPath;
         public static string PersistentDataPath
         {
             get
             {
-                if (_persistentDataPath == null) _persistentDataPath = Application.persistentDataPath + "/";
-                return _persistentDataPath;
+                if (m_persistentDataPath == null) m_persistentDataPath = Application.persistentDataPath + "/";
+                return m_persistentDataPath;
             }
         }
 
         /// <summary>
         /// streamingAsset路径【内部目录】
         /// </summary>
-        private static string _streamingAssetPath;
+        private static string m_streamingAssetPath;
         public static string StreamingAssetPath
         {
             get
             {
-                if (_streamingAssetPath == null)
+                if (m_streamingAssetPath == null)
                 {
 
 #if UNITY_IPHONE && !UNITY_EDITOR
@@ -42,14 +42,14 @@ namespace RGuang.Kit
 #elif UNITY_ANDROID && !UNITY_EDITOR
 					_streamingAssetPath = Application.streamingAssetsPath + "/";
 #elif (UNITY_STANDALONE_WIN) && !UNITY_EDITOR
-                    _streamingAssetPath = Application.streamingAssetsPath + "/";
+                    m_streamingAssetPath = Application.streamingAssetsPath + "/";
 #elif UNITY_STANDALONE_OSX && !UNITY_EDITOR
 					_streamingAssetPath = Application.streamingAssetsPath + "/";
 #else
-                    _streamingAssetPath = Application.streamingAssetsPath + "/";
+                    m_streamingAssetPath = Application.streamingAssetsPath + "/";
 #endif
                 }
-                return _streamingAssetPath;
+                return m_streamingAssetPath;
             }
         }
 

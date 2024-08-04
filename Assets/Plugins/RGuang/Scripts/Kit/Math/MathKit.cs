@@ -101,6 +101,34 @@ namespace RGuang.Kit
         /// </summary>
         public static bool GetTrueOrFalse => UnityEngine.Random.Range(0, 2) == 1;
 
+        /// <summary>
+        /// pi 【3.1415926 53 58 97 93 23 84 62 64 33 83 27 95】
+        /// </summary>
+        public const float PI = 3.1415926536F;
+        /// <summary>
+        /// 2pi
+        /// </summary>
+        public const float PI2 = PI * 2.0f;
+        public const float Rad90 = PI * 0.50f;
+        public const float Rad45 = PI * 0.250f;
+        /// <summary>
+        /// 度到弧度转化常数 【 PI / 180.0f】
+        /// </summary>
+        public const float Deg2Rad = 0.0174532925F;
+        /// <summary>
+        /// 度到弧度转化常数 【 PI / 180.0f】
+        /// </summary>
+        public static float DegToRad() => PI / 180.0f;
+        /// <summary>
+        /// 弧度到度转化常数【180.0f / PI】
+        /// </summary>
+        public const float Rad2Deg = 57.2957795131F;
+        /// <summary>
+        /// 弧度到度转化常数【180.0f / PI】
+        /// </summary>
+        public static float RadToDeg() => 180.0f / PI;
+
+
     }
 
 }

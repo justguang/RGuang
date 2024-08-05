@@ -7,7 +7,7 @@ namespace RGuang.Kit
     /// 时间类
     /// 
     /// </summary>
-    public static class RTime
+    public static class TimeKit
     {
 
 

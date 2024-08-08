@@ -12,7 +12,7 @@ namespace RGuang.Kit
         /// <summary>
         /// 栈对象：存储对象List
         /// </summary>
-        static Stack<List<T>> _listStack = new Stack<List<T>>(8);
+        static Stack<List<T>> s_ListStack = new Stack<List<T>>(8);
 
         /// <summary>
         /// 出栈：获取一个List对象
@@ -21,28 +21,29 @@ namespace RGuang.Kit
         /// <returns></returns>
         public static List<T> Get(int capacity = 8)
         {
-            if (_listStack.Count == 0)
+            if (s_ListStack.Count == 0)
             {
                 return new List<T>(capacity);
             }
-            return _listStack.Pop();
+            return s_ListStack.Pop();
         }
+
 
         /// <summary>
         /// 入栈：将List对象Clear并回收到栈中
+        /// 并检查是否重复回收
         /// </summary>
-        /// <param name="toRelease">回收对象</param>
+        /// <param name="toRelease"></param>
         public static void Release(List<T> toRelease)
         {
             if (toRelease == null) return;
             toRelease.Clear();
-            if (_listStack.Contains(toRelease))
+            if (s_ListStack.Contains(toRelease))
             {
                 throw new Exception("重复回收List");
             }
-            _listStack.Push(toRelease);
+            s_ListStack.Push(toRelease);
         }
-
     }
 
     /// <summary>
@@ -59,6 +60,8 @@ namespace RGuang.Kit
         {
             ListPool<T>.Release(self);
         }
+
+
     }
 
 }

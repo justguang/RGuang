@@ -68,9 +68,12 @@ public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
     }
 
 
+
     private void Start()
     {
         string _path = @"D:\workspace\Creator\Build\Data_Comm\";
+
+
     }
 
 

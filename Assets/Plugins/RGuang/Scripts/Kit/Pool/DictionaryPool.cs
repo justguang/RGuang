@@ -12,7 +12,7 @@ namespace RGuang.Kit
         /// <summary>
         /// 栈对象：存储多个Dictionary
         /// </summary>
-        static Stack<Dictionary<TKey, TValue>> _listStack = new Stack<Dictionary<TKey, TValue>>(8);
+        static Stack<Dictionary<TKey, TValue>> s_DicStack = new Stack<Dictionary<TKey, TValue>>(8);
 
         /// <summary>
         /// 出栈：从栈中获取某个字典数据
@@ -21,26 +21,27 @@ namespace RGuang.Kit
         /// <returns></returns>
         public static Dictionary<TKey, TValue> Get(int capacity = 8)
         {
-            if (_listStack.Count == 0)
+            if (s_DicStack.Count == 0)
             {
                 return new Dictionary<TKey, TValue>(capacity);
             }
-            return _listStack.Pop();
+            return s_DicStack.Pop();
         }
 
         /// <summary>
         /// 入栈：将字典Clear并存储到栈中 
+        /// 并检查是否重复回收
         /// </summary>
         /// <param name="toRelease">回收对象</param>
         public static void Release(Dictionary<TKey, TValue> toRelease)
         {
             if (toRelease == null) return;
             toRelease.Clear();
-            if (_listStack.Contains(toRelease))
+            if (s_DicStack.Contains(toRelease))
             {
                 throw new Exception("重复回收Dictionary");
             }
-            _listStack.Push(toRelease);
+            s_DicStack.Push(toRelease);
         }
 
     }

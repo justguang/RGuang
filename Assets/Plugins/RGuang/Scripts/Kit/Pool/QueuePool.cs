@@ -14,7 +14,7 @@ namespace RGuang.Kit
         /// 栈对象：存储对象Queue
         /// 
         /// </summary>
-        static Stack<Queue<T>> _queStack = new Stack<Queue<T>>(8);
+        static Stack<Queue<T>> m_queStack = new Stack<Queue<T>>(8);
 
         /// <summary>
         /// 出栈：获取一个Queue对象
@@ -23,11 +23,11 @@ namespace RGuang.Kit
         /// <returns></returns>
         public static Queue<T> Get(int capacity = 8)
         {
-            if (_queStack.Count == 0)
+            if (m_queStack.Count == 0)
             {
                 return new Queue<T>(capacity);
             }
-            return _queStack.Pop();
+            return m_queStack.Pop();
         }
 
         /// <summary>
@@ -38,12 +38,12 @@ namespace RGuang.Kit
         {
             if (toRelease == null) return;
             toRelease.Clear();
-            if (_queStack.Contains(toRelease))
+            if (m_queStack.Contains(toRelease))
             {
                 throw new Exception("重复回收Queue");
             }
 
-            _queStack.Push(toRelease);
+            m_queStack.Push(toRelease);
         }
 
     }

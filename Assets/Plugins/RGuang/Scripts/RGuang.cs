@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 /*
 * ==============================================================================
-* RGuang v1.1.0
+* RGuang v1.1.1
 * 
 * 极简型架构
 * - Gitee: https://gitee.com/justguang/RGuang/tree/master/Assets/Plugins/RGuang
@@ -49,10 +49,10 @@ namespace RGuang
         /// <summary>
         /// 版本
         /// </summary>
-        public const string Version = "1.1.0";
+        public const string Version = "1.1.1";
 
         /// <summary>
-        /// 懒加载、初始化
+        /// True懒加载、初始化
         /// </summary>
         public const bool LazyInit = true;
 
@@ -75,11 +75,11 @@ namespace RGuang
         S GetSystem<S>() where S : class, ISystem;
         U GetUtility<U>() where U : class, IUtility;
 
-        IRmv AddEvent<E>(Action evt) where E : struct;
-        IRmv AddEvent<E>(Action<E> evt) where E : struct;
+        IRemover AddEvent<E>(Action evt) where E : struct;
+        IRemover AddEvent<E>(Action<E> evt) where E : struct;
 
-        IRmv AddEvent<E>(E type, Action evt) where E : IConvertible;
-        IRmv AddEvent<E, T>(E type, Action<T> evt) where E : IConvertible;
+        IRemover AddEvent<E>(E type, Action evt) where E : IConvertible;
+        IRemover AddEvent<E, T>(E type, Action<T> evt) where E : IConvertible;
 
         void RmvEvent<E>(Action evt) where E : struct;
         void RmvEvent<E>(Action<E> evt) where E : struct;
@@ -117,19 +117,28 @@ namespace RGuang
                     if (m_Hub == null)
                     {
                         var type = typeof(H);
-                        var ctorArr = type.GetConstructors(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                        var ctor = Array.Find(ctorArr, c => c.GetParameters().Length == 0);
-                        if (ctor == null)
+                        System.Reflection.ConstructorInfo constructor = null;
+                        try
                         {
+                            var ctorArr = type.GetConstructors(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                            constructor = Array.Find(ctorArr, c => c.GetParameters().Length == 0);
+                            if (constructor == null)
+                            {
 #if UNITY_EDITOR
-                            throw new Exception($"请实现一个无参非公有的构造函数！");
+                                throw new Exception($"请实现一个无参非公有的构造函数！");
 #endif
-                        }
-                        else
-                        {
-                            m_Hub = ctor.Invoke(null) as H;
+                            }
+
+                            m_Hub = constructor?.Invoke(null) as H;
                             m_Hub.BuildModelHub();
                         }
+                        catch (Exception e)
+                        {
+#if UNITY_EDITOR
+                            throw e;
+#endif
+                        }
+
                     }
                 }
             }
@@ -391,58 +400,75 @@ namespace RGuang
 #endif
             return null;
         }
-        private IRmv Combine<E>(Delegate evt) where E : struct
+        private IRemover Combine<E>(Delegate evt) where E : struct
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            OnModelHub2DebugError($"要添加项 不可为Null");
-            //if (evt == null) throw new Exception($"要添加项 不可为Null");
-
+                OnModelHub2DebugError($"要添加项 不可为Null");
+                //if (evt == null) throw new Exception($"要添加项 不可为Null");
 #endif
+                return null;
+            }
+
             var key = typeof(E);
             if (m_Events.TryGetValue(key, out var methods))
             {
-#if UNITY_EDITOR
-                if (methods is Action)
+                if (methods is Action && evt is Action<E>)
                 {
                     //if (evt is Action<E>) throw new Exception($"你要添加的是有参数的事件函数， 请使用 AddEvent<E>(Action<E> evt)");
-                    if (evt is Action<E>) OnModelHub2DebugError($"你要添加的是有参数的事件函数， 请使用 AddEvent<E>(Action<E> evt)");
-                }
-                else if (methods is Action<E>)
-                {
-                    //if (evt is Action) throw new Exception($"你要添加的是有无数的事件函数， 请使用 AddEvent<E>(Action evt)");
-                    if (evt is Action) OnModelHub2DebugError($"你要添加的是有无数的事件函数， 请使用 AddEvent<E>(Action evt)");
-                }
+#if UNITY_EDITOR
+                    OnModelHub2DebugError($"你要添加的是有参数的事件函数， 请使用 AddEvent<E>(Action<E> evt)");
 #endif
+                    return null;
+                }
+                else if (methods is Action<E> && evt is Action)
+                {
+#if UNITY_EDITOR
+                    //if (evt is Action) throw new Exception($"你要添加的是有无数的事件函数， 请使用 AddEvent<E>(Action evt)");
+                    OnModelHub2DebugError($"你要添加的是有无数的事件函数， 请使用 AddEvent<E>(Action evt)");
+#endif
+                    return null;
+                }
                 m_Events[key] = Delegate.Combine(methods, evt);
             }
             else m_Events.Add(key, evt);
             // 添加一个自定义移除
-            return new CustomRmv(() => Separate<E>(evt));
+            return new CustomRemover(() => Separate<E>(evt));
         }
         /// <summary>
         /// 将委托从字典中移除
         /// </summary>
         private void Separate<E>(Delegate evt) where E : struct
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            OnModelHub2DebugError($"要移除项 不可为Null");
-            //if (evt == null) throw new Exception($"要移除项 不可为Null");
+                //if (evt == null) throw new Exception($"要移除项 不可为Null");
+                OnModelHub2DebugError($"要移除项 不可为Null");
 #endif
+                return;
+            }
+
             var key = typeof(E);
             if (m_Events.TryGetValue(key, out var methods))
             {
+                if (methods is Action && evt is Action<E>)
+                {
 #if UNITY_EDITOR
-                if (methods is Action)
-                {
-                    if (evt is Action<E>) OnModelHub2DebugError($"你要移除的是有参数的事件函数， 请使用 RmvEvent<E>(Action<E> evt)");
                     //if (evt is Action<E>) throw new Exception($"你要移除的是有参数的事件函数， 请使用 RmvEvent<E>(Action<E> evt)");
-                }
-                else if (methods is Action<E>)
-                {
-                    if (evt is Action) OnModelHub2DebugError($"你要移除的是有无数的事件函数， 请使用 RmvEvent<E>(Action evt)");
-                    //if (evt is Action) throw new Exception($"你要移除的是有无数的事件函数， 请使用 RmvEvent<E>(Action evt)");
-                }
+                    OnModelHub2DebugError($"你要移除的是有参数的事件函数， 请使用 RmvEvent<E>(Action<E> evt)");
 #endif
+                    return;
+                }
+                else if (methods is Action<E> && evt is Action)
+                {
+#if UNITY_EDITOR
+                    //if (evt is Action) throw new Exception($"你要移除的是有无数的事件函数， 请使用 RmvEvent<E>(Action evt)");
+                    OnModelHub2DebugError($"你要移除的是有无数的事件函数， 请使用 RmvEvent<E>(Action evt)");
+#endif
+                    return;
+                }
                 methods = Delegate.Remove(methods, evt);
                 if (methods == null) m_Events.Remove(key);
                 else m_Events[key] = methods;
@@ -451,18 +477,22 @@ namespace RGuang
             else { OnModelHub2DebugWarn($"{key} 事件Key不存在"); }
 #endif
         }
-        IRmv IModelHub.AddEvent<E>(Action evt) => Combine<E>(evt);
-        IRmv IModelHub.AddEvent<E>(Action<E> evt) => Combine<E>(evt);
+        IRemover IModelHub.AddEvent<E>(Action evt) => Combine<E>(evt);
+        IRemover IModelHub.AddEvent<E>(Action<E> evt) => Combine<E>(evt);
         void IModelHub.RmvEvent<E>(Action evt) => Separate<E>(evt);
         void IModelHub.RmvEvent<E>(Action<E> evt) => Separate<E>(evt);
         void IModelHub.SendEvent<E>(E e)
         {
             if (m_Events.TryGetValue(typeof(E), out var methods))
             {
+                if (methods is Action)
+                {
 #if UNITY_EDITOR
-                if (methods is Action) OnModelHub2DebugError($"{typeof(E)}为无参事件 请使用 SendEvent<E>() 或将注册替换成 AddEvent<E>(Action<E> evt)");
-                //if (methods is Action) throw new Exception($"{typeof(E)}为无参事件 请使用 SendEvent<E>() 或将注册替换成 AddEvent<E>(Action<E> evt)");
+                    //if (methods is Action) throw new Exception($"{typeof(E)}为无参事件 请使用 SendEvent<E>() 或将注册替换成 AddEvent<E>(Action<E> evt)");
+                    OnModelHub2DebugError($"{typeof(E)}为无参事件 请使用 SendEvent<E>() 或将注册替换成 AddEvent<E>(Action<E> evt)");
 #endif
+                    return;
+                }
                 (methods as Action<E>).Invoke(e);
             }
 #if UNITY_EDITOR
@@ -473,10 +503,15 @@ namespace RGuang
         {
             if (m_Events.TryGetValue(typeof(E), out var methods))
             {
+
+                if (methods is Action<E>)
+                {
 #if UNITY_EDITOR
-                if (methods is Action<E>) OnModelHub2DebugError($"{typeof(E)}为有参事件 请使用 SendEvent<E>(E e) 或将注册替换成 AddEvent<E>(Action evt)");
-                //if (methods is Action<E>) throw new Exception($"{typeof(E)}为有参事件 请使用 SendEvent<E>(E e) 或将注册替换成 AddEvent<E>(Action evt)");
+                    //if (methods is Action<E>) throw new Exception($"{typeof(E)}为有参事件 请使用 SendEvent<E>(E e) 或将注册替换成 AddEvent<E>(Action evt)");
+                    OnModelHub2DebugError($"{typeof(E)}为有参事件 请使用 SendEvent<E>(E e) 或将注册替换成 AddEvent<E>(Action evt)");
 #endif
+                    return;
+                }
                 (methods as Action).Invoke();
             }
 #if UNITY_EDITOR
@@ -485,12 +520,16 @@ namespace RGuang
         }
 
         // 以下使用枚举转换为索引来驱动事件
-        IRmv IModelHub.AddEvent<E>(E type, Action evt)
+        IRemover IModelHub.AddEvent<E>(E type, Action evt)
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            if (evt == null) OnModelHub2DebugError($"{evt} 不可为Null");
-            //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                OnModelHub2DebugError($"{evt} 不可为Null");
 #endif
+                return null;
+            }
             var key = typeof(E);
             int id = type.ToInt32(null);
             if (m_EnumEvents.TryGetValue(key, out var arr))
@@ -502,10 +541,14 @@ namespace RGuang
                 }
                 else
                 {
+                    if (!(ms is Action))
+                    {
 #if UNITY_EDITOR
-                    if (!(ms is Action)) OnModelHub2DebugError($"{key}为有参事件 请使用 AddEvent<E,T>(E type, Action<T> evt)");
-                    //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 AddEvent<E,T>(E type, Action<T> evt)");
+                        //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 AddEvent<E,T>(E type, Action<T> evt)");
+                        OnModelHub2DebugError($"{key}为有参事件 请使用 AddEvent<E,T>(E type, Action<T> evt)");
 #endif
+                        return null;
+                    }
                     arr[id] = Delegate.Combine(ms, evt);
                 }
             }
@@ -516,14 +559,18 @@ namespace RGuang
                 m_EnumEvents.Add(key, arr);
             }
             // 添加一个自定义移除
-            return new CustomRmv(() => RmvEvent(type, evt));
+            return new CustomRemover(() => RmvEvent(type, evt));
         }
-        IRmv IModelHub.AddEvent<E, T>(E type, Action<T> evt)
+        IRemover IModelHub.AddEvent<E, T>(E type, Action<T> evt)
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            if (evt == null) OnModelHub2DebugError($"{evt} 不可为Null");
-            //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                OnModelHub2DebugError($"{evt} 不可为Null");
 #endif
+                return null;
+            }
             var key = typeof(E);
             int id = type.ToInt32(null);
             if (m_EnumEvents.TryGetValue(key, out var arr))
@@ -535,10 +582,14 @@ namespace RGuang
                 }
                 else
                 {
+                    if (ms is Action)
+                    {
 #if UNITY_EDITOR
-                    if (ms is Action) OnModelHub2DebugError($"{key}为无参事件 请使用 AddEvent<E>(E type, Action evt)");
-                    //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 AddEvent<E>(E type, Action evt)");
+                        //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 AddEvent<E>(E type, Action evt)");
+                        OnModelHub2DebugError($"{key}为无参事件 请使用 AddEvent<E>(E type, Action evt)");
 #endif
+                        return null;
+                    }
                     arr[id] = Delegate.Combine(ms, evt);
                 }
             }
@@ -549,14 +600,18 @@ namespace RGuang
                 m_EnumEvents.Add(key, arr);
             }
             // 添加一个自定义移除
-            return new CustomRmv(() => RmvEvent(type, evt));
+            return new CustomRemover(() => RmvEvent(type, evt));
         }
         public void RmvEvent<E>(E type, Action evt) where E : IConvertible
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            if (evt == null) OnModelHub2DebugError($"{evt} 不可为Null");
-            //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                OnModelHub2DebugError($"{evt} 不可为Null");
 #endif
+                return;
+            }
             var key = typeof(E);
             if (m_EnumEvents.TryGetValue(key, out var arr))
             {
@@ -569,10 +624,14 @@ namespace RGuang
 #endif
                     return;
                 }
+                if (!(ms is Action))
+                {
 #if UNITY_EDITOR
-                if (!(ms is Action)) OnModelHub2DebugError($"{key}为有参事件 请使用 RmvEvent<E,T>(E type, Action<T> evt)");
-                //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 RmvEvent<E,T>(E type, Action<T> evt)");
+                    //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 RmvEvent<E,T>(E type, Action<T> evt)");
+                    OnModelHub2DebugError($"{key}为有参事件 请使用 RmvEvent<E,T>(E type, Action<T> evt)");
 #endif
+                    return;
+                }
                 arr[id] = Delegate.Remove(ms, evt);
             }
 #if UNITY_EDITOR
@@ -581,10 +640,14 @@ namespace RGuang
         }
         public void RmvEvent<E, T>(E type, Action<T> evt) where E : IConvertible
         {
+            if (evt == null)
+            {
 #if UNITY_EDITOR
-            if (evt == null) OnModelHub2DebugError($"{evt} 不可为Null");
-            //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                //if (evt == null) throw new Exception($"{evt} 不可为Null");
+                OnModelHub2DebugError($"{evt} 不可为Null");
 #endif
+                return;
+            }
             var key = typeof(E);
             if (m_EnumEvents.TryGetValue(key, out var arr))
             {
@@ -597,10 +660,14 @@ namespace RGuang
 #endif
                     return;
                 }
+                if (ms is Action)
+                {
 #if UNITY_EDITOR
-                if (ms is Action) OnModelHub2DebugError($"{key}为无参事件 请使用 RmvEvent<E>(E type, Action evt)");
-                //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 RmvEvent<E>(E type, Action evt)");
+                    OnModelHub2DebugError($"{key}为无参事件 请使用 RmvEvent<E>(E type, Action evt)");
+                    //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 RmvEvent<E>(E type, Action evt)");
 #endif
+                    return;
+                }
                 arr[id] = Delegate.Remove(ms, evt);
             }
 #if UNITY_EDITOR
@@ -626,10 +693,14 @@ namespace RGuang
 #endif
                     return;
                 }
+                if (!(ms is Action))
+                {
 #if UNITY_EDITOR
-                if (!(ms is Action)) OnModelHub2DebugError($"{key}为有参事件 请使用 EnumEvent<E,T>(E type,T info)");
-                //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 EnumEvent<E,T>(E type,T info)");
+                    //if (!(ms is Action)) throw new Exception($"{key}为有参事件 请使用 EnumEvent<E,T>(E type,T info)");
+                    OnModelHub2DebugError($"{key}为有参事件 请使用 EnumEvent<E,T>(E type,T info)");
 #endif
+                    return;
+                }
                 (ms as Action).Invoke();
             }
 #if UNITY_EDITOR
@@ -650,10 +721,14 @@ namespace RGuang
 #endif
                     return;
                 }
+                if (ms is Action)
+                {
 #if UNITY_EDITOR
-                if (ms is Action) OnModelHub2DebugError($"{key}为无参事件 请使用 EnumEvent<E>(E type)");
-                //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 EnumEvent<E>(E type)");
+                    //if (ms is Action) throw new Exception($"{key}为无参事件 请使用 EnumEvent<E>(E type)");
+                    OnModelHub2DebugError($"{key}为无参事件 请使用 EnumEvent<E>(E type)");
 #endif
+                    return;
+                }
                 (ms as Action<T>).Invoke(info);
             }
 #if UNITY_EDITOR
@@ -902,10 +977,10 @@ namespace RGuang
     public static class CanListenEventExtension
     {
         //IConvertible
-        public static IRmv AddEvent<E>(this ICanListenEvent self, Action onEvent) where E : struct => self.GetModelHub().AddEvent<E>(onEvent);
-        public static IRmv AddEvent<E>(this ICanListenEvent self, Action<E> onEvent) where E : struct => self.GetModelHub().AddEvent<E>(onEvent);
-        public static IRmv AddEvent<E>(this ICanListenEvent self, E type, Action onEvent) where E : IConvertible => self.GetModelHub().AddEvent<E>(type, onEvent);
-        public static IRmv AddEvent<E, TARgs>(this ICanListenEvent self, E type, Action<TARgs> onEvent) where E : IConvertible => self.GetModelHub().AddEvent<E, TARgs>(type, onEvent);
+        public static IRemover AddEvent<E>(this ICanListenEvent self, Action onEvent) where E : struct => self.GetModelHub().AddEvent<E>(onEvent);
+        public static IRemover AddEvent<E>(this ICanListenEvent self, Action<E> onEvent) where E : struct => self.GetModelHub().AddEvent<E>(onEvent);
+        public static IRemover AddEvent<E>(this ICanListenEvent self, E type, Action onEvent) where E : IConvertible => self.GetModelHub().AddEvent<E>(type, onEvent);
+        public static IRemover AddEvent<E, TARgs>(this ICanListenEvent self, E type, Action<TARgs> onEvent) where E : IConvertible => self.GetModelHub().AddEvent<E, TARgs>(type, onEvent);
         public static void RmvEvent<E>(this ICanListenEvent self, Action onEvent) where E : struct => self.GetModelHub().RmvEvent<E>(onEvent);
         public static void RmvEvent<E>(this ICanListenEvent self, Action<E> onEvent) where E : struct => self.GetModelHub().RmvEvent<E>(onEvent);
         public static void RmvEvent<E>(this ICanListenEvent self, E type, Action onEvent) where E : IConvertible => self.GetModelHub().RmvEvent<E>(type, onEvent);
@@ -952,16 +1027,118 @@ namespace RGuang
     #endregion
 
 
-
-
-    public interface IRmv { void Do(); }
-    // 实现自身移除委托
-    public class CustomRmv : IRmv
+    #region Remover
+    public interface IRemoverLst
     {
-        private Action call;
-        public CustomRmv(Action call) => this.call = call;
-        void IRmv.Do() => call?.Invoke();
+        List<IRemover> RemoverLst { get; }
     }
+
+    public static class RemoverLstExtension
+    {
+        public static void AddToRemoverLst(this IRemover self, IRemoverLst removerLst)
+            => removerLst.RemoverLst.Add(self);
+
+        public static void DoRemoverLst(this IRemoverLst self)
+        {
+            if (self.RemoverLst != null)
+            {
+                for (int i = 0; i < self.RemoverLst.Count; i++)
+                {
+                    self.RemoverLst[i]?.Do();
+                }
+                self.RemoverLst.Clear();
+            }
+        }
+    }
+
+
+
+    public interface IRemover { void Do(); }
+
+    // 实现自身移除委托
+    public struct CustomRemover : IRemover
+    {
+        private Action m_removeCallback { get; set; }
+        public CustomRemover(Action onRemoveCallback) => this.m_removeCallback = onRemoveCallback;
+        public void Do()
+        {
+            m_removeCallback?.Invoke();
+            m_removeCallback = null;
+        }
+    }
+
+
+#if UNITY_5_6_OR_NEWER
+    public abstract class Remover : UnityEngine.MonoBehaviour
+    {
+        private readonly HashSet<IRemover> m_RemoveSet = new HashSet<IRemover>();
+        public IRemover AddRemover(IRemover rmv)
+        {
+            m_RemoveSet.Add(rmv);
+            return rmv;
+        }
+
+        public void RmvRemover(IRemover rmv) => m_RemoveSet.Remove(rmv);
+
+        public void DoRemover()
+        {
+            foreach (var item in m_RemoveSet)
+            {
+                item?.Do();
+            }
+            m_RemoveSet.Clear();
+        }
+    }
+
+    public class RemoverTriggerWhenDestroy : Remover
+    {
+        private void OnDestroy()
+        {
+            DoRemover();
+        }
+    }
+    public class RemoverTriggerWhenDisable : Remover
+    {
+        private void OnDisable()
+        {
+            DoRemover();
+        }
+    }
+#endif
+
+    public static class RemoverExtension
+    {
+#if UNITY_5_6_OR_NEWER
+        static T GetOrAddComponent<T>(UnityEngine.GameObject gameObject) where T : UnityEngine.Component
+        {
+            var trigger = gameObject.GetComponent<T>();
+            if (!trigger)
+            {
+                trigger = gameObject.AddComponent<T>();
+            }
+            return trigger;
+        }
+
+
+        public static IRemover RemoveWhenGameObjectDestroyed(this IRemover self, UnityEngine.GameObject gameObject)
+            => GetOrAddComponent<RemoverTriggerWhenDestroy>(gameObject).AddRemover(self);
+
+        public static IRemover RemoveWhenGameObjectDestroyed<T>(this IRemover self, T component)
+            where T : UnityEngine.Component
+            => self.RemoveWhenGameObjectDestroyed(component.gameObject);
+
+        public static IRemover RemoveWhenDisabled(this IRemover self, UnityEngine.GameObject gameObject)
+            => GetOrAddComponent<RemoverTriggerWhenDisable>(gameObject).AddRemover(self);
+
+        public static IRemover RemoveWhenDisabled<T>(this IRemover self, T component)
+            where T : UnityEngine.Component
+            => self.RemoveWhenDisabled(component.gameObject);
+
+#endif
+    }
+
+
+    #endregion
 
 
 

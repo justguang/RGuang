@@ -422,11 +422,11 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志写入文件 StreamWriter
         /// </summary>
-        private static StreamWriter logFileWriter = null;
+        //private static StreamWriter logFileWriter = null;
         /// <summary>
         /// 日志写入文件 FileStream
         /// </summary>
-        private static FileStream logFileStream = null;
+        //private static FileStream logFileStream = null;
 
         /// <summary>
         /// 日志初始化
@@ -685,11 +685,53 @@ namespace RGuang.Kit
             string path = Cfg.SavePath + fileName;
 
             //FileKit.WriteFileByFileClass(path, msg + "\n", Encoding.UTF8, true, null);
-            FileKit.WriteFileByFileWriter(path, msg + "\n", Encoding.UTF8, true);
+            WriteFileByFileWriter(path, msg + "\n", Encoding.UTF8, true);
             //FileKit.WriteFileByFileStream(path, msg + "\n", true, null);
 
         }
+
+        /// <summary>
+        /// 写入数据自动创建文件【用StreamWriter类写入】
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <param name="context">数据</param>
+        /// <param name="encoding"><编码/param>
+        /// <param name="append">true追加写入数据，false覆盖原有数据</param>
+        /// <param name="errorCallback">异常回调</param>
+        static void WriteFileByFileWriter(string path, string context, Encoding encoding, bool append, Action<string> errorCallback = null)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                errorCallback?.Invoke("写入文件失败！无效路径");
+                return;
+            }
+
+            if (File.Exists(path) == false)
+            {
+                var fs = File.Create(path);
+                fs.Close();
+                fs.Dispose();
+            }
+
+            try
+            {
+                using (StreamWriter sr = new StreamWriter(path, append, encoding))
+                {
+                    sr.Write(context);
+                    sr.Close();
+                    sr.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                errorCallback?.Invoke($"写入文件失败！{e.Message}");
+            }
+
+        }
         #endregion
+
+
+
 
     }
     #endregion

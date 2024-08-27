@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace RGuang.Kit
 {
@@ -18,8 +19,43 @@ namespace RGuang.Kit
     /// <summary>
     /// 引用池
     /// </summary>
-    public static class ReferencePool
+    public static class ReferencePool<TIn, TOut>
     {
+
+        #region 深拷贝 - 表达式树 
+        private static readonly Func<TIn, TOut> cache = GetFunc();
+        private static Func<TIn, TOut> GetFunc()
+        {
+            ParameterExpression parameterExpression = Expression.Parameter(typeof(TIn), "p");
+            List<MemberBinding> memberBindingList = new List<MemberBinding>();
+
+            var propertiesInfoArr = typeof(TOut).GetProperties();
+            for (int i = 0; i < propertiesInfoArr.Length; i++)
+            {
+                var item = propertiesInfoArr[i];
+                if (!item.CanWrite) continue;
+                MemberExpression property = Expression.Property(parameterExpression, typeof(TIn).GetProperty(item.Name));
+                MemberBinding memberBinding = Expression.Bind(item, property);
+                memberBindingList.Add(memberBinding);
+            }
+            MemberInitExpression memberInitExpression = Expression.MemberInit(Expression.New(typeof(TOut)), memberBindingList.ToArray());
+            Expression<Func<TIn, TOut>> lambda = Expression.Lambda<Func<TIn, TOut>>(memberInitExpression, new ParameterExpression[] { parameterExpression });
+
+            return lambda.Compile();
+        }
+
+        /// <summary>
+        /// 深拷贝 - 表达式树
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static TOut CopyObject(TIn obj)
+        {
+            return cache(obj);
+        }
+        #endregion
+
+
         /**
          * 管理所有引用池
          * 
@@ -130,7 +166,7 @@ namespace RGuang.Kit
         /// </summary>
         /// <param name="referenceType">引用类型</param>
         /// <param name="removeCount">要移除的数量</param>
-        public static void RemoveCount(Type referenceType,int removeCount)
+        public static void RemoveCount(Type referenceType, int removeCount)
         {
             InternalCheckReferenceType(referenceType);
             GetReferenceCollection(referenceType).RemoveCount(removeCount);
@@ -139,7 +175,7 @@ namespace RGuang.Kit
         /// 从引用池中移除所有引用
         /// </summary>
         /// <typeparam name="T">引用类型</typeparam>
-        public static void RemoveAll<T>()where T : class, IReference
+        public static void RemoveAll<T>() where T : class, IReference
         {
             GetReferenceCollection(typeof(T)).RemoveAll();
         }

@@ -114,17 +114,24 @@ namespace RGuang.Kit
             }
         }
 
-
-        static List<string> GetFieldNamesFromSheetHeader(ISheet sheet)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <returns>
+        /// int => 标识字段在表格中第几纵列
+        /// string => 字段名
+        /// </returns>
+        static List<ValueTuple<int, string>> GetFieldNamesFromSheetHeader(ISheet sheet)
         {
             IRow headerRow = sheet.GetRow(0);
 
-            var fieldNames = new List<string>();
-            for (int i = 1; i < headerRow.LastCellNum; i++)
+            var fieldNames = new List<ValueTuple<int, string>>();
+            for (int i = 1, idx = 1; i < headerRow.LastCellNum; i++, idx++)
             {
                 var cell = headerRow.GetCell(i);
-                if (cell == null || cell.CellType == CellType.Blank) break;
-                fieldNames.Add(cell.StringCellValue);
+                if (cell == null || cell.CellType == CellType.Blank) continue;
+                fieldNames.Add((idx, cell.StringCellValue));
             }
             return fieldNames;
         }
@@ -154,20 +161,20 @@ namespace RGuang.Kit
             }
         }
 
-        static object CreateEntityFromRow(IRow row, List<string> fieldNames, Type entityType, string sheetName)
+        static object CreateEntityFromRow(IRow row, List<ValueTuple<int, string>> fieldNames, Type entityType, string sheetName)
         {
             var entity = Activator.CreateInstance(entityType);
 
-            for (int fieldIdx = 0, rowIdx = 1; fieldIdx < fieldNames.Count; fieldIdx++, rowIdx++)
+            for (int fieldIdx = 0; fieldIdx < fieldNames.Count; fieldIdx++)
             {
                 FieldInfo entityField = entityType.GetField(
-                    fieldNames[fieldIdx],
+                    fieldNames[fieldIdx].Item2,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                 );
                 if (entityField == null) continue;
                 if (!entityField.IsPublic && entityField.GetCustomAttributes(typeof(SerializeField), false).Length == 0) continue;
 
-                ICell cell = row.GetCell(rowIdx);
+                ICell cell = row.GetCell(fieldNames[fieldIdx].Item1);
                 if (cell == null) continue;
 
                 try
@@ -177,7 +184,7 @@ namespace RGuang.Kit
                 }
                 catch
                 {
-                    throw new Exception($"无效的数据类型. 请确认 【{sheetName}】页 的 {row.RowNum + 1}行,  第{cell.ColumnIndex + 1}纵列 的数据类型. ");
+                    throw new Exception($"无效的数据类型. 请确认 【{sheetName}】页 的 {row.RowNum + 1}行,  第{fieldNames[fieldIdx].Item1 + 1}纵列 的数据类型. ");
                 }
             }
             return entity;
@@ -185,7 +192,7 @@ namespace RGuang.Kit
 
         static object GetEntityListFromSheet(ISheet sheet, Type entityType)
         {
-            List<string> excelColumnNames = GetFieldNamesFromSheetHeader(sheet);
+            var excelColumnNames = GetFieldNamesFromSheetHeader(sheet);
 
             Type listType = typeof(List<>).MakeGenericType(entityType);
             MethodInfo listAddMethod = listType.GetMethod("Add", new Type[] { entityType });

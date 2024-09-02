@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace RGuang.Kit.Example
 {
-    public class ExcelDebugController : MonoBehaviour
+    public class ExcelExample : MonoBehaviour
     {
         [SerializeField] private Text m_txt;
         [SerializeField] private ConfigItems m_ConfigSO;

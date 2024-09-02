@@ -18,49 +18,99 @@ MonoBehaviour:
     Price: 999
     Grade: 2
     Description: "\u590D\u6D3B\u6B21\u6570\u52A01"
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 2
     Name: "\u82F9\u679C"
     Price: 2
     Grade: 0
     Description: "\u6062\u590D\u751F\u547D\u503C"
+    Nothing2: 22
+    SP2: 44
+    OP2: 66
+    SP7: 
+    SP8: 
   - ID: 3
     Name: "\u6E05\u9732"
     Price: 3
     Grade: 0
     Description: "\u6062\u590D\u6CD5\u529B\u503C"
+    Nothing2: bb
+    SP2: dd
+    OP2: gg
+    SP7: 
+    SP8: 
   - ID: 4
     Name: "\u89E3\u6BD2\u4E38"
     Price: 2
     Grade: 0
     Description: "\u7ACB\u5373\u89E3\u9664\u4E2D\u6BD2\u72B6\u6001"
+    Nothing2: -2
+    SP2: -4
+    OP2: -6
+    SP7: 
+    SP8: 
   ItemLst_2:
   - ID: 1
     Name: item1
     Price: 999
     Grade: 1
     Description: "\u590D\u6D3B\u6B21\u6570\u52A01"
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 2
     Name: item2
     Price: 2
     Grade: 2
     Description: "\u6062\u590D\u751F\u547D\u503C"
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 3
     Name: "\u6E05\u9732"
     Price: 3
     Grade: 0
     Description: "\u6062\u590D\u6CD5\u529B\u503C"
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 4
     Name: item4
     Price: 2
     Grade: 1
     Description: "\u7ACB\u5373\u89E3\u9664\u4E2D\u6BD2\u72B6\u6001"
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 5
     Name: item5
     Price: 2
     Grade: 2
     Description: test
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 
   - ID: 6
     Name: item6
     Price: 2
     Grade: 2
     Description: test
+    Nothing2: 
+    SP2: 
+    OP2: 
+    SP7: 
+    SP8: 

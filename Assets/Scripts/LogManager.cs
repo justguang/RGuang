@@ -4,8 +4,6 @@
 ///****************************************************************************
 using UnityEngine;
 using RGuang.Kit;
-using System.Collections;
-using System.Collections.Generic;
 using System;
 
 public class LogManager : RGuang.Kit.MonoSingleton<LogManager>

@@ -23,7 +23,10 @@ namespace RGuang.Kit
         public static void AESFileEncrypt(string path, string EncrptyKey, Action<string> logCallback = null, Action<string> errorCallback = null)
         {
             if (!File.Exists(path))
+            {
+                logCallback?.Invoke($"文件不存在。{path}");
                 return;
+            }
 
             try
             {
@@ -69,6 +72,7 @@ namespace RGuang.Kit
         {
             if (!File.Exists(path))
             {
+                logCallback?.Invoke($"文件不存在。{path}");
                 return;
             }
             try
@@ -107,6 +111,7 @@ namespace RGuang.Kit
         {
             if (!File.Exists(path))
             {
+                logCallback?.Invoke($"文件不存在。{path}");
                 return null;
             }
             byte[] DecBuffer = null;
@@ -158,7 +163,7 @@ namespace RGuang.Kit
         /// <summary>
         /// AES 加密(高级加密标准，是下一代的加密算法标准，速度快，安全级别高，目前 AES 标准的一个实现是 Rijndael 算法)
         /// </summary>
-        /// <param name="EncryptString">待加密密文</param>
+        /// <param name="EncryptByte">待加密密文</param>
         /// <param name="EncryptKey">加密密钥</param>
         public static byte[] AESEncrypt(byte[] EncryptByte, string EncryptKey)
         {

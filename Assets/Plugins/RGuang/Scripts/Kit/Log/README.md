@@ -18,7 +18,6 @@ namespace RGuang.Kit
 	enableThreadID = true/false【显示/不显示线程ID】
 	enableTrace = true/false【输出日志时显示/不显示堆栈信息】
 	enableSave = true/false【保存/不保存日志成日志文件】
-	enableCover = true/false【新日志内容覆盖/不覆盖原有日志内容】
     cfg.loggerType = RLoggerType.Unity/RLoggerType.Console 【日志类型(Unity/Console)】
 	savePath = "Rlogs\"【保存路径】
 	saveName = "RLog.txt"【保存的文件名】
@@ -35,7 +34,6 @@ namespace RGuang.Kit
     cfg.enableThreadID = true;
     cfg.enableTrace = false;
     cfg.enableSave = false;
-    cfg.enableCover = true;
     cfg.loggerType = LoggerType.Unity;
     cfg.savePath = null;
     cfg.saveName = null;

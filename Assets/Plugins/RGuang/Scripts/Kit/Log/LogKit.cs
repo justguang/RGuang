@@ -715,6 +715,7 @@ namespace RGuang.Kit
 
             try
             {
+                context += "\n";
                 using (StreamWriter sr = new StreamWriter(path, append, encoding))
                 {
                     sr.Write(context);

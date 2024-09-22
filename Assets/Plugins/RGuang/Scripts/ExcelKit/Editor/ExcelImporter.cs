@@ -1,3 +1,4 @@
+
 #if UNITY_EDITOR
 
 using System.Collections;
@@ -13,7 +14,7 @@ using NPOI.SS.UserModel;
 
 namespace RGuang.Kit
 {
-    public class ExcelImporter : AssetPostprocessor
+    public sealed class ExcelImporter : AssetPostprocessor
     {
         class ExcelAssetInfo
         {
@@ -29,6 +30,7 @@ namespace RGuang.Kit
         }
 
         static List<ExcelAssetInfo> cachedInfos = null; // Clear on compile.
+
 
         /// <summary>
         /// 当所有资源 的导入，删除，移动，修改操作Editor都会调用该方法

@@ -1,8 +1,12 @@
 {
-    "name": "RGuang.ExcelKit",
+    "name": "RGuang.ExcelKit.Editor",
     "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [],
+    "references": [
+        "GUID:b54312e5ddfda37469440aa1390b688c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

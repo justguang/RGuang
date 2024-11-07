@@ -1,6 +1,3 @@
-
-#if UNITY_EDITOR
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +9,9 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 
-namespace RGuang.Kit
+namespace RGuang.ExcelKit
 {
-    public sealed class ExcelImporter : AssetPostprocessor
+    public class ExcelImporter : AssetPostprocessor
     {
         class ExcelAssetInfo
         {
@@ -29,8 +26,7 @@ namespace RGuang.Kit
             }
         }
 
-        static List<ExcelAssetInfo> cachedInfos = null; // Clear on compile.
-
+        static List<ExcelAssetInfo> m_cachedInfos = null; // Clear on compile.
 
         /// <summary>
         /// 当所有资源 的导入，删除，移动，修改操作Editor都会调用该方法
@@ -42,16 +38,21 @@ namespace RGuang.Kit
             {
                 if (Path.GetExtension(path) == ".xls" || Path.GetExtension(path) == ".xlsx")
                 {
-                    if (cachedInfos == null) cachedInfos = FindExcelAssetInfos();
+                    if (m_cachedInfos == null) m_cachedInfos = FindExcelAssetInfos();
 
                     var excelName = Path.GetFileNameWithoutExtension(path);
                     if (excelName.StartsWith("~$")) continue;
 
-                    ExcelAssetInfo info = cachedInfos.Find(i => i.ExcelName == excelName);
+                    List<ExcelAssetInfo> infoLst = m_cachedInfos.FindAll(i => i.ExcelName == excelName);
 
-                    if (info == null) continue;
+                    if (infoLst == null || infoLst.Count < 1) continue;
 
-                    ImportExcel(path, info);
+
+                    IWorkbook book = LoadBook(path);
+                    for (int i = 0; i < infoLst.Count; i++)
+                    {
+                        ImportExcel(book, infoLst[i]);
+                    }
                     imported = true;
                 }
             }
@@ -74,6 +75,8 @@ namespace RGuang.Kit
                     var attributes = type.GetCustomAttributes(typeof(ExcelAssetAttribute), false);
                     if (attributes.Length == 0) continue;
                     var attribute = (ExcelAssetAttribute)attributes[0];
+                    if (string.IsNullOrWhiteSpace(attribute.AssetPath) || string.IsNullOrWhiteSpace(attribute.ExcelName)) continue;
+
                     var info = new ExcelAssetInfo()
                     {
                         AssetType = type,
@@ -116,24 +119,22 @@ namespace RGuang.Kit
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sheet"></param>
-        /// <returns>
-        /// int => 标识字段在表格中第几纵列
-        /// string => 字段名
-        /// </returns>
-        static List<ValueTuple<int, string>> GetFieldNamesFromSheetHeader(ISheet sheet)
+
+        static List<ValueTuple<int, string>> GetFieldNamesFromSheet(ISheet sheet, int fieldStartRow, int fieldStartColumn)
         {
-            IRow headerRow = sheet.GetRow(0);
+            IRow headerRow = sheet.GetRow(fieldStartRow);
+
+            if (headerRow == null)
+            {
+                throw new Exception($"读取《{sheet.SheetName}》页的数据字段错误，[{fieldStartRow}]行[{fieldStartColumn}]列无数据字段， 请确认字段开始的行列.");
+            }
 
             var fieldNames = new List<ValueTuple<int, string>>();
-            for (int i = 1, idx = 1; i < headerRow.LastCellNum; i++, idx++)
+            for (int i = fieldStartColumn; i < headerRow.LastCellNum; i++)
             {
                 var cell = headerRow.GetCell(i);
                 if (cell == null || cell.CellType == CellType.Blank) continue;
-                fieldNames.Add((idx, cell.StringCellValue));
+                fieldNames.Add((i, cell.StringCellValue));
             }
             return fieldNames;
         }
@@ -169,12 +170,14 @@ namespace RGuang.Kit
 
             for (int fieldIdx = 0; fieldIdx < fieldNames.Count; fieldIdx++)
             {
-                FieldInfo entityField = entityType.GetField(
-                    fieldNames[fieldIdx].Item2,
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                );
+                FieldInfo entityField = entityType.GetField(fieldNames[fieldIdx].Item2, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 if (entityField == null) continue;
-                if (!entityField.IsPublic && entityField.GetCustomAttributes(typeof(SerializeField), false).Length == 0) continue;
+
+
+                //if (!entityField.IsPublic)
+                //{
+                //    if (entityField.GetCustomAttributes(typeof(SerializeField), false).Length == 0) continue;
+                //}
 
                 ICell cell = row.GetCell(fieldNames[fieldIdx].Item1);
                 if (cell == null) continue;
@@ -192,32 +195,33 @@ namespace RGuang.Kit
             return entity;
         }
 
-        static object GetEntityListFromSheet(ISheet sheet, Type entityType)
+
+        static object GetEntityListFromSheet(ISheet sheet, Type entityType, ExcelAssetInfo excelAssetInfo)
         {
-            var excelColumnNames = GetFieldNamesFromSheetHeader(sheet);
+            List<(int, string)> excelColumnNames = GetFieldNamesFromSheet(sheet, excelAssetInfo.Attribute.FieldStartRow, excelAssetInfo.Attribute.FieldStartColumn);
 
             Type listType = typeof(List<>).MakeGenericType(entityType);
             MethodInfo listAddMethod = listType.GetMethod("Add", new Type[] { entityType });
             object list = Activator.CreateInstance(listType);
 
             // row of index 0 is header
-            for (int i = 1; i <= sheet.LastRowNum; i++)
+
+            int contextIdx = excelAssetInfo.Attribute.FieldStartColumn;
+            for (int i = excelAssetInfo.Attribute.FieldStartRow + 1; i <= sheet.LastRowNum; i++)
             {
                 IRow row = sheet.GetRow(i);
                 if (row == null) continue;
 
                 ICell entryCell = row.GetCell(0);
                 // skip comment row
-                if (entryCell != null && entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
+                //if (entryCell != null && entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
+                if (entryCell != null) continue;
 
-                ICell c1 = row.GetCell(1);
+                ICell c1 = row.GetCell(contextIdx);
                 // skip NullOrWhiteSpace
                 if (c1 == null) continue;
-                if (c1 != null)
-                {
-                    if (c1.CellType == CellType.Blank) continue;
-                    if (c1.CellType == CellType.String && string.IsNullOrWhiteSpace(c1.StringCellValue)) continue;
-                }
+                if (c1.CellType == CellType.Blank) continue;
+                if (c1.CellType == CellType.String && string.IsNullOrWhiteSpace(c1.StringCellValue)) continue;
 
                 var entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
                 listAddMethod.Invoke(list, new object[] { entity });
@@ -226,47 +230,48 @@ namespace RGuang.Kit
             return list;
         }
 
-        static void ImportExcel(string excelPath, ExcelAssetInfo info)
+        static void ImportExcel(IWorkbook book, ExcelAssetInfo info)
         {
-            string assetPath = "";
             string assetName = info.AssetType.Name + ".asset";
+            string assetPath = Path.Combine(info.Attribute.AssetPath, assetName);
 
-            if (string.IsNullOrEmpty(info.Attribute.AssetPath))
-            {
-                string basePath = Path.GetDirectoryName(excelPath);
-                assetPath = Path.Combine(basePath, assetName);
-            }
-            else
-            {
-                var path = Path.Combine("Assets", info.Attribute.AssetPath);
-                assetPath = Path.Combine(path, assetName);
-            }
             UnityEngine.Object asset = LoadOrCreateAsset(assetPath, info.AssetType);
 
-            IWorkbook book = LoadBook(excelPath);
 
             var assetFields = info.AssetType.GetFields();
-            int sheetCount = 0;
+            if (assetFields == null || assetFields.Length == 0) return;
 
-            foreach (var assetField in assetFields)
+
+            ISheet sheet = book.GetSheet(info.Attribute.ExcelSheetName);
+            if (sheet == null)
             {
-                ISheet sheet = book.GetSheet(assetField.Name);
-                if (sheet == null) continue;
-
-                Type fieldType = assetField.FieldType;
-                if (!fieldType.IsGenericType || (fieldType.GetGenericTypeDefinition() != typeof(List<>))) continue;
-
-                Type[] types = fieldType.GetGenericArguments();
-                Type entityType = types[0];
-
-                object entities = GetEntityListFromSheet(sheet, entityType);
-                assetField.SetValue(asset, entities);
-                sheetCount++;
+                if (info.Attribute.LogOnImport)
+                {
+                    Debug.LogWarning($"在[{info.Attribute.ExcelName}]表中没有找到[{info.Attribute.ExcelSheetName}]页的数据.");
+                }
+                return;
             }
+
+            FieldInfo dataField = assetFields[0];
+            Type fieldType = dataField.FieldType;
+            if (!fieldType.IsGenericType || (fieldType.GetGenericTypeDefinition() != typeof(List<>)))
+            {
+                if (info.Attribute.LogOnImport)
+                {
+                    Debug.LogWarning($"{info.AssetType} 字段中没有指定存储数据的类型=>List<>。");
+                }
+                return;
+            }
+
+            Type[] types = fieldType.GetGenericArguments();
+            Type entityType = types[0];
+
+            object entities = GetEntityListFromSheet(sheet, entityType, info);
+            dataField.SetValue(asset, entities);
 
             if (info.Attribute.LogOnImport)
             {
-                Debug.Log($"从【{excelPath}】 成功导入 {sheetCount}个表数据 .");
+                Debug.Log($"从 [{info.Attribute.AssetPath}/{info.Attribute.ExcelName}] 表中 [{info.Attribute.ExcelSheetName}]页 成功导入数据 .");
             }
 
             EditorUtility.SetDirty(asset);
@@ -276,6 +281,5 @@ namespace RGuang.Kit
 }
 
 
-#endif
 
 

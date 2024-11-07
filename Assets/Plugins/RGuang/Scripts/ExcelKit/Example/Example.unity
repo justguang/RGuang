@@ -574,5 +574,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2517303da66824898c6c6b8a2e45a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_txt: {fileID: 0}
-  m_ConfigSO: {fileID: 11400000, guid: 311e97a70f73d4f42945266d28af0396, type: 2}
+  so_data: {fileID: 11400000, guid: 538d213447709c84780ed1d1172fc3d4, type: 2}
+  so_data2: {fileID: 11400000, guid: 579ed6d2bd28b644587e183e3c44da59, type: 2}

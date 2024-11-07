@@ -9,52 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed596e0c3b25a5f41b6f83b2b400a3e6, type: 3}
-  m_Name: ConfigItems
+  m_Script: {fileID: 11500000, guid: a25c19391295be94f934b0a573b8140e, type: 3}
+  m_Name: SO_ItemData
   m_EditorClassIdentifier: 
-  ItemLst_1:
-  - ID: 1
-    Name: "\u4E5D\u8F6C\u8FD8\u9B42\u4E39"
-    Price: 999
-    Grade: 2
-    Description: "\u590D\u6D3B\u6B21\u6570\u52A01"
-    Nothing2: 
-    SP2: 
-    OP2: 
-    SP7: 
-    SP8: 
-  - ID: 2
-    Name: "\u82F9\u679C"
-    Price: 2
-    Grade: 0
-    Description: "\u6062\u590D\u751F\u547D\u503C"
-    Nothing2: 22
-    SP2: 44
-    OP2: 66
-    SP7: 
-    SP8: 
-  - ID: 3
-    Name: "\u6E05\u9732"
-    Price: 3
-    Grade: 0
-    Description: "\u6062\u590D\u6CD5\u529B\u503C"
-    Nothing2: bb
-    SP2: dd
-    OP2: gg
-    SP7: 
-    SP8: 
-  - ID: 4
-    Name: "\u89E3\u6BD2\u4E38"
-    Price: 2
-    Grade: 0
-    Description: "\u7ACB\u5373\u89E3\u9664\u4E2D\u6BD2\u72B6\u6001"
-    Nothing2: -2
-    SP2: -4
-    OP2: -6
-    SP7: 
-    SP8: 
-  ItemLst_2:
-  - ID: 1
+  DataLst:
+  - Id: 1
     Name: item1
     Price: 999
     Grade: 1
@@ -64,7 +23,7 @@ MonoBehaviour:
     OP2: 
     SP7: 
     SP8: 
-  - ID: 2
+  - Id: 2
     Name: item2
     Price: 2
     Grade: 2
@@ -74,7 +33,7 @@ MonoBehaviour:
     OP2: 
     SP7: 
     SP8: 
-  - ID: 3
+  - Id: 3
     Name: "\u6E05\u9732"
     Price: 3
     Grade: 0
@@ -84,7 +43,7 @@ MonoBehaviour:
     OP2: 
     SP7: 
     SP8: 
-  - ID: 4
+  - Id: 4
     Name: item4
     Price: 2
     Grade: 1
@@ -94,7 +53,7 @@ MonoBehaviour:
     OP2: 
     SP7: 
     SP8: 
-  - ID: 5
+  - Id: 5
     Name: item5
     Price: 2
     Grade: 2
@@ -104,7 +63,7 @@ MonoBehaviour:
     OP2: 
     SP7: 
     SP8: 
-  - ID: 6
+  - Id: 6
     Name: item6
     Price: 2
     Grade: 2

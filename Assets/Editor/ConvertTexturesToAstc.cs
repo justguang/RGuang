@@ -19,7 +19,6 @@ public class ConvertTexturesToAstc : EditorWindow
         x4096 = 4096
     }
 
-
     private List<string> folderPaths = new List<string>();
 
     private TextureSize curSetSize = TextureSize.x512;

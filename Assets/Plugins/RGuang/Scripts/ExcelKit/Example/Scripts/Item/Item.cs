@@ -3,21 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace RGuang.Kit.Example
+namespace RGuang.ExcelKit.Example
 {
 
-    /*
-     * 要求public，或者带有[SerializeField]标签的非public字段
-     * 
-     */
 
     [Serializable]
     public class Item
     {
-        public int ID;
+        public int Id;
         public string Name;
         public int Price;
-        public GradeType Grade;
+        public EnumGradeType Grade;
         public string Description;
         [SerializeField] protected string Nothing2;
         [SerializeField] protected string SP2;
@@ -27,10 +23,10 @@ namespace RGuang.Kit.Example
 
         public override string ToString()
         {
-            return $"ID={ID},\n" +
+            return $"Id={Id},\n" +
                     $"Name={Name},\n" +
                     $"Price={Price},\n" +
-                    $"GradeType={Grade},\n" +
+                    $"EnumGradeType={Grade},\n" +
                     $"Description={Description}\n" +
                     $"Nothing2={Nothing2}\n" +
                     $"SP2={SP2}\n" +
@@ -41,7 +37,7 @@ namespace RGuang.Kit.Example
 
     }
 
-    public enum GradeType
+    public enum EnumGradeType
     {
         低,
         中,

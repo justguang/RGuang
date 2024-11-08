@@ -19,11 +19,11 @@ namespace RGuang.ExcelKit
         /// </summary>
         public string ExcelSheetName { get; set; }
         /// <summary>
-        /// 字段在第几行开始
+        /// 字段在第n行开始
         /// </summary>
         public int FieldStartRow { get; set; }
         /// <summary>
-        /// 字段在第几列开始
+        /// 字段在第n列开始
         /// </summary>
         public int FieldStartColumn { get; set; }
         /// <summary>
@@ -38,8 +38,8 @@ namespace RGuang.ExcelKit
         /// <param name="assetPath">资源路径【Assets/】</param>
         /// <param name="excelName">Excel表名</param>
         /// <param name="excelSheet">读取Excel表下指定的页数据</param>
-        /// <param name="fieldStartRow">字段在第0行开始</param>
-        /// <param name="fieldStartColumn">字段在第1列开始</param>
+        /// <param name="fieldStartRow">字段在第n行开始</param>
+        /// <param name="fieldStartColumn">字段在第n列开始</param>
         /// <param name="enableLog">True开启日志</param>
         public ExcelAssetAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, bool enableLog = false)
         {

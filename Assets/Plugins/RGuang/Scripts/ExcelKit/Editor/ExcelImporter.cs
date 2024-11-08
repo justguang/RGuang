@@ -28,9 +28,6 @@ namespace RGuang.ExcelKit
 
         static List<ExcelAssetInfo> m_cachedInfos = null; // Clear on compile.
 
-        /// <summary>
-        /// 当所有资源 的导入，删除，移动，修改操作Editor都会调用该方法
-        /// </summary>
         static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             bool imported = false;

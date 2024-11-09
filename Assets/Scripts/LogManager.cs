@@ -92,7 +92,7 @@ public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
 
         Debug.Log($"Unity Log2");
         Debug.LogWarning($"Unity LogWarning2");
-        Debug.LogError($"Unity LogErrorg2");
+        UnityEngine.Debug.LogError($"Unity LogErrorg2");
 
         RGuang.ExcelKit.Example.Item item = null;
         item.Id += 1;
@@ -103,7 +103,7 @@ public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        Application.logMessageReceived -= LogKit.OnUnityLogReceived;
+        UnityEngine.Application.logMessageReceived -= LogKit.OnUnityLogReceived;
     }
 
 

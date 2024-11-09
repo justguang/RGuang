@@ -130,9 +130,8 @@ namespace RGuang.Kit
         void Warn(string msg);
         void Error(string msg);
 
-
-
     }
+
 
     /// <summary>
     /// Log 配置
@@ -144,13 +143,13 @@ namespace RGuang.Kit
         /// </summary>
         public LoggerLevel LogLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error;
         /// <summary>
+        /// 日志类型【默认LoggerType.Console】
+        /// </summary>
+        public LoggerType LoggerType = LoggerType.Console;
+        /// <summary>
         /// 前缀标记【默认 #】
         /// </summary>
         public string LogPrefix = "#";
-        /// <summary>
-        /// 标记与日志具体内容间隔符号【默认 >>】
-        /// </summary>
-        public string LogSeparate = ">";
         /// <summary>
         /// 是否显示时间标记【默认true，显示】
         /// </summary>
@@ -160,6 +159,10 @@ namespace RGuang.Kit
         /// </summary>
         public bool EnableThreadID = true;
         /// <summary>
+        /// 标记与日志具体内容间隔符号【默认 >>】
+        /// </summary>
+        public string LogSeparate = ">";
+        /// <summary>
         /// 是否显示具体堆栈的消息【默认true，显示】
         /// </summary>
         public bool EnableTrace = false;
@@ -167,10 +170,6 @@ namespace RGuang.Kit
         /// 是否将日志保存下来【默认true，保存】
         /// </summary>
         public bool EnableSave = true;
-        /// <summary>
-        /// 日志类型【默认LoggerType.Console】
-        /// </summary>
-        public LoggerType LoggerType = LoggerType.Console;
         /// <summary>
         /// 日志保存的路径【默认当前运行程序的更目录下Logs文件夹下】
         /// </summary>

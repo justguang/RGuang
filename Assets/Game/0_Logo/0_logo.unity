@@ -558,10 +558,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_logLevel: 22
   m_logPrefix: '#'
-  m_logSeparate: '>>'
   m_enableTime: 1
   m_enableThreadID: 1
-  m_enableTrace: 1
+  m_logSeparate: '>>'
+  m_enableTrace: 0
   m_enableSave: 1
   m_saveFilePath: 
   m_saveFileName: 

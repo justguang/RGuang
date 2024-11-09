@@ -5,6 +5,7 @@
 using UnityEngine;
 using RGuang.Kit;
 using System;
+using UnityEngine.Assertions;
 
 public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
 {
@@ -61,10 +62,49 @@ public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
         };
 
         LogKit.InitSetting(cfg);
+        Application.logMessageReceived += LogKit.OnUnityLogReceived;
+
+        LogKit.Log($" ↓↓↓RGuang.LogKit 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
         LogKit.ColorLog(ColorLog.Cyan, cfg.ToString());
-        LogKit.Log($" test = {DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+
+        LogKit.ColorLog(ColorLog.White, " -- 测试白色 --");
+        LogKit.ColorLog(ColorLog.Gray, "-- 测试灰色 --");
+        LogKit.ColorLog(ColorLog.Black, "-- 测试黑色 --");
+        LogKit.ColorLog(ColorLog.Red, "-- 测试红色 --");
+        LogKit.ColorLog(ColorLog.Green, "-- 测试绿色 --");
+        LogKit.ColorLog(ColorLog.Blue, "-- 测试蓝色 --");
+        LogKit.ColorLog(ColorLog.Yellow, "-- 测试黄色 --");
+        LogKit.ColorLog(ColorLog.Cyan, "-- 测试青色 --");
+        LogKit.ColorLog(ColorLog.Magenta, "-- 测试洋红色 --");
+        LogKit.Log("---------------- 分割线 ----------------------------");
+        LogKit.ColorLog(ColorLog.DarkGray, "-- 测试深灰 --");
+        LogKit.ColorLog(ColorLog.DarkRed, "-- 测试深红 --");
+        LogKit.ColorLog(ColorLog.DarkGreen, "-- 测试深绿 --");
+        LogKit.ColorLog(ColorLog.DarkBlue, "-- 测试深蓝 --");
+        LogKit.ColorLog(ColorLog.DarkYellow, "-- 测试暗黄 --");
+        LogKit.ColorLog(ColorLog.DarkCyan, "-- 测试暗青 --");
+        LogKit.ColorLog(ColorLog.DarkMagenta, "-- 测试紫 --");
+        LogKit.Log("---------------- 分割线 ----------------------------");
+        LogKit.Warn("-- RGuang.Kit Warn测试 --");
+        LogKit.Error("-- RGuang.Kit Error测试--");
+        LogKit.Trace("-- RGuang.Kit Trace测试--");
+        LogKit.Log($" ↑↑↑ RGuang.LogKit 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+
+        Debug.Log($"Unity Log2");
+        Debug.LogWarning($"Unity LogWarning2");
+        Debug.LogError($"Unity LogErrorg2");
+
+        RGuang.ExcelKit.Example.Item item = null;
+        item.Id += 1;
+
+        throw new Exception(" Exce测试");
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        Application.logMessageReceived -= LogKit.OnUnityLogReceived;
+    }
 
 
 }

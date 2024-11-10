@@ -1,7 +1,7 @@
 #	RLog日志工具
 	namespace RGuang.Kit
 
-### --- func: ---
+### ---		func:	---
 	LogKit.Log	
 	LogKit.ColorLog
 	LogKit.Warn
@@ -9,7 +9,7 @@
 	LogKit.Error
 
 
-### --- RLogConfig ---
+### ---		RLogConfig	---
 	日志配置：
 	//日志启用等级(可多选)
     logLevel = LoggerLevel.None|Log|Warn|Trace|Error
@@ -44,7 +44,7 @@
 
 
 
-### --- Example For Unity ---
+### ---		Example For Unity	---
     LogConfig cfg = new LogConfig();
     cfg.logLevel = LoggerLevel.Log|LoggerLevel.Warn;
     cfg.loggerType = LoggerType.Unity;
@@ -53,19 +53,33 @@
     cfg.enableThreadID = true;
     cfg.logSeparate = ">";
     cfg.enableTrace = false;
-    cfg.enableSave = false;
+    cfg.enableSave = true;
     cfg.savePath = null;
     cfg.saveName = null;
 	
 	LogKit.InitSetting(cfg);
-	UnityEngine.Application.logMessageReceived += LogKit.OnUnityLogReceived;
 	
     LogKit.Log("hello world");
 
-##### ps: 日志文件同时保存 UnityEngine.Debug 输出的信息需要添加事件监听 如下：
-	void Awake() => UnityEngine.Application.logMessageReceived += LogKit.OnUnityLogReceived;
-	
-	void OnDestroy() => UnityEngine.Application.logMessageReceived -= LogKit.OnUnityLogReceived;
 
+###	--- 	Example For Console		---
+	LogConfig cfg = new LogConfig
+	{
+		LogLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error,
+		LoggerType = LoggerType.Console,
+
+		LogPrefix = "#",
+		EnableTime = true,
+		EnableThreadID = true,
+		LogSeparate = ">>",
+
+		EnableTrace = true,
+
+		EnableSave = true,
+	};
+
+	LogKit.InitSetting(cfg);
+	
+    LogKit.Log("hello world");
 
 

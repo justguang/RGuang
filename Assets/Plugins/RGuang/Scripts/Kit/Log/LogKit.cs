@@ -8,11 +8,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
-using Markdig.Helpers;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace RGuang.Kit
 {
@@ -173,7 +172,7 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志保存的路径【默认当前运行程序的更目录下Logs文件夹下】
         /// </summary>
-        private string _savePath;
+        private string _savePath = string.Empty;
         /// <summary>
         /// 日志文件保存路径
         /// </summary>
@@ -181,7 +180,7 @@ namespace RGuang.Kit
         {
             get
             {
-                if (_savePath == null)
+                if (string.IsNullOrWhiteSpace(_savePath))
                 {
                     if (LoggerType == LoggerType.Unity)
                     {
@@ -193,12 +192,11 @@ namespace RGuang.Kit
                         _savePath = string.Format("{0}RLog\\", AppDomain.CurrentDomain.BaseDirectory);
                     }
                 }
+
                 return _savePath;
             }
-            set
-            {
-                _savePath = value;
-            }
+
+            set => _savePath = value;
         }
 
         /// <summary>
@@ -208,16 +206,18 @@ namespace RGuang.Kit
         /// </summary>
         public string SaveName
         {
-            get => _saveName;
-            set
+            get
             {
-                if (!string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(_saveName))
                 {
-                    _saveName = SaveName;
+                    _saveName = "Rlog.txt";
                 }
+                return _saveName;
             }
+
+            set => _saveName = value;
         }
-        private string _saveName = "Rlog.txt";
+        private string _saveName = string.Empty;
 
 
 
@@ -466,31 +466,62 @@ namespace RGuang.Kit
             if (Cfg.LoggerType == LoggerType.Console)
             {
                 Logger = new ConsoleLogger();
+                System.AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
             }
             else if (Cfg.LoggerType == LoggerType.Unity)
             {
                 Logger = new UnityLogger();
+                UnityEngine.Application.logMessageReceivedThreaded += OnUnityLogReceivedThreaded;
             }
+
+            if (Directory.Exists(Cfg.SavePath) == false) Directory.CreateDirectory(Cfg.SavePath);
 
         }
 
-        /// <summary>
-        /// 提供给Unity日志信息打印回调
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="stackTrace"></param>
-        /// <param name="logType"></param>
-        public static void OnUnityLogReceived(string msg, string stackTrace, UnityEngine.LogType logType)
+
+        private static void FirstChanceException(object? sender, FirstChanceExceptionEventArgs e)
+        {
+            if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
+            {
+                StringBuilder sb = new StringBuilder(DecorateLog(e.Exception.Message, false));
+                sb.Insert(0, "【异常】 ");
+                sb.AppendFormat("\n\t堆栈:{0}\n\t异常函数:{1}", e.Exception.StackTrace, e.Exception.TargetSite);
+                Console.WriteLine(sb.ToString());
+                WriteToFile(sb.ToString());
+            }
+        }
+
+        private static void OnUnityLogReceivedThreaded(string msg, string stackTrace, UnityEngine.LogType logType)
         {
             if (Cfg.LoggerType.Equals(LoggerType.Unity) && Cfg.EnableSave)
             {
                 switch (logType)
                 {
-                    case LogType.Log: msg = string.Format("[Log]{0}", msg); break;
-                    case LogType.Warning: msg = string.Format("[Warn]{0}", msg); break;
-                    case LogType.Error: msg = string.Format("[Error]{0}", msg); break;
-                    case LogType.Assert: msg = string.Format("【Assert】{0}\n\tStackTrace:\n\t\t{1}", msg, stackTrace); break;
-                    case LogType.Exception: msg = string.Format("【Exception】{0}\n\tStackTrace:\n\t\t{1}", msg, stackTrace); break;
+                    case LogType.Log: msg = string.Format("[信息]{0}", msg); break;
+                    case LogType.Warning: msg = string.Format("[警告]{0}", msg); break;
+                    case LogType.Error: msg = string.Format("[错误]{0}", msg); break;
+
+                    //【断言】+前缀符号+时间+线程ID+分割符号+信息内容
+                    case LogType.Assert:
+                        msg = string.Format("【断言】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
+                        Cfg.LogPrefix,
+                        Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff")+" " : null,
+                        Cfg.EnableThreadID ? GetThreadID()+" " : null,
+                        Cfg.LogSeparate+" ",
+                        msg,
+                        stackTrace);
+
+                        break;
+                    case LogType.Exception:
+                        msg = string.Format("【异常】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
+                        Cfg.LogPrefix,
+                        Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff")+" " : null,
+                        Cfg.EnableThreadID ? GetThreadID()+" " : null,
+                        Cfg.LogSeparate+" ",
+                        msg,
+                        stackTrace);
+
+                        break;
                     default:
                         break;
                 }
@@ -518,7 +549,7 @@ namespace RGuang.Kit
             Logger.Log(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Log] {0}", msg));
+                WriteToFile(string.Format("[信息] {0}", msg));
             }
         }
         /// <summary>
@@ -533,7 +564,7 @@ namespace RGuang.Kit
             Logger.Log(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Log] {0}", msg));
+                WriteToFile(string.Format("[信息] {0}", msg));
             }
         }
 
@@ -551,7 +582,7 @@ namespace RGuang.Kit
             Logger.Log(msg, color);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Log] {0}", msg));
+                WriteToFile(string.Format("[信息] {0}", msg));
             }
         }
         /// <summary>
@@ -567,7 +598,7 @@ namespace RGuang.Kit
             Logger.Log(msg, color);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Log] {0}", msg));
+                WriteToFile(string.Format("[信息] {0}", msg));
             }
         }
 
@@ -584,7 +615,7 @@ namespace RGuang.Kit
             Logger.Warn(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Warn] {0}", msg));
+                WriteToFile(string.Format("[警告] {0}", msg));
             }
         }
         /// <summary>
@@ -599,7 +630,7 @@ namespace RGuang.Kit
             Logger.Warn(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Warn] {0}", msg));
+                WriteToFile(string.Format("[警告] {0}", msg));
             }
         }
 
@@ -616,7 +647,7 @@ namespace RGuang.Kit
             Logger.Error(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Error] {0}", msg));
+                WriteToFile(string.Format("[错误] {0}", msg));
             }
         }
         /// <summary>
@@ -631,7 +662,7 @@ namespace RGuang.Kit
             Logger.Error(msg);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Error] {0}", msg));
+                WriteToFile(string.Format("[错误] {0}", msg));
             }
         }
 
@@ -648,7 +679,7 @@ namespace RGuang.Kit
             Logger.Log(msg, Kit.ColorLog.Magenta);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Stack Trace] {0}", msg));
+                WriteToFile(string.Format("[堆栈] {0}", msg));
             }
         }
         /// <summary>
@@ -663,7 +694,7 @@ namespace RGuang.Kit
             Logger.Log(msg, Kit.ColorLog.Magenta);
             if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
             {
-                WriteToFile(string.Format("[Stack Trace] {0}", msg));
+                WriteToFile(string.Format("[堆栈] {0}", msg));
             }
         }
         #endregion
@@ -692,7 +723,7 @@ namespace RGuang.Kit
 
             if (isTrace)
             {
-                sb.AppendFormat(" \n\tStackTrace:\n\t\t{0}", GetLogTrace());
+                sb.AppendFormat(" \n\t堆栈:\n\t\t{0}", GetLogTrace());
             }
 
             return sb.ToString();
@@ -704,7 +735,7 @@ namespace RGuang.Kit
         /// <returns>返回当前线程ID</returns>
         private static string GetThreadID()
         {
-            return string.Format(" ThreadID:{0}", Thread.CurrentThread.ManagedThreadId);
+            return string.Format("线程ID:{0}", Thread.CurrentThread.ManagedThreadId);
         }
 
         /// <summary>
@@ -733,9 +764,7 @@ namespace RGuang.Kit
             string fileName = prefix + Cfg.SaveName;
             string path = Cfg.SavePath + fileName;
 
-            //FileKit.WriteFileByFileClass(path, msg + "\n", Encoding.UTF8, true, null);
             WriteFileByFileWriter(path, msg + "\n", Encoding.UTF8, true);
-            //FileKit.WriteFileByFileStream(path, msg + "\n", true, null);
         }
 
         /// <summary>

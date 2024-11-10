@@ -18,7 +18,7 @@ namespace CardGame
         [Header("日志信息前缀与内容间隔符号"), SerializeField] string m_logSeparate = ">>";
         [Header("True显示堆栈信息"), SerializeField] bool m_enableTrace = false;
 
-        [Header("True保存日志文件"), SerializeField] bool m_enableSave = false;
+        [Header("True保存日志文件"), SerializeField] bool m_enableSave = true;
         [Header("文件路劲"), SerializeField] string m_saveFilePath = string.Empty;
         [Header("日志文件名"), SerializeField] string m_saveFileName = string.Empty;
 
@@ -43,8 +43,6 @@ namespace CardGame
 #else
         if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = PathKit.StreamingAssetPath + "RLog/";
 #endif
-            if (!System.IO.Directory.Exists(m_saveFilePath)) System.IO.Directory.CreateDirectory(m_saveFilePath);
-
 
             LogConfig cfg = new LogConfig
             {
@@ -65,7 +63,6 @@ namespace CardGame
             };
 
             LogKit.InitSetting(cfg);
-            Application.logMessageReceived += LogKit.OnUnityLogReceived;
 
             LogKit.Log($" ↓↓↓RGuang.LogKit 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
             LogKit.ColorLog(ColorLog.Cyan, cfg.ToString());
@@ -88,14 +85,15 @@ namespace CardGame
             LogKit.ColorLog(ColorLog.DarkCyan, "-- 测试暗青 --");
             LogKit.ColorLog(ColorLog.DarkMagenta, "-- 测试紫 --");
             LogKit.Log($" ↑↑↑ RGuang.LogKit 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
-        }
 
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Application.logMessageReceived -= LogKit.OnUnityLogReceived;
+            RGuang.ExcelKit.Example.Item item = null;
+            //Debug.LogError(item.ToString());
+            throw new Exception("测试");
+
+
         }
+
 
 
 

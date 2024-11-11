@@ -265,6 +265,51 @@ namespace RGuang.Kit
         class UnityLogger : ILogger
         {
             Type type = Type.GetType("UnityEngine.Debug, UnityEngine");
+            public UnityLogger() => UnityEngine.Application.logMessageReceivedThreaded += OnUnityLogReceivedThreaded;
+
+            /**
+             * Unity全局异常事件监听：
+             *      UnityEngine.Application.logMessageReceivedThreaded += OnUnityLogReceivedThreaded;
+             */
+            private static void OnUnityLogReceivedThreaded(string msg, string stackTrace, UnityEngine.LogType logType)
+            {
+                if (LogKit.Cfg.LoggerType.Equals(LoggerType.Unity) && LogKit.Cfg.EnableSave)
+                {
+                    switch (logType)
+                    {
+                        case LogType.Log: msg = string.Format("[信息]{0}", msg); break;
+                        case LogType.Warning: msg = string.Format("[警告]{0}", msg); break;
+                        case LogType.Error: msg = string.Format("[错误]{0}", msg); break;
+
+                        //【断言】+前缀符号+时间+线程ID+分割符号+信息内容
+                        case LogType.Assert:
+                            msg = string.Format("【断言】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
+                            LogKit.Cfg.LogPrefix,
+                            LogKit.Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff") + " " : null,
+                            LogKit.Cfg.EnableThreadID ? LogKit.GetThreadID() + " " : null,
+                            LogKit.Cfg.LogSeparate + " ",
+                            msg,
+                            stackTrace);
+
+                            break;
+                        case LogType.Exception:
+                            msg = string.Format("【异常】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
+                            LogKit.Cfg.LogPrefix,
+                            LogKit.Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff") + " " : null,
+                            LogKit.Cfg.EnableThreadID ? LogKit.GetThreadID() + " " : null,
+                            LogKit.Cfg.LogSeparate + " ",
+                            msg,
+                            stackTrace);
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                    LogKit.WriteToFile(msg);
+                }
+            }
+
 
             public void Log(string msg, ColorLog logColor)
             {
@@ -323,6 +368,24 @@ namespace RGuang.Kit
         /// </summary>
         class ConsoleLogger : ILogger
         {
+            public ConsoleLogger() => System.AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
+
+            /**
+             * Console全局异常事件监听：
+             *      System.AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
+             */
+            private static void FirstChanceException(object? sender, FirstChanceExceptionEventArgs e)
+            {
+                if (LogKit.Cfg.LoggerType.Equals(LoggerType.Console) && LogKit.Cfg.EnableSave)
+                {
+                    StringBuilder sb = new StringBuilder(DecorateLog(e.Exception.Message, false));
+                    sb.Insert(0, "【异常】 ");
+                    sb.AppendFormat("\n\t堆栈:\n\t\t{0}", e.Exception.StackTrace);
+                    Console.WriteLine(sb.ToString());
+                    LogKit.WriteToFile(sb.ToString());
+                }
+            }
+
             public void Log(string msg, ColorLog logColor)
             {
                 WriteConsoleLog(msg, logColor);
@@ -433,7 +496,16 @@ namespace RGuang.Kit
         /// <summary>
         /// 日志配置
         /// </summary>
-        public static LogConfig Cfg;
+        public static LogConfig Cfg
+        {
+            get
+            {
+                if (_cfg == null) throw new Exception("日志 [RGuang.Kit.LogKit] 未初始化. 请使用[RGuang.Kit.LogKit.InitSetting]进行初始化.");
+                return _cfg;
+            }
+            private set => _cfg = value;
+        }
+        private static LogConfig _cfg = null;
         /// <summary>
         /// 日志输出
         /// </summary>
@@ -455,79 +527,23 @@ namespace RGuang.Kit
         /// <param name="logConfig">日志配置【默认null，自动配置】</param>
         public static void InitSetting(LogConfig logConfig = null)
         {
-            if (logConfig == null)
-            {
-                logConfig = new LogConfig();
-            }
+            if (logConfig == null) logConfig = new LogConfig();
             RGuang.Kit.LogKit.Cfg = logConfig;
 
 
-            //unity或控制台类型的日志
             if (Cfg.LoggerType == LoggerType.Console)
             {
+                //Console
                 Logger = new ConsoleLogger();
-                System.AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
             }
             else if (Cfg.LoggerType == LoggerType.Unity)
             {
+                //Unity
                 Logger = new UnityLogger();
-                UnityEngine.Application.logMessageReceivedThreaded += OnUnityLogReceivedThreaded;
             }
 
             if (Directory.Exists(Cfg.SavePath) == false) Directory.CreateDirectory(Cfg.SavePath);
 
-        }
-
-
-        private static void FirstChanceException(object? sender, FirstChanceExceptionEventArgs e)
-        {
-            if (Cfg.LoggerType.Equals(LoggerType.Console) && Cfg.EnableSave)
-            {
-                StringBuilder sb = new StringBuilder(DecorateLog(e.Exception.Message, false));
-                sb.Insert(0, "【异常】 ");
-                sb.AppendFormat("\n\t堆栈:{0}\n\t异常函数:{1}", e.Exception.StackTrace, e.Exception.TargetSite);
-                Console.WriteLine(sb.ToString());
-                WriteToFile(sb.ToString());
-            }
-        }
-
-        private static void OnUnityLogReceivedThreaded(string msg, string stackTrace, UnityEngine.LogType logType)
-        {
-            if (Cfg.LoggerType.Equals(LoggerType.Unity) && Cfg.EnableSave)
-            {
-                switch (logType)
-                {
-                    case LogType.Log: msg = string.Format("[信息]{0}", msg); break;
-                    case LogType.Warning: msg = string.Format("[警告]{0}", msg); break;
-                    case LogType.Error: msg = string.Format("[错误]{0}", msg); break;
-
-                    //【断言】+前缀符号+时间+线程ID+分割符号+信息内容
-                    case LogType.Assert:
-                        msg = string.Format("【断言】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
-                        Cfg.LogPrefix,
-                        Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff")+" " : null,
-                        Cfg.EnableThreadID ? GetThreadID()+" " : null,
-                        Cfg.LogSeparate+" ",
-                        msg,
-                        stackTrace);
-
-                        break;
-                    case LogType.Exception:
-                        msg = string.Format("【异常】{0}{1}{2}{3}{4}\n\t堆栈:\n\t\t{5}",
-                        Cfg.LogPrefix,
-                        Cfg.EnableTime ? DateTime.Now.ToString("HH:mm:ss.ffff")+" " : null,
-                        Cfg.EnableThreadID ? GetThreadID()+" " : null,
-                        Cfg.LogSeparate+" ",
-                        msg,
-                        stackTrace);
-
-                        break;
-                    default:
-                        break;
-                }
-
-                WriteToFile(msg);
-            }
         }
 
 

@@ -64,9 +64,9 @@ namespace RGuang.ExcelKit
 
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class ExcelAsset2Texture2DAttribute : ExcelAssetAttribute
+    public class ExcelAsset2AssetsAttribute : ExcelAssetAttribute
     {
-        public ExcelAsset2Texture2DAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
+        public ExcelAsset2AssetsAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
             : base(assetPath, excelName, excelSheet, fieldStartRow, fieldStartColumn, hideFlags, enableLog)
         {
         }

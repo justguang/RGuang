@@ -78,7 +78,7 @@ namespace RGuang.ExcelKit
                         }
                     }
 
-                    var excelAsset2Texture2DAttributes = type.GetCustomAttributes(typeof(ExcelAsset2Texture2DAttribute), false);
+                    var excelAsset2Texture2DAttributes = type.GetCustomAttributes(typeof(ExcelAsset2AssetsAttribute), false);
                     if (excelAsset2Texture2DAttributes.Length > 0)
                     {
                         var attribute = (ExcelAssetAttribute)excelAsset2Texture2DAttributes[0];

@@ -6,11 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using static RGuang.ExcelKit.ExcelAsset2Texture2DAttribute;
+using static RGuang.ExcelKit.ExcelAsset2AssetsAttribute;
 
 namespace RGuang.ExcelKit.Example
 {
-    [ExcelAsset2Texture2DAttribute(
+    [ExcelAsset2AssetsAttribute(
     hideFlags: HideFlags.NotEditable,
     assetPath: "Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Excels",
     excelName: "ConfigItems",

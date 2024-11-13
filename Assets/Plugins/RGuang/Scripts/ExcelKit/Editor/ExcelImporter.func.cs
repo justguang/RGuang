@@ -9,7 +9,7 @@ using NPOI.SS.UserModel;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
-using static RGuang.ExcelKit.ExcelAsset2Texture2DAttribute;
+using static RGuang.ExcelKit.ExcelAsset2AssetsAttribute;
 
 namespace RGuang.ExcelKit
 {
@@ -55,7 +55,7 @@ namespace RGuang.ExcelKit
             object entities = GetEntityListFromSheet(sheet, entityType, info);
             dataField.SetValue(asset, entities);
 
-            if (info.Attribute is ExcelAsset2Texture2DAttribute)
+            if (info.Attribute is ExcelAsset2AssetsAttribute)
             {
                 AddReference_Assets(asset);
             }

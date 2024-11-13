@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using RGuang.ExcelKit.Example;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +11,21 @@ namespace RGuang.Kit.Example
     {
         [SerializeField] private SO_ExcelExample so_data;
         [SerializeField] private SO_ExcelExample2 so_data2;
+
+        public string hideFlags_;
+
+        [ContextMenu("Set_____HideFlags")]
+        public  void Set_____HideFlags()
+        {
+            hideFlags_ = "Editor";
+        }
+
+
+
         void Start()
         {
+
+            //so_testSO.TestOtherImage();
 
             if (so_data != null && so_data.DataLst != null)
             {
@@ -27,7 +41,6 @@ namespace RGuang.Kit.Example
 
 
         }
-
 
 
 

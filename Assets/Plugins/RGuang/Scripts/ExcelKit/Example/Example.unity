@@ -576,3 +576,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   so_data: {fileID: 11400000, guid: 538d213447709c84780ed1d1172fc3d4, type: 2}
   so_data2: {fileID: 11400000, guid: 579ed6d2bd28b644587e183e3c44da59, type: 2}
+  so_testSO: {fileID: 0}

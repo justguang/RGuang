@@ -9,6 +9,8 @@ namespace RGuang.ExcelKit.Example
     public class SO_ItemData : ScriptableObject
     {
         public List<Item> DataLst;
+
     }
 
 }
+

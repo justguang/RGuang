@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace RGuang.ExcelKit
 {
@@ -6,6 +7,7 @@ namespace RGuang.ExcelKit
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ExcelAssetAttribute : Attribute
     {
+
         /// <summary>
         /// Excel资源路径
         /// </summary>
@@ -27,6 +29,10 @@ namespace RGuang.ExcelKit
         /// </summary>
         public int FieldStartColumn { get; set; }
         /// <summary>
+        /// HideFlags
+        /// </summary>
+        public HideFlags HideFlags { get; set; }
+        /// <summary>
         /// True开启日志
         /// </summary>
         public bool LogOnImport { get; set; }
@@ -41,13 +47,14 @@ namespace RGuang.ExcelKit
         /// <param name="fieldStartRow">字段在第n行开始</param>
         /// <param name="fieldStartColumn">字段在第n列开始</param>
         /// <param name="enableLog">True开启日志</param>
-        public ExcelAssetAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, bool enableLog = false)
+        public ExcelAssetAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
         {
             this.AssetPath = assetPath;
             this.ExcelName = excelName;
             this.ExcelSheetName = excelSheet;
             this.FieldStartRow = fieldStartRow;
             this.FieldStartColumn = fieldStartColumn;
+            this.HideFlags = hideFlags;
             this.LogOnImport = enableLog;
         }
 
@@ -56,6 +63,31 @@ namespace RGuang.ExcelKit
     }
 
 
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    public class ExcelAsset2Texture2DAttribute : ExcelAssetAttribute
+    {
+        public ExcelAsset2Texture2DAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
+            : base(assetPath, excelName, excelSheet, fieldStartRow, fieldStartColumn, hideFlags, enableLog)
+        {
+        }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class AssetDirAttribute : Attribute { }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class AssetNameWithExtensionAttribute : Attribute { }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class Texture2DAssetAttribute : Attribute { }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class SpriteAssetAttribute : Attribute { }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class PrefabAssetAttribute : Attribute { }
+
+
+    }
 
 
 

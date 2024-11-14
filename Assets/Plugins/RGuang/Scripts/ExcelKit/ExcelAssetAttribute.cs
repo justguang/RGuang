@@ -84,6 +84,9 @@ namespace RGuang.ExcelKit
         public class SpriteAssetAttribute : Attribute { }
 
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+        public class SpriteAtlasAssetAttribute : Attribute { }
+
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
         public class PrefabAssetAttribute : Attribute { }
 
 

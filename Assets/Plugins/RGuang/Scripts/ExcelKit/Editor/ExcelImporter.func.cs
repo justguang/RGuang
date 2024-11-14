@@ -253,6 +253,12 @@ namespace RGuang.ExcelKit
                     assetFieldLst.Add(fieldInfos[i]);
                     continue;
                 }
+                var attr_spriteAtlas = (SpriteAtlasAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(SpriteAtlasAssetAttribute), false);
+                if (attr_spriteAtlas != null)
+                {
+                    assetFieldLst.Add(fieldInfos[i]);
+                    continue;
+                }
                 var attr_prefab = (PrefabAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(PrefabAssetAttribute), false);
                 if (attr_prefab != null)
                 {
@@ -267,19 +273,24 @@ namespace RGuang.ExcelKit
             for (int i = 0; i < dataLst.Count; i++)
             {
                 string dir = (string)fiedDir.GetValue(dataLst[i]);
-                string name = (string)fiedName.GetValue(dataLst[i]);
+                string nameWithExtension = (string)fiedName.GetValue(dataLst[i]);
 
-                if (string.IsNullOrEmpty(name)) continue;
+                if (string.IsNullOrEmpty(nameWithExtension)) continue;
 
+                string rootDir = "Assets";
                 if (string.IsNullOrWhiteSpace(dir))
                 {
-                    dir = "Assets";
+                    dir = rootDir;
+                }
+                if (dir.StartsWith(rootDir) == false)
+                {
+                    dir = Path.Combine(rootDir, dir);
                 }
 
                 for (int j = 0; j < assetFieldLst.Count; j++)
                 {
                     FieldInfo field = assetFieldLst[j];
-                    var assetObj = AssetDatabase.LoadAssetAtPath(dir + "/" + name, field.FieldType);
+                    var assetObj = AssetDatabase.LoadAssetAtPath(dir + "/" + nameWithExtension, field.FieldType);
                     field.SetValue(dataLst[i], assetObj);
                 }
             }

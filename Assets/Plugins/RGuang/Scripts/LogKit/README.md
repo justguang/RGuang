@@ -1,4 +1,4 @@
-#	RLog日志工具
+#	Log日志工具
 	namespace RGuang.LogKit
 
 ### ---		func:	---
@@ -15,7 +15,7 @@
     logLevel = LoggerLevel.None|Info|Warn|Trace|Error
 	
 	//日志类型(Unity | Console)
-    cfg.loggerType = RLoggerType.Unity、RLoggerType.Console
+    cfg.loggerType = LoggerType.Unity、LoggerType.Console
 	
 	//日志信息前缀 - 前缀标记字符
 	logPrefix = "#"
@@ -36,7 +36,7 @@
 	enableSave = true/false
 	
 	//保存日志文件路径【Unity在Assets目录的Logs\RLog文件夹下 | Console在应用程序同级目录的RLog文件夹下】
-	savePath = "Rlog\"
+	savePath = "Rlog/"
 	
 	//日志文件名
 	saveName = "RLog.txt"
@@ -44,25 +44,7 @@
 
 
 
-### ---		Example For Unity	---
-    LogConfig cfg = new LogConfig();
-    cfg.logLevel = LoggerLevel.Log|LoggerLevel.Warn;
-    cfg.loggerType = LoggerType.Unity;
-    cfg.logPrefix = "#";
-    cfg.enableTime = true;
-    cfg.enableThreadID = true;
-    cfg.logSeparate = ">";
-    cfg.enableTrace = false;
-    cfg.enableSave = true;
-    cfg.savePath = null;
-    cfg.saveName = null;
-	
-	LogKit.InitSetting(cfg);
-	
-    LogKit.Log("hello world");
-
-
-###	--- 	Example For Console		---
+### ---		Example For Console	---
 	RGuang.LogKit.LogConfig cfg = new RGuang.LogKit.LogConfig
 	{
 		LogLevel = RGuang.LogKit.LoggerLevel.Info | LoggerLevel.Warn | LoggerLevel.Error,
@@ -77,6 +59,25 @@
 
 		EnableSave = true,
 	};
+	
+	
+	Log.InitSetting(cfg);
+	
+    Log.Info("hello world");
+
+
+###	--- 	Example For Unity   ---
+    LogConfig cfg = new LogConfig();
+    cfg.logLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error;
+    cfg.loggerType = LoggerType.Unity;
+    cfg.logPrefix = "#";
+    cfg.enableTime = true;
+    cfg.enableThreadID = true;
+    cfg.logSeparate = ">";
+    cfg.enableTrace = false;
+    cfg.enableSave = true;
+    cfg.savePath = null;
+    cfg.saveName = null;
 
 	RGuang.LogKit.Log.InitSetting(cfg);
 

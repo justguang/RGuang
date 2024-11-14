@@ -6,6 +6,8 @@ using UnityEngine;
 using RGuang.Kit;
 using System;
 using RGuang.LogKit;
+using Log = RGuang.LogKit.Log;
+using ColorLog = RGuang.LogKit.ColorLog;
 
 namespace CardGame
 {
@@ -89,7 +91,7 @@ namespace CardGame
             RGuang.LogKit.Log.Info($" ↑↑↑ RGuang.Info 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
 
 
-            RGuang.ExcelKit.Example.Item item = null;
+            //RGuang.ExcelKit.Example.Item item = null;
 
             //Debug.LogError(item.ToString());
             throw new Exception("测试");

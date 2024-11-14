@@ -6,30 +6,30 @@
 ///********************************************/
 /// <summary>
 
-namespace RGuang.Kit
+namespace RGuang.LogKit
 {
 
     /// <summary>
     /// Log扩展
     /// </summary>
-    public static class LogKitExtensionMethods
+    public static class LogExtensionMethods
     {
         /// <summary>
         /// 打印普通日志
         /// </summary>
         /// <param name="log">要打印的内容</param>
         /// <param name="args">格式化的参数</param>
-        public static void Log(this object obj, string log, params object[] args)
+        public static void Info(this object obj, string log, params object[] args)
         {
-            RGuang.Kit.LogKit.Log(string.Format(log, args));
+            RGuang.LogKit.Log.Info(string.Format(log, args));
         }
         /// <summary>
         /// 打印普通日志
         /// </summary>
         /// <param name="log">要打印的内容</param>
-        public static void Log(this object obj, object log)
+        public static void Info(this object obj, object log)
         {
-            RGuang.Kit.LogKit.Log(log);
+            RGuang.LogKit.Log.Info(log);
         }
 
         /// <summary>
@@ -38,18 +38,18 @@ namespace RGuang.Kit
         /// <param name="color">设置内容显示的颜色</param>
         /// <param name="log">要打印的内容</param>
         /// <param name="args">格式化的参数</param>
-        public static void ColorLog(this object obj, ColorLog color, string log, params object[] args)
+        public static void ColorInfo(this object obj, ColorLog color, string log, params object[] args)
         {
-            RGuang.Kit.LogKit.ColorLog(color, string.Format(log, args));
+            RGuang.LogKit.Log.ColorInfo(color, string.Format(log, args));
         }
         /// <summary>
         /// 打印带颜色的日志
         /// </summary>
         /// <param name="color">设置内容显示的颜色</param>
         /// <param name="log">要打印的内容</param>
-        public static void ColorLog(this object obj, ColorLog color, object log)
+        public static void ColorInfo(this object obj, ColorLog color, object log)
         {
-            RGuang.Kit.LogKit.ColorLog(color, log);
+            RGuang.LogKit.Log.ColorInfo(color, log);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Warn(this object obj, string log, params object[] args)
         {
-            RGuang.Kit.LogKit.Warn(string.Format(log, args));
+            RGuang.LogKit.Log.Warn(string.Format(log, args));
         }
         /// <summary>
         /// 打印警告日志
@@ -67,7 +67,7 @@ namespace RGuang.Kit
         /// <param name="log">要打印的内容</param>
         public static void Warn(this object obj, object log)
         {
-            RGuang.Kit.LogKit.Warn(log);
+            RGuang.LogKit.Log.Warn(log);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Error(this object obj, string log, params object[] args)
         {
-            RGuang.Kit.LogKit.Error(string.Format(log, args));
+            RGuang.LogKit.Log.Error(string.Format(log, args));
         }
         /// <summary>
         /// 打印错误日志
@@ -85,7 +85,7 @@ namespace RGuang.Kit
         /// <param name="log">要打印的内容</param>
         public static void Error(this object obj, object log)
         {
-            RGuang.Kit.LogKit.Error(log);
+            RGuang.LogKit.Log.Error(log);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace RGuang.Kit
         /// <param name="args">格式化的参数</param>
         public static void Trace(this object obj, string log, params object[] args)
         {
-            RGuang.Kit.LogKit.Trace(string.Format(log, args));
+            RGuang.LogKit.Log.Trace(string.Format(log, args));
         }
         /// <summary>
         /// 打印堆栈
@@ -103,7 +103,7 @@ namespace RGuang.Kit
         /// <param name="log">要打印的内容</param>
         public static void Trace(this object obj, object log)
         {
-            RGuang.Kit.LogKit.Trace(log);
+            RGuang.LogKit.Log.Trace(log);
         }
     }
 

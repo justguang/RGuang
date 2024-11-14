@@ -5,14 +5,14 @@
 using UnityEngine;
 using RGuang.Kit;
 using System;
-using System.Threading;
+using RGuang.LogKit;
 
 namespace CardGame
 {
 
     public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
     {
-        [Header("启用日志等级"), SerializeField] LoggerLevel m_logLevel = LoggerLevel.Log | LoggerLevel.Warn | LoggerLevel.Error;
+        [Header("启用日志等级"), SerializeField] LoggerLevel m_logLevel = LoggerLevel.Info | LoggerLevel.Warn | LoggerLevel.Error;
         [Header("日志信息前缀 - 头部标记字符"), SerializeField] string m_logPrefix = "#";
         [Header("日志信息前缀 - True显示时间"), SerializeField] bool m_enableTime = true;
         [Header("日志信息前缀 - True显示线程ID"), SerializeField] bool m_enableThreadID = true;
@@ -45,7 +45,7 @@ namespace CardGame
         if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = PathKit.StreamingAssetPath + "RLog/";
 #endif
 
-            LogConfig cfg = new LogConfig
+            RGuang.LogKit.LogConfig cfg = new RGuang.LogKit.LogConfig
             {
                 LogLevel = m_logLevel,
                 LoggerType = m_loggerType,
@@ -64,29 +64,29 @@ namespace CardGame
             };
 
 
-            LogKit.InitSetting(cfg);
+            RGuang.LogKit.Log.InitSetting(cfg);
 
-            LogKit.Log($" ↓↓↓RGuang.LogKit 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
-            LogKit.ColorLog(ColorLog.Cyan, cfg.ToString());
+            RGuang.LogKit.Log.Info($" ↓↓↓RGuang.Info 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Cyan, cfg.ToString());
 
-            LogKit.ColorLog(ColorLog.White, " -- 测试白色 --");
-            LogKit.ColorLog(ColorLog.Gray, "-- 测试灰色 --");
-            LogKit.ColorLog(ColorLog.Black, "-- 测试黑色 --");
-            LogKit.ColorLog(ColorLog.Red, "-- 测试红色 --");
-            LogKit.ColorLog(ColorLog.Green, "-- 测试绿色 --");
-            LogKit.ColorLog(ColorLog.Blue, "-- 测试蓝色 --");
-            LogKit.ColorLog(ColorLog.Yellow, "-- 测试黄色 --");
-            LogKit.ColorLog(ColorLog.Cyan, "-- 测试青色 --");
-            LogKit.ColorLog(ColorLog.Magenta, "-- 测试洋红色 --");
-            LogKit.Log("---------------- 分割线 ----------------------------");
-            LogKit.ColorLog(ColorLog.DarkGray, "-- 测试深灰 --");
-            LogKit.ColorLog(ColorLog.DarkRed, "-- 测试深红 --");
-            LogKit.ColorLog(ColorLog.DarkGreen, "-- 测试深绿 --");
-            LogKit.ColorLog(ColorLog.DarkBlue, "-- 测试深蓝 --");
-            LogKit.ColorLog(ColorLog.DarkYellow, "-- 测试暗黄 --");
-            LogKit.ColorLog(ColorLog.DarkCyan, "-- 测试暗青 --");
-            LogKit.ColorLog(ColorLog.DarkMagenta, "-- 测试紫 --");
-            LogKit.Log($" ↑↑↑ RGuang.LogKit 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.White, " -- 测试白色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Gray, "-- 测试灰色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Black, "-- 测试黑色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Red, "-- 测试红色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Green, "-- 测试绿色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Blue, "-- 测试蓝色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Yellow, "-- 测试黄色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Cyan, "-- 测试青色 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Magenta, "-- 测试洋红色 --");
+            RGuang.LogKit.Log.Info("---------------- 分割线 ----------------------------");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkGray, "-- 测试深灰 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkRed, "-- 测试深红 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkGreen, "-- 测试深绿 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkBlue, "-- 测试深蓝 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkYellow, "-- 测试暗黄 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkCyan, "-- 测试暗青 --");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkMagenta, "-- 测试紫 --");
+            RGuang.LogKit.Log.Info($" ↑↑↑ RGuang.Info 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
 
 
             RGuang.ExcelKit.Example.Item item = null;

@@ -9,13 +9,7 @@ using RGuang.LogKit;
 using Log = RGuang.LogKit.Log;
 using ColorLog = RGuang.LogKit.ColorLog;
 using RGuang.Attribute;
-using System.IO;
 
-
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace CardGame
 {
@@ -110,31 +104,6 @@ namespace CardGame
 
 
     }
-
-#if UNITY_EDITOR
-
-    [CustomEditor(typeof(LogManager))]
-    public sealed class LogManageInspector : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-
-            serializedObject.Update();
-
-
-
-
-            serializedObject.ApplyModifiedProperties();
-
-            Repaint();
-
-
-        }
-    }
-
-#endif
-
 
 
 }

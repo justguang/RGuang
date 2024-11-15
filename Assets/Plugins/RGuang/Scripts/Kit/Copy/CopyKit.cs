@@ -6,6 +6,7 @@ namespace RGuang.Kit
 {
     public static class CopyKit<TIn, TOut>
     {
+        #region --- 深拷贝 - 表达式树 ---
         private static readonly Func<TIn, TOut> cache = GetFunc();
         private static Func<TIn, TOut> GetFunc()
         {
@@ -35,7 +36,11 @@ namespace RGuang.Kit
         {
             return cache(obj);
         }
+
+        #endregion
+
     }
+
 
 }
 

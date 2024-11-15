@@ -156,6 +156,8 @@ namespace RGuang.LogKit
         /// <param name="msg"></param>
         void Error(string msg);
 
+        void Dispose();
+
     }
 
 
@@ -197,11 +199,7 @@ namespace RGuang.LogKit
         /// </summary>
         public bool EnableSave = true;
         /// <summary>
-        /// 日志保存的路径【默认当前运行程序的更目录下Logs文件夹下】
-        /// </summary>
-        private string _savePath = string.Empty;
-        /// <summary>
-        /// 日志文件保存路径
+        /// 日志文件保存路径【默认当前运行程序的更目录下Logs文件夹下】
         /// </summary>
         public string SavePath
         {
@@ -212,19 +210,26 @@ namespace RGuang.LogKit
                     if (LoggerType == LoggerType.Unity)
                     {
                         Type type = Type.GetType("UnityEngine.Application, UnityEngine");
-                        _savePath = type.GetProperty("persistentDataPath").GetValue(null).ToString() + "/RLog/";
+                        _savePath = type.GetProperty("streamingAssetsPath").GetValue(null).ToString();
+
+#if UNITY_EDITOR
+                        int subIndex = _savePath.LastIndexOf("/", _savePath.Length - 17);
+                        _savePath = _savePath.Substring(0, subIndex) + "/Logs";
+#endif
+
+                        _savePath = _savePath + "/RGuangLog/";
                     }
                     else
                     {
-                        _savePath = string.Format("{0}RLog\\", AppDomain.CurrentDomain.BaseDirectory);
+                        _savePath = string.Format("{0}RGuangLog\\", AppDomain.CurrentDomain.BaseDirectory);
                     }
                 }
 
                 return _savePath;
             }
 
-            set => _savePath = value;
         }
+        private string _savePath = string.Empty;
 
         /// <summary>
         /// 日志文件保存的名字
@@ -237,12 +242,10 @@ namespace RGuang.LogKit
             {
                 if (string.IsNullOrWhiteSpace(_saveName))
                 {
-                    _saveName = "Rlog.txt";
+                    _saveName = "RGuangLog.log";
                 }
                 return _saveName;
             }
-
-            set => _saveName = value;
         }
         private string _saveName = string.Empty;
 
@@ -286,11 +289,16 @@ namespace RGuang.LogKit
     /// </summary>
     public sealed class Log
     {
+        #region Unity Logger
         /// <summary>
         /// unity类型的输出日志
         /// </summary>
         class UnityLogger : ILogger
         {
+            ~UnityLogger()
+            {
+                Dispose();
+            }
             Type type = Type.GetType("UnityEngine.Debug, UnityEngine");
             public UnityLogger() => UnityEngine.Application.logMessageReceivedThreaded += OnUnityLogReceivedThreaded;
 
@@ -359,6 +367,12 @@ namespace RGuang.LogKit
                 type.GetMethod("LogError", new Type[] { typeof(object) }).Invoke(null, new object[] { msg });
             }
 
+            public void Dispose()
+            {
+                type = null;
+                UnityEngine.Application.logMessageReceivedThreaded -= OnUnityLogReceivedThreaded;
+            }
+
             private string UnityInfoColor(string msg, ColorLog color)
             {
                 switch (color)
@@ -387,12 +401,18 @@ namespace RGuang.LogKit
                 return msg;
             }
         }
+        #endregion
 
+        #region ConsoleLogger
         /// <summary>
         /// 控制台类型的输出日志
         /// </summary>
         class ConsoleLogger : ILogger
         {
+            ~ConsoleLogger()
+            {
+                Dispose();
+            }
             public ConsoleLogger() => System.AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
 
             /**
@@ -422,6 +442,10 @@ namespace RGuang.LogKit
             public void Error(string msg)
             {
                 WriteConsoleInfo(msg, LogKit.ColorLog.Red);
+            }
+            public void Dispose()
+            {
+                System.AppDomain.CurrentDomain.FirstChanceException -= FirstChanceException;
             }
             private void WriteConsoleInfo(string msg, ColorLog color)
             {
@@ -515,7 +539,7 @@ namespace RGuang.LogKit
             }
 
         }
-
+        #endregion
 
 
         /// <summary>
@@ -555,6 +579,7 @@ namespace RGuang.LogKit
             if (logConfig == null) logConfig = new LogConfig();
             RGuang.LogKit.Log.Cfg = logConfig;
 
+            if (Logger != null) Logger.Dispose();
 
             if (Cfg.LoggerType == LoggerType.Console)
             {
@@ -818,10 +843,6 @@ namespace RGuang.LogKit
         /// <param name="errorCallback">异常回调</param>
         static void WriteFileByFileWriter(string path, string context, Encoding encoding, bool append)
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                throw new Exception("写入日志文件失败！没有指定文件路径");
-            }
 
             if (File.Exists(path) == false)
             {

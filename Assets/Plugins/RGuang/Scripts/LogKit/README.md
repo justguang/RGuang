@@ -35,12 +35,6 @@
 	//True保存日志文件
 	enableSave = true/false
 	
-	//保存日志文件路径【Unity在Assets目录的Logs\RLog文件夹下 | Console在应用程序同级目录的RLog文件夹下】
-	savePath = "Rlog/"
-	
-	//日志文件名
-	saveName = "RLog.txt"
-	
 
 
 
@@ -62,7 +56,7 @@
 	
 	
 	Log.InitSetting(cfg);
-	
+	Log.ColorInfo(ColorLog.Cyan, cfg.ToString());
     Log.Info("hello world");
 
 
@@ -76,8 +70,6 @@
     cfg.logSeparate = ">";
     cfg.enableTrace = false;
     cfg.enableSave = true;
-    cfg.savePath = null;
-    cfg.saveName = null;
 
 	RGuang.LogKit.Log.InitSetting(cfg);
 

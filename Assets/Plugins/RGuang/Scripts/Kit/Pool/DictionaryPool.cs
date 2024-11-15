@@ -27,6 +27,22 @@ namespace RGuang.Kit
             }
             return s_DicStack.Pop();
         }
+        public static Dictionary<TKey, TValue> Get(KeyValuePair<TKey, TValue> obj, int capacity = 8)
+        {
+            var dic = Get(capacity);
+            dic.Add(obj.Key, obj.Value);
+            return dic;
+        }
+        public static Dictionary<TKey, TValue> Get(ICollection<KeyValuePair<TKey, TValue>> collection, int capacity = 8)
+        {
+            var dic = Get(capacity);
+            var iterator = collection.GetEnumerator();
+            while (iterator.MoveNext())
+            {
+                dic.Add(iterator.Current.Key, iterator.Current.Value);
+            }
+            return dic;
+        }
 
         /// <summary>
         /// 入栈：将字典Clear并存储到栈中 

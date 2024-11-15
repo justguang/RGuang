@@ -23,6 +23,7 @@ namespace RGuang.Attribute.Editor
             DrawMethods();
         }
 
+
         private void DrawMethods()
         {
             if (Methods.Length < 1)
@@ -41,6 +42,7 @@ namespace RGuang.Attribute.Editor
         {
             string btnName = attr.ButtonName;
             float topSpace = attr.TopSpace;
+            float bottomSpace = attr.BottomSpace;
             if (string.IsNullOrEmpty(btnName))
             {
                 btnName = method.Name;
@@ -59,6 +61,10 @@ namespace RGuang.Attribute.Editor
                 method.Invoke(target, null);
 
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.Space(bottomSpace);
+            EditorGUILayout.EndVertical();
 
 
         }

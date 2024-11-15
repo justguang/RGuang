@@ -8,22 +8,43 @@ using System;
 using RGuang.LogKit;
 using Log = RGuang.LogKit.Log;
 using ColorLog = RGuang.LogKit.ColorLog;
+using RGuang.Attribute;
+using System.IO;
+
+
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace CardGame
 {
-
-    public class LogManager : RGuang.Kit.MonoSingleton<LogManager>
+    public sealed class LogManager : RGuang.Kit.MonoSingleton<LogManager>
     {
-        [Header("启用日志等级"), SerializeField] LoggerLevel m_logLevel = LoggerLevel.Info | LoggerLevel.Warn | LoggerLevel.Error;
-        [Header("日志信息前缀 - 头部标记字符"), SerializeField] string m_logPrefix = "#";
-        [Header("日志信息前缀 - True显示时间"), SerializeField] bool m_enableTime = true;
-        [Header("日志信息前缀 - True显示线程ID"), SerializeField] bool m_enableThreadID = true;
-        [Header("日志信息前缀与内容间隔符号"), SerializeField] string m_logSeparate = ">>";
-        [Header("True显示堆栈信息"), SerializeField] bool m_enableTrace = false;
+        [Header("启用日志等级"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private LoggerLevel m_logLevel = LoggerLevel.Info | LoggerLevel.Warn | LoggerLevel.Error;
 
-        [Header("True保存日志文件"), SerializeField] bool m_enableSave = true;
-        [Header("文件路劲"), SerializeField] string m_saveFilePath = string.Empty;
-        [Header("日志文件名"), SerializeField] string m_saveFileName = string.Empty;
+        [Header("日志信息前缀 - 头部标记字符"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private string m_logPrefix = "#";
+
+        [Header("日志信息前缀 - True显示时间"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private bool m_enableTime = true;
+
+        [Header("日志信息前缀 - True显示线程ID"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private bool m_enableThreadID = true;
+
+        [Header("日志信息前缀与内容间隔符号"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private string m_logSeparate = ">>";
+
+        [Header("True显示堆栈信息"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private bool m_enableTrace = false;
+
+        [Header("True保存日志文件"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
+        private bool m_enableSave = true;
+
+        [Header("日志文件路劲"), SerializeField, ReadWriteInspector(Mode.InSpector)]
+        private string m_saveFilePath = string.Empty;
+
 
         //日志类型
         readonly LoggerType m_loggerType = LoggerType.Unity;
@@ -36,17 +57,6 @@ namespace CardGame
 
         private void Awake()
         {
-
-#if UNITY_EDITOR
-            if (string.IsNullOrWhiteSpace(m_saveFilePath))
-            {
-                int index = PathKit.StreamingAssetPath.LastIndexOf("/", PathKit.StreamingAssetPath.Length - 20);
-                m_saveFilePath = PathKit.StreamingAssetPath.Substring(0, index) + "/Logs/RLog/";
-            }
-#else
-        if (string.IsNullOrWhiteSpace(m_saveFilePath)) m_saveFilePath = PathKit.StreamingAssetPath + "RLog/";
-#endif
-
             RGuang.LogKit.LogConfig cfg = new RGuang.LogKit.LogConfig
             {
                 LogLevel = m_logLevel,
@@ -60,11 +70,9 @@ namespace CardGame
                 EnableTrace = m_enableTrace,
 
                 EnableSave = m_enableSave,
-                SavePath = m_saveFilePath,
-                SaveName = m_saveFileName,
-
             };
 
+            m_saveFilePath = cfg.SavePath;
 
             RGuang.LogKit.Log.InitSetting(cfg);
 
@@ -92,9 +100,8 @@ namespace CardGame
 
 
             //RGuang.ExcelKit.Example.Item item = null;
-
             //Debug.LogError(item.ToString());
-            throw new Exception("测试");
+            //throw new Exception("测试");
 
 
         }
@@ -103,6 +110,32 @@ namespace CardGame
 
 
     }
+
+#if UNITY_EDITOR
+
+    [CustomEditor(typeof(LogManager))]
+    public sealed class LogManageInspector : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            serializedObject.Update();
+
+
+
+
+            serializedObject.ApplyModifiedProperties();
+
+            Repaint();
+
+
+        }
+    }
+
+#endif
+
+
 
 }
 

@@ -27,7 +27,18 @@ namespace RGuang.Kit
             }
             return s_ListStack.Pop();
         }
-
+        public static List<T> Get(T obj, int capacity = 8)
+        {
+            var lst = Get(capacity);
+            lst.Add(obj);
+            return lst;
+        }
+        public static List<T> Get(IEnumerable<T> collection, int capacity = 8)
+        {
+            var lst = Get(capacity);
+            lst.AddRange(collection);
+            return lst;
+        }
 
         /// <summary>
         /// 入栈：将List对象Clear并回收到栈中

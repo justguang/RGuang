@@ -29,6 +29,22 @@ namespace RGuang.Kit
             }
             return m_queStack.Pop();
         }
+        public static Queue<T> Get(T obj, int capacity = 8)
+        {
+            var que = Get(capacity);
+            que.Enqueue(obj);
+            return que;
+        }
+        public static Queue<T> Get(IEnumerable<T> collection, int capacity = 8)
+        {
+            var que = Get(capacity);
+            var iterator = collection.GetEnumerator();
+            while (iterator.MoveNext())
+            {
+                que.Enqueue(iterator.Current);
+            }
+            return que;
+        }
 
         /// <summary>
         /// 入栈：将Queue对象Clear并回收到栈中

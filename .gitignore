@@ -8,10 +8,13 @@
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
+/[Ll]ogs/RLog/
+/[Ll]ogs/RGuangLog/
 /[Uu]ser[Ss]ettings/
 /[Aa]ssets/[Ss]treamingAssets/[Ll]og/
 /[Aa]ssets/[Ss]treamingAssets/R[Ll]og/
 /[Aa]ssets/[Ss]treamingAssets/[Llogs]/RGuangLog/
+/[Aa]ssets/[Ss]treamingAssets/RGuangLog/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

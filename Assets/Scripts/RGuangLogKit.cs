@@ -1,19 +1,18 @@
 ///****************************************************************************
-/// @fileName   ： LogManager.cs                                                                
+/// @fileName   ： RGuangLogKit.cs                                                                
 /// @description： 日志配置管理                                                                                      
 ///****************************************************************************
+using System;
 using UnityEngine;
 using RGuang.Kit;
-using System;
 using RGuang.LogKit;
+using RGuang.Attribute;
 using Log = RGuang.LogKit.Log;
 using ColorLog = RGuang.LogKit.ColorLog;
-using RGuang.Attribute;
-
 
 namespace CardGame
 {
-    public sealed class LogManager : RGuang.Kit.MonoSingleton<LogManager>
+    public sealed class RGuangLogKit : MonoBehaviour
     {
         [Header("启用日志等级"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
         private LoggerLevel m_logLevel = LoggerLevel.Info | LoggerLevel.Warn | LoggerLevel.Error;
@@ -39,15 +38,9 @@ namespace CardGame
         [Header("日志文件路劲"), SerializeField, ReadWriteInspector(Mode.InSpector)]
         private string m_saveFilePath = string.Empty;
 
-
         //日志类型
         readonly LoggerType m_loggerType = LoggerType.Unity;
 
-
-        public override void OnSingletonInit()
-        {
-            base.OnSingletonInit();
-        }
 
         private void Awake()
         {
@@ -104,6 +97,7 @@ namespace CardGame
 
 
     }
+
 
 
 }

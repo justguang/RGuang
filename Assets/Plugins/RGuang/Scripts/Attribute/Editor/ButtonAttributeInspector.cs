@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Reflection;
 using UnityEditor;
@@ -56,6 +57,7 @@ namespace RGuang.Attribute.Editor
             EditorGUILayout.BeginHorizontal();
 
             bool btnOK = GUILayout.Button(btnName);
+            
 
             if (btnOK)
                 method.Invoke(target, null);
@@ -71,4 +73,5 @@ namespace RGuang.Attribute.Editor
     }
 }
 
+#endif
 

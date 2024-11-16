@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using RGuang.Attribute;
 
 namespace CardGame
 {
@@ -18,6 +19,8 @@ namespace CardGame
         {
             _ani.enabled = false;
         }
+
+
     }
 
 }

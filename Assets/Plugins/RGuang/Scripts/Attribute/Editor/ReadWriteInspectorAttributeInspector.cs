@@ -28,6 +28,7 @@ namespace RGuang.Attribute.Editor
 
             EditorGUI.BeginDisabledGroup(disable);
             EditorGUI.PropertyField(position, property, label, true);
+            //EditorGUILayout.PropertyField(property,label);
             EditorGUI.EndDisabledGroup();
 
         }

@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using static RGuang.ExcelKit.ExcelAsset2AssetsAttribute;
@@ -64,7 +62,7 @@ namespace RGuang.ExcelKit
 
             if (info.Attribute.LogOnImport)
             {
-                Debug.Log($"从 [{info.Attribute.AssetPath}/{info.Attribute.ExcelName}] 表中 [{info.Attribute.ExcelSheetName}]页 成功导入数据 .");
+                Debug.Log($"从 [{info.Attribute.AssetPath}/{info.Attribute.ExcelName}] 表中 [{info.Attribute.ExcelSheetName}]页 成功导入数据,数据保存在 [{AssetDatabase.GetAssetPath(asset)}] ");
             }
 
             EditorUtility.SetDirty(asset);
@@ -111,14 +109,14 @@ namespace RGuang.ExcelKit
 
                 ICell entryCell = row.GetCell(0);
                 // skip comment row
-                //if (entryCell != null && entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
-                if (entryCell != null) continue;
+                if (entryCell != null && entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
+                //if (entryCell != null) continue;
 
                 ICell c1 = row.GetCell(contextIdx);
                 // skip NullOrWhiteSpace
                 if (c1 == null) continue;
-                if (c1.CellType == CellType.Blank) continue;
-                if (c1.CellType == CellType.String && string.IsNullOrWhiteSpace(c1.StringCellValue)) continue;
+                //if (c1.CellType == CellType.Blank) continue;
+                //if (c1.CellType == CellType.String && string.IsNullOrWhiteSpace(c1.StringCellValue)) continue;
 
                 var entity = CreateEntityFromRow(row, excelColumnNames, entityType, sheet.SheetName);
 

@@ -79,19 +79,6 @@ namespace RGuang.ExcelKit
                             excelAssetInfoLst.Add(new ExcelAssetInfo { AssetType = type, Attribute = attribute });
                         }
                     }
-
-                    var excelAsset2Texture2DAttributes = type.GetCustomAttributes(typeof(ExcelAsset2AssetsAttribute), false);
-                    if (excelAsset2Texture2DAttributes.Length > 0)
-                    {
-                        var attribute = (ExcelAssetAttribute)excelAsset2Texture2DAttributes[0];
-                        if (string.IsNullOrWhiteSpace(attribute.AssetPath) == false
-                            && string.IsNullOrWhiteSpace(attribute.ExcelName) == false
-                            && string.IsNullOrWhiteSpace(attribute.ExcelSheetName) == false)
-                        {
-                            excelAssetInfoLst.Add(new ExcelAssetInfo { AssetType = type, Attribute = attribute });
-                        }
-                    }
-
                 }
             }
         }

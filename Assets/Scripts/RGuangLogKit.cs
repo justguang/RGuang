@@ -9,6 +9,7 @@ using RGuang.LogKit;
 using RGuang.Attribute;
 using Log = RGuang.LogKit.Log;
 using ColorLog = RGuang.LogKit.ColorLog;
+using System.Collections.Generic;
 
 namespace CardGame
 {
@@ -40,7 +41,6 @@ namespace CardGame
 
         //日志类型
         readonly LoggerType m_loggerType = LoggerType.Unity;
-
 
         private void Awake()
         {

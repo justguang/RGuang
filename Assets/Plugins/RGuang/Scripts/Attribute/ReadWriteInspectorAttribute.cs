@@ -20,7 +20,7 @@ namespace RGuang.Attribute
 
     /// <summary>
     /// 在Inspector面板上的读写模式
-    /// 注意：对集合的增减无效
+    /// 注意：对集合的增减无效，可使用OptionalInspector<T>代替
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class ReadWriteInspectorAttribute : PropertyAttribute

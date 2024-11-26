@@ -520,6 +520,21 @@ MonoBehaviour:
   m_enableTrace: 0
   m_enableSave: 1
   m_saveFilePath: 
+  tFloat:
+    enabled: 0
+    value: 3
+  tInt:
+    enabled: 0
+    value: 30
+  tStr:
+    enabled: 0
+    value: aaa
+  tLst:
+    enabled: 0
+    value:
+    - "\u963F\u65AF\u987F"
+    - "\u8BF7\u95EE"
+    - "\u81EA\u884C\u8F66"
 --- !u!1 &2076821547
 GameObject:
   m_ObjectHideFlags: 0

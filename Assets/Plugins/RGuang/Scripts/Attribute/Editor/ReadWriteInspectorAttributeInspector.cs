@@ -9,10 +9,6 @@ namespace RGuang.Attribute.Editor
     [CustomPropertyDrawer(typeof(ReadWriteInspectorAttribute))]
     public class ReadWriteInspectorAttributeInspector : PropertyDrawer
     {
-        private bool IsArray => fieldInfo.FieldType.IsArray;
-        private bool IsList => fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(List<>);
-
-
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUI.GetPropertyHeight(property, label, true);
@@ -28,11 +24,9 @@ namespace RGuang.Attribute.Editor
 
             EditorGUI.BeginDisabledGroup(disable);
             EditorGUI.PropertyField(position, property, label, true);
-            //EditorGUILayout.PropertyField(property,label);
             EditorGUI.EndDisabledGroup();
 
         }
-
 
 
     }

@@ -38,12 +38,12 @@ namespace RGuang.ExcelKit
                     var excelName = Path.GetFileNameWithoutExtension(path);
                     if (excelName.StartsWith("~$")) continue;
 
-                    List<ExcelAssetInfo> excelAssetLst = m_cachedExcelAssetInfos.FindAll(i => i.Attribute.ExcelName.Equals(excelName));
+                    List<ExcelAssetInfo> excelAssetLst = m_cachedExcelAssetInfos.FindAll(i => i.Attribute.ExcelName.StartsWith(excelName));
 
                     IWorkbook book = LoadBook(path);
                     for (int i = 0; i < excelAssetLst.Count; i++)
                     {
-                        ImportExcel(book, excelAssetLst[i]);
+                        ImportExcel(book, excelAssetLst[i], path);
                     }
 
                     book.Close();
@@ -72,8 +72,7 @@ namespace RGuang.ExcelKit
                     if (excelAssetAttributes.Length > 0)
                     {
                         var attribute = (ExcelAssetAttribute)excelAssetAttributes[0];
-                        if (string.IsNullOrWhiteSpace(attribute.AssetPath) == false
-                            && string.IsNullOrWhiteSpace(attribute.ExcelName) == false
+                        if (string.IsNullOrWhiteSpace(attribute.ExcelName) == false
                             && string.IsNullOrWhiteSpace(attribute.ExcelSheetName) == false)
                         {
                             excelAssetInfoLst.Add(new ExcelAssetInfo { AssetType = type, Attribute = attribute });

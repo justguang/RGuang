@@ -12,7 +12,7 @@ namespace RGuang.ExcelKit.Example
 {
     [ExcelAsset2AssetsAttribute(
     hideFlags: HideFlags.NotEditable,
-    assetPath: "Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Excels",
+    saveDataPath: "Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Excels",
     excelName: "ConfigItems",
     excelSheet: "资源配置",
     fieldStartRow: 2,

@@ -15,11 +15,15 @@ namespace RGuang.ExcelKit
 {
     public partial class ExcelImporter
     {
-
-        static void ImportExcel(IWorkbook book, ExcelAssetInfo info)
+        static void ImportExcel(IWorkbook book, ExcelAssetInfo info, string excelPath)
         {
             string assetName = info.AssetType.Name + ".asset";
-            string assetPath = Path.Combine(info.Attribute.AssetPath, assetName);
+            if (string.IsNullOrEmpty(info.Attribute.SaveDataPath) || info.Attribute.SaveDataPath.StartsWith("Assets/") == false)
+            {
+                int idx = excelPath.LastIndexOf("/");
+                info.Attribute.SaveDataPath = excelPath.Substring(0, idx);
+            }
+            string assetPath = Path.Combine(info.Attribute.SaveDataPath, assetName);
 
             UnityEngine.Object asset = LoadOrCreateAsset(assetPath, info.AssetType);
             asset.hideFlags = info.Attribute.HideFlags;
@@ -62,7 +66,7 @@ namespace RGuang.ExcelKit
 
             if (info.Attribute.LogOnImport)
             {
-                Debug.Log($"从 [{info.Attribute.AssetPath}/{info.Attribute.ExcelName}] 表中 [{info.Attribute.ExcelSheetName}]页 成功导入数据,数据保存在 [{AssetDatabase.GetAssetPath(asset)}] ");
+                Debug.Log($"从 [{excelPath}] 表中 [{info.Attribute.ExcelSheetName}]页 成功导入数据,数据保存在 [{AssetDatabase.GetAssetPath(asset)}] ");
             }
 
             EditorUtility.SetDirty(asset);
@@ -110,7 +114,6 @@ namespace RGuang.ExcelKit
                 ICell entryCell = row.GetCell(0);
                 // skip comment row
                 if (entryCell != null && entryCell.CellType == CellType.String && entryCell.StringCellValue.StartsWith("#")) continue;
-                //if (entryCell != null) continue;
 
                 ICell c1 = row.GetCell(contextIdx);
                 // skip NullOrWhiteSpace

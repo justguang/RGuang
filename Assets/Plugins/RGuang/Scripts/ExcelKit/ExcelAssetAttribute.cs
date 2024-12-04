@@ -7,11 +7,6 @@ namespace RGuang.ExcelKit
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ExcelAssetAttribute : Attribute
     {
-
-        /// <summary>
-        /// Excel资源路径
-        /// </summary>
-        public string AssetPath { get; set; }
         /// <summary>
         /// Excel表名
         /// </summary>
@@ -20,6 +15,10 @@ namespace RGuang.ExcelKit
         /// 读取Excel表下的指定页里的数据
         /// </summary>
         public string ExcelSheetName { get; set; }
+        /// <summary>
+        /// 保存数据的路径，如果不设置就则默认同Excel表同一路径下
+        /// </summary>
+        public string SaveDataPath { get; set; }
         /// <summary>
         /// 字段在第n行开始
         /// </summary>
@@ -41,17 +40,20 @@ namespace RGuang.ExcelKit
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="assetPath">资源路径【Assets/】</param>
         /// <param name="excelName">Excel表名</param>
         /// <param name="excelSheet">读取Excel表下指定的页数据</param>
+        /// <param name="saveDataPath">转存的数据资源保存的路径【Assets/】,如果不设置就则默认同Excel表同一路径下</param>
         /// <param name="fieldStartRow">字段在第n行开始</param>
         /// <param name="fieldStartColumn">字段在第n列开始</param>
         /// <param name="enableLog">True开启日志</param>
-        public ExcelAssetAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
+        public ExcelAssetAttribute(string excelName, string excelSheet, string saveDataPath = null, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
         {
-            this.AssetPath = assetPath;
             this.ExcelName = excelName;
             this.ExcelSheetName = excelSheet;
+            if (string.IsNullOrEmpty(saveDataPath) == false)
+            {
+                this.SaveDataPath = saveDataPath.Replace("\\", "/");
+            }
             this.FieldStartRow = fieldStartRow;
             this.FieldStartColumn = fieldStartColumn;
             this.HideFlags = hideFlags;
@@ -66,8 +68,8 @@ namespace RGuang.ExcelKit
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ExcelAsset2AssetsAttribute : ExcelAssetAttribute
     {
-        public ExcelAsset2AssetsAttribute(string assetPath, string excelName, string excelSheet, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
-            : base(assetPath, excelName, excelSheet, fieldStartRow, fieldStartColumn, hideFlags, enableLog)
+        public ExcelAsset2AssetsAttribute(string excelName, string excelSheet, string saveDataPath = null, int fieldStartRow = 0, int fieldStartColumn = 1, HideFlags hideFlags = HideFlags.NotEditable, bool enableLog = false)
+            : base(excelName, excelSheet, saveDataPath, fieldStartRow, fieldStartColumn, hideFlags, enableLog)
         {
         }
 

@@ -274,7 +274,7 @@ namespace RGuang.LogKit
             sb.Append($"\n日志前缀与具体内容分割符号 [{LogSeparate}]");
             sb.Append($"\n日志是否保存到日志文件 [{EnableSave}]");
             sb.Append($"\n日志文件保存路径 [{SavePath}]");
-            sb.Append($"\n日志保存的文件名 [{DateTime.Now.ToString("yyyy-MM-dd[HH]@") + SaveName}]");
+            sb.Append($"\n日志保存的文件名 [{DateTime.Now.ToString("yyyy-MM-dd.HH@") + SaveName}]");
 
             return sb.ToString();
         }
@@ -596,8 +596,312 @@ namespace RGuang.LogKit
 
         }
 
+        #region --- TEST PRINT ---
+        /// <summary>
+        /// 测试打印 【初音未来】
+        /// <param name="colorLog">颜色</param>
+        public static void TestPrint_Miku(ColorLog colorLog = ColorLog.Cyan)
+        {
+            /**
+             *_______________#########_______________________
+             *______________############_____________________
+             *______________#############____________________
+             *_____________##__###########___________________
+             *____________###__######_#####__________________
+             *____________###_#######___####_________________
+             *___________###__##########_####________________
+             *__________####__###########_####_______________
+             *________#####___###########__#####_____________
+             *_______######___###_########___#####___________
+             *_______#####___###___########___######_________
+             *______######___###__###########___######_______
+             *_____######___####_##############__######______
+             *____#######__#####################_#######_____
+             *____#######__##############################____
+             *___#######__######_#################_#######___
+             *___#######__######_######_#########___######___
+             *___#######____##__######___######_____######___
+             *___#######________######____#####_____#####____
+             *____######________#####_____#####_____####_____
+             *_____#####________####______#####_____###______
+             *______#####______;###________###______#________
+             *________##_______####________####______________
+             */
 
 
+            {
+                Log.Info(" ");
+                Log.ColorInfo(colorLog, "_______________#########_______________________");
+                Log.ColorInfo(colorLog, "______________############_____________________");
+                Log.ColorInfo(colorLog, "______________#############____________________");
+                Log.ColorInfo(colorLog, "_____________##__###########___________________");
+                Log.ColorInfo(colorLog, "____________###__######_#####__________________");
+                Log.ColorInfo(colorLog, "____________###_#######___####_________________");
+                Log.ColorInfo(colorLog, "___________###__##########_####________________");
+                Log.ColorInfo(colorLog, "__________####__###########_####_______________");
+                Log.ColorInfo(colorLog, "________#####___###########__#####_____________");
+                Log.ColorInfo(colorLog, "_______######___###_########___#####___________");
+                Log.ColorInfo(colorLog, "_______#####___###___########___######_________");
+                Log.ColorInfo(colorLog, "______######___###__###########___######_______");
+                Log.ColorInfo(colorLog, "_____######___####_##############__######______");
+                Log.ColorInfo(colorLog, "____#######__#####################_#######_____");
+                Log.ColorInfo(colorLog, "____#######__##############################____");
+                Log.ColorInfo(colorLog, "___#######__######_#################_#######___");
+                Log.ColorInfo(colorLog, "___#######__######_######_#########___######___");
+                Log.ColorInfo(colorLog, "___#######____##__######___######_____######___");
+                Log.ColorInfo(colorLog, "___#######________######____#####_____#####____");
+                Log.ColorInfo(colorLog, "____######________#####_____#####_____####_____");
+                Log.ColorInfo(colorLog, "_____#####________####______#####_____###______");
+                Log.ColorInfo(colorLog, "______#####______;###________###______#________");
+                Log.ColorInfo(colorLog, "________##_______####________####______________");
+                Log.Info(" ");
+            }
+
+        }
+
+        /// <summary>
+        /// 测试打印【Doge】
+        /// </summary>
+        public static void TestPrint_Doge(ColorLog colorLog = ColorLog.Yellow)
+        {
+            /**                                                                          
+             *          .,:,,,                                        .::,,,::.          
+             *        .::::,,;;,                                  .,;;:,,....:i:         
+             *        :i,.::::,;i:.      ....,,:::::::::,....   .;i:,.  ......;i.        
+             *        :;..:::;::::i;,,:::;:,,,,,,,,,,..,.,,:::iri:. .,:irsr:,.;i.        
+             *        ;;..,::::;;;;ri,,,.                    ..,,:;s1s1ssrr;,.;r,        
+             *        :;. ,::;ii;:,     . ...................     .;iirri;;;,,;i,        
+             *        ,i. .;ri:.   ... ............................  .,,:;:,,,;i:        
+             *        :s,.;r:... ....................................... .::;::s;        
+             *        ,1r::. .............,,,.,,:,,........................,;iir;        
+             *        ,s;...........     ..::.,;:,,.          ...............,;1s        
+             *       :i,..,.              .,:,,::,.          .......... .......;1,       
+             *      ir,....:rrssr;:,       ,,.,::.     .r5S9989398G95hr;. ....,.:s,      
+             *     ;r,..,s9855513XHAG3i   .,,,,,,,.  ,S931,.,,.;s;s&BHHA8s.,..,..:r:     
+             *    :r;..rGGh,  :SAG;;G@BS:.,,,,,,,,,.r83:      hHH1sXMBHHHM3..,,,,.ir.    
+             *   ,si,.1GS,   sBMAAX&MBMB5,,,,,,:,,.:&8       3@HXHBMBHBBH#X,.,,,,,,rr    
+             *   ;1:,,SH:   .A@&&B#&8H#BS,,,,,,,,,.,5XS,     3@MHABM&59M#As..,,,,:,is,   
+             *  .rr,,,;9&1   hBHHBB&8AMGr,,,,,,,,,,,:h&&9s;   r9&BMHBHMB9:  . .,,,,;ri.  
+             *  :1:....:5&XSi;r8BMBHHA9r:,......,,,,:ii19GG88899XHHH&GSr.      ...,:rs.  
+             *  ;s.     .:sS8G8GG889hi.        ....,,:;:,.:irssrriii:,.        ...,,i1,  
+             *  ;1,         ..,....,,isssi;,        .,,.                      ....,.i1,  
+             *  ;h:               i9HHBMBBHAX9:         .                     ...,,,rs,  
+             *  ,1i..            :A#MBBBBMHB##s                             ....,,,;si.  
+             *  .r1,..        ,..;3BMBBBHBB#Bh.     ..                    ....,,,,,i1;   
+             *   :h;..       .,..;,1XBMMMMBXs,.,, .. :: ,.               ....,,,,,,ss.   
+             *    ih: ..    .;;;, ;;:s58A3i,..    ,. ,.:,,.             ...,,,,,:,s1,    
+             *    .s1,....   .,;sh,  ,iSAXs;.    ,.  ,,.i85            ...,,,,,,:i1;     
+             *     .rh: ...     rXG9XBBM#M#MHAX3hss13&&HHXr         .....,,,,,,,ih;      
+             *      .s5: .....    i598X&&A&AAAAAA&XG851r:       ........,,,,:,,sh;       
+             *      . ihr, ...  .         ..                    ........,,,,,;11:.       
+             *         ,s1i. ...  ..,,,..,,,.,,.,,.,..       ........,,.,,.;s5i.         
+             *          .:s1r,......................       ..............;shs,           
+             *          . .:shr:.  ....                 ..............,ishs.             
+             *              .,issr;,... ...........................,is1s;.               
+             *                 .,is1si;:,....................,:;ir1sr;,                  
+             *                    ..:isssssrrii;::::::;;iirsssssr;:..                    
+             *                         .,::iiirsssssssssrri;;:.                      
+             */
+
+            {
+
+                Log.Info(" ");
+                Log.ColorInfo(colorLog, "          .,:,,,                                        .::,,,::.          ");
+                Log.ColorInfo(colorLog, "        .::::,,;;,                                  .,;;:,,....:i:         ");
+                Log.ColorInfo(colorLog, "        :i,.::::,;i:.      ....,,:::::::::,....   .;i:,.  ......;i.        ");
+                Log.ColorInfo(colorLog, "        :;..:::;::::i;,,:::;:,,,,,,,,,,..,.,,:::iri:. .,:irsr:,.;i.        ");
+                Log.ColorInfo(colorLog, "        ;;..,::::;;;;ri,,,.                    ..,,:;s1s1ssrr;,.;r,        ");
+                Log.ColorInfo(colorLog, "        :;. ,::;ii;:,     . ...................     .;iirri;;;,,;i,        ");
+                Log.ColorInfo(colorLog, "        ,i. .;ri:.   ... ............................  .,,:;:,,,;i:        ");
+                Log.ColorInfo(colorLog, "        :s,.;r:... ....................................... .::;::s;        ");
+                Log.ColorInfo(colorLog, "        ,1r::. .............,,,.,,:,,........................,;iir;        ");
+                Log.ColorInfo(colorLog, "        ,s;...........     ..::.,;:,,.          ...............,;1s        ");
+                Log.ColorInfo(colorLog, "       :i,..,.              .,:,,::,.          .......... .......;1,       ");
+                Log.ColorInfo(colorLog, "      ir,....:rrssr;:,       ,,.,::.     .r5S9989398G95hr;. ....,.:s,      ");
+                Log.ColorInfo(colorLog, "     ;r,..,s9855513XHAG3i   .,,,,,,,.  ,S931,.,,.;s;s&BHHA8s.,..,..:r:     ");
+                Log.ColorInfo(colorLog, "    :r;..rGGh,  :SAG;;G@BS:.,,,,,,,,,.r83:      hHH1sXMBHHHM3..,,,,.ir.    ");
+                Log.ColorInfo(colorLog, "   ,si,.1GS,   sBMAAX&MBMB5,,,,,,:,,.:&8       3@HXHBMBHBBH#X,.,,,,,,rr    ");
+                Log.ColorInfo(colorLog, "   ;1:,,SH:   .A@&&B#&8H#BS,,,,,,,,,.,5XS,     3@MHABM&59M#As..,,,,:,is,   ");
+                Log.ColorInfo(colorLog, "  .rr,,,;9&1   hBHHBB&8AMGr,,,,,,,,,,,:h&&9s;   r9&BMHBHMB9:  . .,,,,;ri.  ");
+                Log.ColorInfo(colorLog, "  :1:....:5&XSi;r8BMBHHA9r:,......,,,,:ii19GG88899XHHH&GSr.      ...,:rs.  ");
+                Log.ColorInfo(colorLog, "  ;s.     .:sS8G8GG889hi.        ....,,:;:,.:irssrriii:,.        ...,,i1,  ");
+                Log.ColorInfo(colorLog, "  ;1,         ..,....,,isssi;,        .,,.                      ....,.i1,  ");
+                Log.ColorInfo(colorLog, "  ;h:               i9HHBMBBHAX9:         .                     ...,,,rs,  ");
+                Log.ColorInfo(colorLog, "  ,1i..            :A#MBBBBMHB##s                             ....,,,;si.  ");
+                Log.ColorInfo(colorLog, "  .r1,..        ,..;3BMBBBHBB#Bh.     ..                    ....,,,,,i1;   ");
+                Log.ColorInfo(colorLog, "   :h;..       .,..;,1XBMMMMBXs,.,, .. :: ,.               ....,,,,,,ss.   ");
+                Log.ColorInfo(colorLog, "    ih: ..    .;;;, ;;:s58A3i,..    ,. ,.:,,.             ...,,,,,:,s1,    ");
+                Log.ColorInfo(colorLog, "    .s1,....   .,;sh,  ,iSAXs;.    ,.  ,,.i85            ...,,,,,,:i1;     ");
+                Log.ColorInfo(colorLog, "     .rh: ...     rXG9XBBM#M#MHAX3hss13&&HHXr         .....,,,,,,,ih;      ");
+                Log.ColorInfo(colorLog, "      .s5: .....    i598X&&A&AAAAAA&XG851r:       ........,,,,:,,sh;       ");
+                Log.ColorInfo(colorLog, "      . ihr, ...  .         ..                    ........,,,,,;11:.       ");
+                Log.ColorInfo(colorLog, "         ,s1i. ...  ..,,,..,,,.,,.,,.,..       ........,,.,,.;s5i.         ");
+                Log.ColorInfo(colorLog, "          .:s1r,......................       ..............;shs,           ");
+                Log.ColorInfo(colorLog, "          . .:shr:.  ....                 ..............,ishs.             ");
+                Log.ColorInfo(colorLog, "              .,issr;,... ...........................,is1s;.               ");
+                Log.ColorInfo(colorLog, "                 .,is1si;:,....................,:;ir1sr;,                  ");
+                Log.ColorInfo(colorLog, "                    ..:isssssrrii;::::::;;iirsssssr;:..                    ");
+                Log.ColorInfo(colorLog, "                         .,::iiirsssssssssrri;;:.                      ");
+                Log.Info(" ");
+            }
+        }
+
+        /// <summary>
+        /// 测试打印 【Doge2】
+        /// </summary>
+        /// <param name="colorLog"></param>
+        public static void TestPrint_Doge2(ColorLog colorLog = ColorLog.DarkYellow)
+        {
+
+            /***
+            * ░░░░░░░░░░░░░░░░░░░░░░░░▄░░
+            * ░░░░░░░░░▐█░░░░░░░░░░░▄▀▒▌░
+            * ░░░░░░░░▐▀▒█░░░░░░░░▄▀▒▒▒▐
+            * ░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐
+            * ░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐
+            * ░░░▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌
+            * ░░▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒
+            * ░░▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐
+            * ░▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄
+            * ░▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒
+            * ▀▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒
+            */
+
+            {
+
+                Log.Info(" ");
+                Log.ColorInfo(colorLog, "  ░░░░░░░░░░░░░░░░░░░░░░░░▄░░  ");
+                Log.ColorInfo(colorLog, "  ░░░░░░░░░▐█░░░░░░░░░░░▄▀▒▌░  ");
+                Log.ColorInfo(colorLog, "  ░░░░░░░░▐▀▒█░░░░░░░░▄▀▒▒▒▐  ");
+                Log.ColorInfo(colorLog, "  ░░░░░░░▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐  ");
+                Log.ColorInfo(colorLog, "  ░░░░░▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐  ");
+                Log.ColorInfo(colorLog, "  ░░░▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌  ");
+                Log.ColorInfo(colorLog, "  ░░▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒  ");
+                Log.ColorInfo(colorLog, "  ░░▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐  ");
+                Log.ColorInfo(colorLog, "  ░▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄  ");
+                Log.ColorInfo(colorLog, "  ░▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒  ");
+                Log.ColorInfo(colorLog, "  ▀▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒  ");
+                Log.Info(" ");
+
+            }
+
+        }
+
+        /// <summary>
+        /// 测试打印 【FUCK BUG】
+        /// </summary>
+        /// <param name="colorLog"></param>
+        public static void TestPrint_FuckBug(ColorLog colorLog = ColorLog.White)
+        {
+            /***
+            *
+            *   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗
+            * ▓██   ▒ ██  ▓██▒▒██▀ ▀█   ██▄█▒        ██╔══██╗██║   ██║██╔════╝
+            * ▒████ ░▓██  ▒██░▒▓█    ▄ ▓███▄░        ██████╔╝██║   ██║██║  ███╗
+            * ░▓█▒  ░▓▓█  ░██░▒▓▓▄ ▄██▒▓██ █▄        ██╔══██╗██║   ██║██║   ██║
+            * ░▒█░   ▒▒█████▓ ▒ ▓███▀ ░▒██▒ █▄       ██████╔╝╚██████╔╝╚██████╔╝
+            *  ▒ ░   ░▒▓▒ ▒ ▒ ░ ░▒ ▒  ░▒ ▒▒ ▓▒       ╚═════╝  ╚═════╝  ╚═════╝
+            *  ░     ░░▒░ ░ ░   ░  ▒   ░ ░▒ ▒░
+            *  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░
+            *           ░     ░ ░      ░  ░
+            */
+
+            {
+
+                Log.Info(" ");
+                Log.ColorInfo(colorLog, "   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗");
+                Log.ColorInfo(colorLog, " ▓██   ▒ ██  ▓██▒▒██▀ ▀█   ██▄█▒        ██╔══██╗██║   ██║██╔════╝");
+                Log.ColorInfo(colorLog, " ▒████ ░▓██  ▒██░▒▓█    ▄ ▓███▄░        ██████╔╝██║   ██║██║  ███╗");
+                Log.ColorInfo(colorLog, " ░▓█▒  ░▓▓█  ░██░▒▓▓▄ ▄██▒▓██ █▄        ██╔══██╗██║   ██║██║   ██║");
+                Log.ColorInfo(colorLog, " ░▒█░   ▒▒█████▓ ▒ ▓███▀ ░▒██▒ █▄       ██████╔╝╚██████╔╝╚██████╔╝");
+                Log.ColorInfo(colorLog, "  ▒ ░   ░▒▓▒ ▒ ▒ ░ ░▒ ▒  ░▒ ▒▒ ▓▒       ╚═════╝  ╚═════╝  ╚═════╝");
+                Log.ColorInfo(colorLog, "  ░     ░░▒░ ░ ░   ░  ▒   ░ ░▒ ▒░");
+                Log.ColorInfo(colorLog, "  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░");
+                Log.ColorInfo(colorLog, "           ░     ░ ░      ░  ░");
+                Log.Info(" ");
+            }
+
+        }
+
+        /// <summary>
+        /// 测试打印 【DaBiDou】
+        /// </summary>
+        /// <param name="colorLog"></param>
+        public static void TestPrint_DaBiDou(ColorLog colorLog = ColorLog.Blue)
+        {
+            /***
+             *                                         ,s555SB@@&                          
+             *                                      :9H####@@@@@Xi                        
+             *                                     1@@@@@@@@@@@@@@8                       
+             *                                   ,8@@@@@@@@@B@@@@@@8                      
+             *                                  :B@@@@X3hi8Bs;B@@@@@Ah,                   
+             *             ,8i                  r@@@B:     1S ,M@@@@@@#8;                 
+             *            1AB35.i:               X@@8 .   SGhr ,A@@@@@@@@S                
+             *            1@h31MX8                18Hhh3i .i3r ,A@@@@@@@@@5               
+             *            ;@&i,58r5                 rGSS:     :B@@@@@@@@@@A               
+             *             1#i  . 9i                 hX.  .: .5@@@@@@@@@@@1               
+             *              sG1,  ,G53s.              9#Xi;hS5 3B@@@@@@@B1                
+             *               .h8h.,A@@@MXSs,           #@H1:    3ssSSX@1                  
+             *               s ,@@@@@@@@@@@@Xhi,       r#@@X1s9M8    .GA981               
+             *               ,. rS8H#@@@@@@@@@@#HG51;.  .h31i;9@r    .8@@@@BS;i;          
+             *                .19AXXXAB@@@@@@@@@@@@@@#MHXG893hrX#XGGXM@@@@@@@@@@MS        
+             *                s@@MM@@@hsX#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&,      
+             *              :GB@#3G@@Brs ,1GM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B,     
+             *            .hM@@@#@@#MX 51  r;iSGAM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8     
+             *          :3B@@@@@@@@@@@&9@h :Gs   .;sSXH@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:    
+             *      s&HA#@@@@@@@@@@@@@@M89A;.8S.       ,r3@@@@@@@@@@@@@@@@@@@@@@@@@@@r    
+             *   ,13B@@@@@@@@@@@@@@@@@@@5 5B3 ;.         ;@@@@@@@@@@@@@@@@@@@@@@@@@@@i    
+             *  5#@@#&@@@@@@@@@@@@@@@@@@9  .39:          ;@@@@@@@@@@@@@@@@@@@@@@@@@@@;    
+             *  9@@@X:MM@@@@@@@@@@@@@@@#;    ;31.         H@@@@@@@@@@@@@@@@@@@@@@@@@@:    
+             *   SH#@B9.rM@@@@@@@@@@@@@B       :.         3@@@@@@@@@@@@@@@@@@@@@@@@@@5    
+             *     ,:.   9@@@@@@@@@@@#HB5                 .M@@@@@@@@@@@@@@@@@@@@@@@@@B    
+             *           ,ssirhSM@&1;i19911i,.             s@@@@@@@@@@@@@@@@@@@@@@@@@@S   
+             *              ,,,rHAri1h1rh&@#353Sh:          8@@@@@@@@@@@@@@@@@@@@@@@@@#:  
+             *            .A3hH@#5S553&@@#h   i:i9S          #@@@@@@@@@@@@@@@@@@@@@@@@@A.
+             *
+             *
+             *    又看源码，看你妹妹呀！
+             */
+
+            {
+                Log.Info(" ");
+                Log.ColorInfo(colorLog, "                                         ,s555SB@@&                          ");
+                Log.ColorInfo(colorLog, "                                      :9H####@@@@@Xi                        ");
+                Log.ColorInfo(colorLog, "                                     1@@@@@@@@@@@@@@8                       ");
+                Log.ColorInfo(colorLog, "                                   ,8@@@@@@@@@B@@@@@@8                      ");
+                Log.ColorInfo(colorLog, "                                  :B@@@@X3hi8Bs;B@@@@@Ah,                   ");
+                Log.ColorInfo(colorLog, "             ,8i                  r@@@B:     1S ,M@@@@@@#8;                 ");
+                Log.ColorInfo(colorLog, "            1AB35.i:               X@@8 .   SGhr ,A@@@@@@@@S                ");
+                Log.ColorInfo(colorLog, "            1@h31MX8                18Hhh3i .i3r ,A@@@@@@@@@5               ");
+                Log.ColorInfo(colorLog, "            ;@&i,58r5                 rGSS:     :B@@@@@@@@@@A               ");
+                Log.ColorInfo(colorLog, "             1#i  . 9i                 hX.  .: .5@@@@@@@@@@@1               ");
+                Log.ColorInfo(colorLog, "              sG1,  ,G53s.              9#Xi;hS5 3B@@@@@@@B1                ");
+                Log.ColorInfo(colorLog, "               .h8h.,A@@@MXSs,           #@H1:    3ssSSX@1                  ");
+                Log.ColorInfo(colorLog, "               s ,@@@@@@@@@@@@Xhi,       r#@@X1s9M8    .GA981               ");
+                Log.ColorInfo(colorLog, "               ,. rS8H#@@@@@@@@@@#HG51;.  .h31i;9@r    .8@@@@BS;i;          ");
+                Log.ColorInfo(colorLog, "                .19AXXXAB@@@@@@@@@@@@@@#MHXG893hrX#XGGXM@@@@@@@@@@MS        ");
+                Log.ColorInfo(colorLog, "                s@@MM@@@hsX#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&,      ");
+                Log.ColorInfo(colorLog, "              :GB@#3G@@Brs ,1GM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B,     ");
+                Log.ColorInfo(colorLog, "            .hM@@@#@@#MX 51  r;iSGAM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8     ");
+                Log.ColorInfo(colorLog, "          :3B@@@@@@@@@@@&9@h :Gs   .;sSXH@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:    ");
+                Log.ColorInfo(colorLog, "      s&HA#@@@@@@@@@@@@@@M89A;.8S.       ,r3@@@@@@@@@@@@@@@@@@@@@@@@@@@r    ");
+                Log.ColorInfo(colorLog, "   ,13B@@@@@@@@@@@@@@@@@@@5 5B3 ;.         ;@@@@@@@@@@@@@@@@@@@@@@@@@@@i    ");
+                Log.ColorInfo(colorLog, "  5#@@#&@@@@@@@@@@@@@@@@@@9  .39:          ;@@@@@@@@@@@@@@@@@@@@@@@@@@@;    ");
+                Log.ColorInfo(colorLog, "  9@@@X:MM@@@@@@@@@@@@@@@#;    ;31.         H@@@@@@@@@@@@@@@@@@@@@@@@@@:    ");
+                Log.ColorInfo(colorLog, "   SH#@B9.rM@@@@@@@@@@@@@B       :.         3@@@@@@@@@@@@@@@@@@@@@@@@@@5    ");
+                Log.ColorInfo(colorLog, "     ,:.   9@@@@@@@@@@@#HB5                 .M@@@@@@@@@@@@@@@@@@@@@@@@@B    ");
+                Log.ColorInfo(colorLog, "           ,ssirhSM@&1;i19911i,.             s@@@@@@@@@@@@@@@@@@@@@@@@@@S   ");
+                Log.ColorInfo(colorLog, "              ,,,rHAri1h1rh&@#353Sh:          8@@@@@@@@@@@@@@@@@@@@@@@@@#:  ");
+                Log.ColorInfo(colorLog, "            .A3hH@#5S553&@@#h   i:i9S          #@@@@@@@@@@@@@@@@@@@@@@@@@A.");
+                Log.ColorInfo(colorLog, "");
+                Log.ColorInfo(colorLog, "");
+                Log.ColorInfo(colorLog, "    又看源码，看你妹妹呀！");
+                Log.Info(" ");
+
+
+            }
+        }
+        #endregion
 
 
         #region public static【 Log、Warn、Error、StackTrace】
@@ -826,7 +1130,7 @@ namespace RGuang.LogKit
         /// <param name="msg">要写的内容</param>
         private static void WriteToFile(string msg)
         {
-            string prefix = DateTime.Now.ToString("yyyy-MM-dd[HH]@");
+            string prefix = DateTime.Now.ToString("yyyy-MM-dd.HH@");
             string fileName = prefix + Cfg.SaveName;
             string path = Cfg.SavePath + fileName;
 

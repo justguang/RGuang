@@ -13,6 +13,19 @@ using System.Collections.Generic;
 
 namespace CardGame
 {
+    /**
+     * UnityEngine.EventSystems.EventSystem                             -1000
+     * TMPro.TextContainer                                              -110
+     * TMPro.TextMeshPro                                                -105
+     * TMPro.TextMeshProUGUI                                            -100
+     * UnityEngine.Rendering.Universal.CinemachineUniversalPixelPerfect -1
+     * 
+     *  --- 默认时间 ---
+     * 
+     * UnityEngine.UI.ToggleGroup                                       10
+     * 
+     */
+    [DefaultExecutionOrder(-50)]//脚本执行顺序，从小到大
     public sealed class RGuangLogKit : MonoBehaviour
     {
         [Header("启用日志等级"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
@@ -63,8 +76,10 @@ namespace CardGame
 
             RGuang.LogKit.Log.InitSetting(cfg);
 
-            RGuang.LogKit.Log.Info($" ↓↓↓RGuang.Info 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+            RGuang.LogKit.Log.Info($" ↓↓↓RGuang.Info 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd.HH")}");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Cyan, cfg.ToString());
+            Log.TestPrint_Miku();
+            Log.TestPrint_Doge2();
 
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.White, " -- 测试白色 --");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Gray, "-- 测试灰色 --");
@@ -82,8 +97,8 @@ namespace CardGame
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkBlue, "-- 测试深蓝 --");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkYellow, "-- 测试暗黄 --");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkCyan, "-- 测试暗青 --");
-            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkMagenta, "-- 测试紫 --");
-            RGuang.LogKit.Log.Info($" ↑↑↑ RGuang.Info 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd[HH]")}");
+            RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.DarkMagenta, "-- 测试暗紫 --");
+            RGuang.LogKit.Log.Info($" ↑↑↑ RGuang.Info 日志初始化End↑↑↑  时间=>{DateTime.Now.ToString("yyyy-MM-dd.HH")}");
 
 
             //RGuang.ExcelKit.Example.Item item = null;

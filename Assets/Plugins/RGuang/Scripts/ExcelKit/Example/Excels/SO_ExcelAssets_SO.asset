@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf790b69d07b3d4688887d883976e0e, type: 3}
+  m_Name: SO_ExcelAssets_SO
+  m_EditorClassIdentifier: 
+  DataLst:
+  - Id: 1
+    Name: tu.png
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 2
+    Name: jin.png
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 3
+    Name: Text.prefab
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 8
+    Name: Text.prefab
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 9
+    Name: Item.cs
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Scripts/Item
+    AssetRefernce: {fileID: 0}
+  - Id: 10
+    Name: SO_ItemData.asset
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Excels
+    AssetRefernce: {fileID: 11400000, guid: fb02ab091056a3341bc5ee2f6c74adef, type: 2}
+  - Id: 11
+    Name: ExcelExample.cs
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Scripts
+    AssetRefernce: {fileID: 0}

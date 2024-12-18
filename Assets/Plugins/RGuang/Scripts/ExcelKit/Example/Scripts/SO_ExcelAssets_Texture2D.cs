@@ -14,14 +14,14 @@ namespace RGuang.ExcelKit.Example
     hideFlags: HideFlags.NotEditable,
     saveDataPath: "Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Excels",
     excelName: "ConfigItems",
-    excelSheet: "资源配置",
+    excelSheet: "资源配置_Texture2D",
     fieldStartRow: 2,
     fieldStartColumn: 1,
     enableLog: true
     )]
-    public class SO_ExcelAssets : ScriptableObject
+    public class SO_ExcelAssets_Texture2D : ScriptableObject
     {
-        public List<MyAssetsInfo> DataLst;
+        public List<MyAssets_Texture2DInfo> DataLst;
 
 
 
@@ -42,19 +42,21 @@ namespace RGuang.ExcelKit.Example
 
 
     [System.Serializable]
-    public class MyAssetsInfo
+    public class MyAssets_Texture2DInfo
     {
         public string Id;
         [AssetNameWithExtension]
         public string Name;
         [AssetDir]
         public string DirPath;
-        [Texture2DAsset]
-        public Texture2D Texture2DAsset;
-        [SpriteAsset]
-        public Sprite SpriteAsset;
-        [PrefabAsset]
-        public GameObject PrefabAsset;
+        //[Texture2DAsset]
+        //public Texture2D Texture2DAsset;
+        //[SpriteAsset]
+        //public Sprite SpriteAsset;
+        //[PrefabAsset]
+        //public GameObject PrefabAsset;
+        [AssetReferenceAttribute]
+        public Texture2D AssetRefernce;
 
     }
 

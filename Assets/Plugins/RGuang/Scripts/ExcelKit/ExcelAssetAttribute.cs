@@ -64,7 +64,6 @@ namespace RGuang.ExcelKit
 
     }
 
-
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ExcelAsset2AssetsAttribute : ExcelAssetAttribute
     {
@@ -73,24 +72,23 @@ namespace RGuang.ExcelKit
         {
         }
 
+        /// <summary>
+        /// 资源的文件夹
+        /// </summary>
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
         public class AssetDirAttribute : Attribute { }
 
+        /// <summary>
+        /// 资源名带后缀
+        /// </summary>
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
         public class AssetNameWithExtensionAttribute : Attribute { }
 
+        /// <summary>
+        /// 资源引用
+        /// </summary>
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-        public class Texture2DAssetAttribute : Attribute { }
-
-        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-        public class SpriteAssetAttribute : Attribute { }
-
-        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-        public class SpriteAtlasAssetAttribute : Attribute { }
-
-        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-        public class PrefabAssetAttribute : Attribute { }
-
+        public class AssetReferenceAttribute : Attribute { }
 
     }
 

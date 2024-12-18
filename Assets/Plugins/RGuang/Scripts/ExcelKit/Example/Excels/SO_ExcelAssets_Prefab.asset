@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2736b0c31d7c344438c1b55cd88b058a, type: 3}
+  m_Name: SO_ExcelAssets_Prefab
+  m_EditorClassIdentifier: 
+  DataLst:
+  - Id: 1
+    Name: tu.png
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 2
+    Name: jin.png
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 0}
+  - Id: 3
+    Name: Text.prefab
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 1632937241238185082, guid: d9edd939b5ac33744ad52ba07c6a5ef6,
+      type: 3}
+  - Id: 8
+    Name: Text.prefab
+    DirPath: Assets/Plugins/RGuang/Scripts/ExcelKit/Example/Art
+    AssetRefernce: {fileID: 1632937241238185082, guid: d9edd939b5ac33744ad52ba07c6a5ef6,
+      type: 3}

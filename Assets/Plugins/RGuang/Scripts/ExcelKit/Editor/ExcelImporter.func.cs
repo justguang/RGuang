@@ -221,11 +221,9 @@ namespace RGuang.ExcelKit
             List<object> dataLst = ((IEnumerable)SOFieldInfo.GetValue(obj)).Cast<object>().ToList();
             Type entityType = dataLst[0].GetType();
 
-
             FieldInfo fiedDir = null;
             FieldInfo fiedName = null;
-
-            List<FieldInfo> assetFieldLst = new List<FieldInfo>();
+            FieldInfo assetRefernce = null;
 
             FieldInfo[] fieldInfos = entityType.GetFields();
             for (int i = 0; i < fieldInfos.Length; i++)
@@ -244,34 +242,15 @@ namespace RGuang.ExcelKit
                     continue;
                 }
 
-                var attr_texture2D = (Texture2DAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(Texture2DAssetAttribute), false);
-                if (attr_texture2D != null)
+                var attr_assetRefernce = (AssetReferenceAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(AssetReferenceAttribute), false);
+                if (attr_assetRefernce != null)
                 {
-                    assetFieldLst.Add(fieldInfos[i]);
-                    continue;
-                }
-                var attr_sprite = (SpriteAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(SpriteAssetAttribute), false);
-                if (attr_sprite != null)
-                {
-                    assetFieldLst.Add(fieldInfos[i]);
-                    continue;
-                }
-                var attr_spriteAtlas = (SpriteAtlasAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(SpriteAtlasAssetAttribute), false);
-                if (attr_spriteAtlas != null)
-                {
-                    assetFieldLst.Add(fieldInfos[i]);
-                    continue;
-                }
-                var attr_prefab = (PrefabAssetAttribute)Attribute.GetCustomAttribute(fieldInfos[i], typeof(PrefabAssetAttribute), false);
-                if (attr_prefab != null)
-                {
-                    assetFieldLst.Add(fieldInfos[i]);
+                    assetRefernce = fieldInfos[i];
                     continue;
                 }
             }
 
             if (fiedName == null) return;
-            if (assetFieldLst.Count < 1) return;
 
             for (int i = 0; i < dataLst.Count; i++)
             {
@@ -280,7 +259,7 @@ namespace RGuang.ExcelKit
 
                 if (string.IsNullOrEmpty(nameWithExtension)) continue;
 
-                string rootDir = "Assets";
+                string rootDir = "Assets/";
                 if (string.IsNullOrWhiteSpace(dir))
                 {
                     dir = rootDir;
@@ -289,13 +268,17 @@ namespace RGuang.ExcelKit
                 {
                     dir = Path.Combine(rootDir, dir);
                 }
-
-                for (int j = 0; j < assetFieldLst.Count; j++)
+                if (dir.EndsWith("/") == false)
                 {
-                    FieldInfo field = assetFieldLst[j];
-                    var assetObj = AssetDatabase.LoadAssetAtPath(dir + "/" + nameWithExtension, field.FieldType);
-                    field.SetValue(dataLst[i], assetObj);
+                    dir = dir + "/";
                 }
+
+                if (assetRefernce != null)
+                {
+                    var assetObj = AssetDatabase.LoadAssetAtPath(dir + nameWithExtension, assetRefernce.FieldType);
+                    assetRefernce.SetValue(dataLst[i], assetObj);
+                }
+
             }
 
 

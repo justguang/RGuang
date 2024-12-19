@@ -9,14 +9,29 @@ namespace RGuang.Kit
     public class GameObjectPool
     {
         public GameObjectPool() { }
-        public GameObjectPool(GameObject prefab, Transform parentRoot, string poolName = null, int capacity = 7) => Init(prefab, parentRoot, poolName, capacity);
+        public GameObjectPool(GameObject prefab, Transform parentRoot, string poolName = null, int capacity = DefaultCapacity) => Init(prefab, parentRoot, poolName, capacity);
 
         #region Properties
         [Tooltip("对象池名称"), SerializeField] private string m_poolName;
         [SerializeField] private GameObject m_prefab;
-        [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 7;
-        private Queue<GameObject> m_pool = new Queue<GameObject>(7);
+        [Tooltip("配置池容量"), Range(MinCapacity, MaxCapacity), SerializeField] private int m_capacity = DefaultCapacity;
         private bool m_initialized;
+
+        #region QUEUE Data
+        private Queue<GameObject> m_pool = new Queue<GameObject>(DefaultCapacity);
+        /// <summary>
+        /// 默认容量
+        /// </summary>
+        public const int DefaultCapacity = 10;
+        /// <summary>
+        /// 允许最小容量
+        /// </summary>
+        public const int MinCapacity = 2;
+        /// <summary>
+        /// 允许最大容量
+        /// </summary>
+        public const int MaxCapacity = 500;
+        #endregion
 
         /// <summary>
         /// 对象池名称【唯一】
@@ -48,7 +63,11 @@ namespace RGuang.Kit
         public int ConfigCapacity
         {
             get => m_capacity;
-            private set => m_capacity = value;
+            private set
+            {
+                m_capacity = Mathf.Clamp(value, MinCapacity, MaxCapacity);
+                m_pool = new Queue<GameObject>(m_capacity);
+            }
         }
         /// <summary>
         /// 闲置对象数量
@@ -114,7 +133,7 @@ namespace RGuang.Kit
         #endregion
 
         #region --- Init/Dispose ---
-        public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, string poolName = null, int poolCapacity = 7)
+        public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, string poolName = null, int poolCapacity = DefaultCapacity)
         {
             if (Initialized)
             {
@@ -129,8 +148,6 @@ namespace RGuang.Kit
 
             ConfigCapacity = poolCapacity;
 
-
-            m_pool = new Queue<GameObject>(ConfigCapacity);
             Initialized = true;
             return this;
         }

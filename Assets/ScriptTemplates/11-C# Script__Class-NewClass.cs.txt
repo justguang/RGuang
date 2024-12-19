@@ -4,7 +4,7 @@ namespace MyNamespace
 {
 	public class #SCRIPTNAME#
 	{
-		//need代码
+		//写句中文在这里，用于成功编码【UTF8】，可删除
 	}
 
 }

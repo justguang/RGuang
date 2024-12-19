@@ -5,7 +5,7 @@ namespace MyNamespace
 	[CreateAssetMenu(menuName=(""),fileName=(""))]
 	public class #SCRIPTNAME# : ScriptableObject
 	{
-		//need代码
+		//写句中文在这里，用于成功编码【UTF8】，可删除
 		#NOTRIM#
 	}
 

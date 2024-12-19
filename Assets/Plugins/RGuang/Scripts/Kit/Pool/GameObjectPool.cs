@@ -9,14 +9,23 @@ namespace RGuang.Kit
     public class GameObjectPool
     {
         public GameObjectPool() { }
-        public GameObjectPool(GameObject prefab, Transform parentRoot, int capacity = 7) => Init(prefab, parentRoot, capacity);
+        public GameObjectPool(GameObject prefab, Transform parentRoot, string poolName = null, int capacity = 7) => Init(prefab, parentRoot, poolName, capacity);
 
         #region Properties
+        [Tooltip("对象池名称"), SerializeField] private string m_poolName;
         [SerializeField] private GameObject m_prefab;
         [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 7;
         private Queue<GameObject> m_pool = new Queue<GameObject>(7);
         private bool m_initialized;
 
+        /// <summary>
+        /// 对象池名称【唯一】
+        /// </summary>
+        public string PoolName
+        {
+            get => m_poolName;
+            private set => m_poolName = value;
+        }
         /// <summary>
         /// 目标对象
         /// </summary>
@@ -105,17 +114,21 @@ namespace RGuang.Kit
         #endregion
 
         #region --- Init/Dispose ---
-        public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, int poolCapacity = 5)
+        public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, string poolName = null, int poolCapacity = 7)
         {
             if (Initialized)
             {
-                Debug.LogError($"重复Init！[{Prefab}]对象池已初始化。");
+                Debug.LogError($"重复Init！[{PoolName}]对象池已初始化。");
                 return this;
             }
 
             if (prefab) Prefab = prefab;
             if (parentRoot) ParentRoot = parentRoot;
+            if (string.IsNullOrWhiteSpace(poolName)) PoolName = Prefab.name;
+            else PoolName = poolName;
+
             ConfigCapacity = poolCapacity;
+
 
             m_pool = new Queue<GameObject>(ConfigCapacity);
             Initialized = true;
@@ -140,7 +153,7 @@ namespace RGuang.Kit
             }
             else
             {
-                Debug.LogError($"对象池重复Dispose！[{Prefab}]对象池已释放。");
+                Debug.LogError($"对象池重复Dispose！[{PoolName}]对象池已释放。");
             }
         }
         #endregion
@@ -225,12 +238,12 @@ namespace RGuang.Kit
         /// <exception cref="Exception">可能重复回收</exception>
         public void UnSpawn(GameObject obj)
         {
-            obj.SetActive(false);
+            if (obj.activeSelf) obj.SetActive(false);
             obj.transform.SetParent(ParentRoot);
 
             if (m_pool.Contains(obj))
             {
-                throw new Exception($"重复回收对象{obj}");
+                throw new Exception($"对象池[{PoolName}] 重复回收对象{obj}");
             }
 
             if (IdleCount >= ConfigCapacity)

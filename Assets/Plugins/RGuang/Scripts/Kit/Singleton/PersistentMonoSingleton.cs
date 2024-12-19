@@ -4,7 +4,7 @@ namespace RGuang.Kit
 {
     /// <summary>
     /// MonoBehaviour 单例类
-    /// 如果场景里包含两个 PersistentMonoSingleton 则保留最先创建的
+    /// 如果场景里包含两个及以上的 PersistentMonoSingleton 则保留最先创建的
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class PersistentMonoSingleton<T> : MonoBehaviour where T : Component

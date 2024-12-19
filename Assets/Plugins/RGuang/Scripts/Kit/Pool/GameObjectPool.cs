@@ -15,6 +15,7 @@ namespace RGuang.Kit
         [SerializeField] private GameObject m_prefab;
         [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 5;
         private Queue<GameObject> m_pool;
+        private bool m_initialized;
 
         /// <summary>
         /// 目标对象
@@ -98,24 +99,40 @@ namespace RGuang.Kit
         #region --- Init/Dispose ---
         public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, int poolCapacity = 5)
         {
+            if (m_initialized)
+            {
+                Debug.LogError($"重复Init！[{Prefab}]对象池已初始化。");
+                return this;
+            }
+
             if (prefab) Prefab = prefab;
             if (parentRoot) ParentRoot = parentRoot;
             ConfigCapacity = poolCapacity;
 
             m_pool = new Queue<GameObject>(ConfigCapacity);
+            m_initialized = true;
             return this;
         }
+
+
         public void Dispose()
         {
-            while (m_pool.TryDequeue(out var obj))
+            if (m_initialized)
             {
-                GameObject.Destroy(obj);
-            }
+                while (m_pool.TryDequeue(out var obj))
+                {
+                    GameObject.Destroy(obj);
+                }
 
-            m_pool.Clear();
-            UseingCount = 0;
-            CreatedCount = 0;
-            OverflowCount = 0;
+                m_pool.Clear();
+                UseingCount = 0;
+                CreatedCount = 0;
+                OverflowCount = 0;
+            }
+            else
+            {
+                Debug.LogError($"对象池重复Dispose！[{Prefab}]对象池已释放。");
+            }
         }
         #endregion
 

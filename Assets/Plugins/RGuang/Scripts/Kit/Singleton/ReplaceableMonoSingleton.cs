@@ -4,7 +4,7 @@ namespace RGuang.Kit
 {
     /// <summary>
     /// MonoBehaviour 单例类
-    /// 如果场景里包含两个 ReplaceableMonoSingleton 则保留最后创建的
+    /// 如果场景里包含两个及以上的 ReplaceableMonoSingleton 则保留最后创建的
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class ReplaceableMonoSingleton<T> : MonoBehaviour where T : Component

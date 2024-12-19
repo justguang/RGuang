@@ -8,6 +8,10 @@ namespace RGuang.Kit
     [System.Serializable]
     public class GameObjectPool
     {
+        public GameObjectPool() { }
+        public GameObjectPool(GameObject prefab, Transform parentRoot, int capacity = 5) => Init(prefab, parentRoot, capacity);
+
+        #region Properties
         [SerializeField] private GameObject m_prefab;
         [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 5;
         private Queue<GameObject> m_pool;
@@ -15,11 +19,15 @@ namespace RGuang.Kit
         /// <summary>
         /// 目标对象
         /// </summary>
-        public GameObject Prefab => m_prefab;
+        public GameObject Prefab
+        {
+            get => m_prefab;
+            private set => m_prefab = value;
+        }
         /// <summary>
         /// 目标对象默认父级
         /// </summary>
-        public Transform ObjParent
+        public Transform ParentRoot
         {
             get;
             private set;
@@ -60,12 +68,13 @@ namespace RGuang.Kit
             get;
             private set;
         }
+        #endregion
 
         #region --- Private Function ---
         GameObject CreateObj()
         {
             CreatedCount++;
-            var copy = GameObject.Instantiate(m_prefab, ObjParent);
+            var copy = GameObject.Instantiate(m_prefab, ParentRoot);
             copy.SetActive(false);
             return copy;
         }
@@ -87,23 +96,14 @@ namespace RGuang.Kit
         #endregion
 
         #region --- Init/Dispose ---
-        public void Init(Transform parent, int poolCapacity)
+        public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, int poolCapacity = 5)
         {
+            if (prefab) Prefab = prefab;
+            if (parentRoot) ParentRoot = parentRoot;
             ConfigCapacity = poolCapacity;
-            Init(parent);
-        }
-        public void Init(Transform parent)
-        {
-            ObjParent = parent;
-            Init();
-        }
-        public void Init()
-        {
+
             m_pool = new Queue<GameObject>(ConfigCapacity);
-            for (int i = 0; i < ConfigCapacity; i++)
-            {
-                m_pool.Enqueue(CreateObj());
-            }
+            return this;
         }
         public void Dispose()
         {
@@ -137,6 +137,7 @@ namespace RGuang.Kit
         /// 获取一个对象
         /// </summary>
         /// <param name="pos">该对象要重置的位置</param>
+        /// <param name="parent">该对象要重置的父级</param>
         public GameObject Spawn(Vector3 pos, Transform parent = null)
         {
             GameObject obj = AvailableObject();
@@ -153,6 +154,7 @@ namespace RGuang.Kit
         /// </summary>
         /// <param name="pos">该对象要重置的位置</param>
         /// <param name="rot">该对象要重置的旋转</param>
+        /// <param name="parent">该对象要重置的父级</param>
         public GameObject Spawn(Vector3 pos, Quaternion rot, Transform parent = null)
         {
             GameObject obj = AvailableObject();
@@ -171,6 +173,7 @@ namespace RGuang.Kit
         /// <param name="pos">该对象要重置的位置</param>
         /// <param name="rot">该对象要重置的旋转</param>
         /// <param name="localScale">该对象要重置的缩放比例</param>
+        /// <param name="parent">该对象要重置的父级</param>
         public GameObject Spawn(Vector3 pos, Quaternion rot, Vector3 localScale, Transform parent = null)
         {
             GameObject obj = AvailableObject();
@@ -189,10 +192,15 @@ namespace RGuang.Kit
 
 
         #region --- UnSpawn ---
+        /// <summary>
+        /// 回收
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="Exception">可能重复回收</exception>
         public void UnSpawn(GameObject obj)
         {
             obj.SetActive(false);
-            obj.transform.SetParent(ObjParent);
+            obj.transform.SetParent(ParentRoot);
 
             if (m_pool.Contains(obj))
             {
@@ -210,7 +218,19 @@ namespace RGuang.Kit
             }
 
         }
+
+        /// <summary>
+        /// 检测对象是否可回收
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>返回True则可回收，返回False则池子已满或者对象已存在池子中</returns>
+        public bool CanUnSpawn(GameObject obj)
+        {
+            return IdleCount < ConfigCapacity && !m_pool.Contains(obj);
+        }
+        public bool Contains(GameObject obj) => m_pool.Contains(obj);
         #endregion
+
 
 
     }

@@ -9,12 +9,12 @@ namespace RGuang.Kit
     public class GameObjectPool
     {
         public GameObjectPool() { }
-        public GameObjectPool(GameObject prefab, Transform parentRoot, int capacity = 5) => Init(prefab, parentRoot, capacity);
+        public GameObjectPool(GameObject prefab, Transform parentRoot, int capacity = 7) => Init(prefab, parentRoot, capacity);
 
         #region Properties
         [SerializeField] private GameObject m_prefab;
-        [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 5;
-        private Queue<GameObject> m_pool;
+        [Tooltip("配置池容量"), Range(1, 500), SerializeField] private int m_capacity = 7;
+        private Queue<GameObject> m_pool = new Queue<GameObject>(7);
         private bool m_initialized;
 
         /// <summary>
@@ -69,13 +69,21 @@ namespace RGuang.Kit
             get;
             private set;
         }
+        /// <summary>
+        /// True => 已初始化
+        /// </summary>
+        public bool Initialized
+        {
+            get => m_initialized;
+            private set => m_initialized = value;
+        }
         #endregion
 
         #region --- Private Function ---
         GameObject CreateObj()
         {
             CreatedCount++;
-            var copy = GameObject.Instantiate(m_prefab, ParentRoot);
+            var copy = GameObject.Instantiate(Prefab, ParentRoot);
             copy.SetActive(false);
             return copy;
         }
@@ -99,7 +107,7 @@ namespace RGuang.Kit
         #region --- Init/Dispose ---
         public GameObjectPool Init(GameObject prefab = null, Transform parentRoot = null, int poolCapacity = 5)
         {
-            if (m_initialized)
+            if (Initialized)
             {
                 Debug.LogError($"重复Init！[{Prefab}]对象池已初始化。");
                 return this;
@@ -110,15 +118,16 @@ namespace RGuang.Kit
             ConfigCapacity = poolCapacity;
 
             m_pool = new Queue<GameObject>(ConfigCapacity);
-            m_initialized = true;
+            Initialized = true;
             return this;
         }
 
 
         public void Dispose()
         {
-            if (m_initialized)
+            if (Initialized)
             {
+                Initialized = false;
                 while (m_pool.TryDequeue(out var obj))
                 {
                     GameObject.Destroy(obj);

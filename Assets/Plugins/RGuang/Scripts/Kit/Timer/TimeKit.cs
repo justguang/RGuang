@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RGuang.Kit
 {
     /// <summary>
-    /// 时间类
+    /// DateTime
     /// 
     /// </summary>
     public static class TimeKit
@@ -12,11 +12,12 @@ namespace RGuang.Kit
 
 
         /// <summary>
-        /// 获取单位为秒的 时间戳【获取失败返回-1】
+        /// 获取当前时间戳【获取失败返回-1】
+        /// ps：单位：秒
         /// </summary>
         public static long GetTimeStampSecond(Action<string> errorCallback = null)
         {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1);
             try
             {
                 return Convert.ToInt64(ts.TotalSeconds);
@@ -27,12 +28,14 @@ namespace RGuang.Kit
                 return -1;
             }
         }
+
         /// <summary>
-        /// 获取单位为毫秒的 时间戳【获取失败返回-1】
+        /// 获取当前时间戳【获取失败返回-1】
+        /// ps：单位：毫秒
         /// </summary>
         public static long GetTimeStampMilliSecond(Action<string> errorCallback = null)
         {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1);
             try
             {
                 return Convert.ToInt64(ts.TotalMilliseconds);

@@ -3,23 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+
 namespace RGuang.Kit
 {
-    [System.Serializable]
-    public class GameObjectPool
+    [DisallowMultipleComponent]
+    public sealed class GameObjectPool : MonoBehaviour
     {
-        public GameObjectPool() { }
-        public GameObjectPool(GameObject prefab, Transform parentRoot) => Init(prefab, parentRoot);
-        public GameObjectPool(GameObject prefab, Transform parentRoot, string poolName = null, int capacity = DefaultCapacity, int releaseIdleInterval = DefaultReleaseIdleInterval)
-            => Init(prefab, parentRoot, poolName, capacity, releaseIdleInterval);
-
-        #region Properties
-        [Tooltip("对象池名称"), SerializeField] private string m_poolName;
-        [SerializeField] private GameObject m_prefab;
-        [Tooltip("配置池容量"), Range(MinCapacity, MaxCapacity), SerializeField] private int m_capacity = DefaultCapacity;
-        [Tooltip("释放闲置资源间隔(秒)"), Range(MinReleaseIdleInterval, MaxReleaseIdleInterval), SerializeField] private int m_releaseIdleInterval = DefaultReleaseIdleInterval;
-        private bool m_initialized;
-        private Queue<GameObject> m_pool = new Queue<GameObject>(DefaultCapacity);
+        private GameObjectPool() { }
 
         #region --- CONST ---
         /// <summary>
@@ -37,7 +31,7 @@ namespace RGuang.Kit
         /// <summary>
         /// 默认释放闲置资源间隔【秒】
         /// </summary>
-        public const int DefaultReleaseIdleInterval = 55;
+        public const int DefaultReleaseIdleInterval = 180;
         /// <summary>
         /// 最小释放闲置资源间隔【秒】
         /// </summary>
@@ -48,6 +42,25 @@ namespace RGuang.Kit
         public const int MaxReleaseIdleInterval = 3600;
         #endregion
 
+        #region ---  Properties  ---
+        [SerializeField] private string m_poolName;
+        [SerializeField] private GameObject m_prefab;
+        [SerializeField] private Transform m_parentRoot;
+        [SerializeField] private int m_capacity = DefaultCapacity;
+        [SerializeField] private int m_releaseIdleInterval = DefaultReleaseIdleInterval;
+        private int m_createdCount;
+        private int m_overflowCount;
+        private int m_usingCount;
+        private long m_createdPoolTime;
+        private long m_lastCreatedObjTime;
+        private long m_lastSpawnObjTime;
+        private long m_lastUnSpawnObjTime;
+        private Queue<GameObject> m_pool = new Queue<GameObject>(DefaultCapacity);
+
+        private bool m_initialized;
+        #endregion
+
+        #region ---  Getter/Setter  ---
         /// <summary>
         /// 对象池名称【唯一】
         /// </summary>
@@ -56,7 +69,6 @@ namespace RGuang.Kit
             get => m_poolName;
             private set => m_poolName = value;
         }
-
         /// <summary>
         /// 目标对象
         /// </summary>
@@ -66,26 +78,12 @@ namespace RGuang.Kit
             private set => m_prefab = value;
         }
         /// <summary>
-        /// 目标对象默认父级
+        /// 默认父级
         /// </summary>
         public Transform ParentRoot
         {
-            get;
-            private set;
-        }
-
-
-        #region --- Count ---
-        /// <summary>
-        /// 释放闲置资源间隔【秒】
-        /// </summary>
-        public int ReleaseIdleInterval
-        {
-            get => m_releaseIdleInterval;
-            private set
-            {
-                m_releaseIdleInterval = Mathf.Clamp(value, MinReleaseIdleInterval, MaxReleaseIdleInterval);
-            }
+            get => m_parentRoot;
+            private set => m_parentRoot = value;
         }
         /// <summary>
         /// 配置容量
@@ -100,70 +98,80 @@ namespace RGuang.Kit
             }
         }
         /// <summary>
-        /// 闲置对象数量
+        /// 释放闲置资源间隔【秒】
         /// </summary>
-        public int IdleCount => m_pool.Count;
-        /// <summary>
-        /// 正在使用的对象数量
-        /// </summary>
-        public int UseingCount
+        public int ReleaseIdleInterval
         {
-            get;
-            private set;
+            get => m_releaseIdleInterval;
+            private set
+            {
+                m_releaseIdleInterval = Mathf.Clamp(value, MinReleaseIdleInterval, MaxReleaseIdleInterval);
+            }
         }
         /// <summary>
         /// 已创建对象的数量
         /// </summary>
         public int CreatedCount
         {
-            get;
-            private set;
+            get => m_createdCount;
+            private set => m_createdCount = value;
         }
         /// <summary>
         /// 超出配置容量的对象数量
         /// </summary>
         public int OverflowCount
         {
-            get;
-            private set;
+            get => m_overflowCount;
+            private set => m_overflowCount = value;
         }
-        #endregion
+        /// <summary>
+        /// 正在使用的对象数量
+        /// </summary>
+        public int UseingCount
+        {
+            get => m_usingCount;
+            private set => m_usingCount = value;
+        }
+        /// <summary>
+        /// 闲置对象数量
+        /// </summary>
+        public int IdleCount
+        {
+            get => m_pool.Count;
+        }
 
-        #region --- DateTime ---
         /// <summary>
         /// 对象池创建时间
         /// </summary>
-        public DateTime CreatedTime
+        public long CreatedPoolTime
         {
-            get;
-            private set;
+            get => m_createdPoolTime;
+            private set => m_createdPoolTime = value;
         }
         /// <summary>
         /// 上一次创建对象时间
         /// </summary>
-        public DateTime LastCreatedObjTime
+        public long LastCreatedObjTime
         {
-            get;
-            private set;
+            get => m_lastCreatedObjTime;
+            private set => m_lastCreatedObjTime = value;
         }
         /// <summary>
         /// 最新取用对象时间
         /// </summary>
-        public DateTime LastSpawnTime
+        public long LastSpawnObjTime
         {
-            get;
-            private set;
+            get => m_lastSpawnObjTime;
+            private set => m_lastSpawnObjTime = value;
         }
         /// <summary>
         /// 上一次回收对象时间
         /// </summary>
-        public DateTime LastUnSpawnTime
+        public long LastUnSpawnObjTime
         {
-            get;
-            private set;
+            get => m_lastUnSpawnObjTime;
+            private set => m_lastUnSpawnObjTime = value;
         }
-        #endregion
-
         /// <summary>
         /// True => 已初始化
         /// </summary>
@@ -178,7 +186,7 @@ namespace RGuang.Kit
         GameObject CreateObj()
         {
             CreatedCount++;
-            LastCreatedObjTime = DateTime.UtcNow;
+            LastCreatedObjTime = DateTime.UtcNow.Ticks;
             var copy = GameObject.Instantiate(Prefab, ParentRoot);
             copy.SetActive(false);
             return copy;
@@ -186,7 +194,7 @@ namespace RGuang.Kit
         GameObject AvailableObject(bool active = true, Transform parent = null)
         {
             UseingCount++;
-            LastSpawnTime = DateTime.UtcNow;
+            LastSpawnObjTime = DateTime.UtcNow.Ticks;
             GameObject availableObject = null;
             if (m_pool.Count > 0 && !m_pool.Peek().activeSelf)
             {
@@ -217,9 +225,9 @@ namespace RGuang.Kit
         /// <param name="poolCapacity">对象池容量</param>
         /// <param name="releaseIdleInterval">释放闲置资源间隔【秒】</param>
         /// <returns></returns>
-        public GameObjectPool Init(
-            GameObject prefab = null,
-            Transform parentRoot = null,
+        public GameObjectPool InitPool(
+            GameObject prefab,
+            Transform parentRoot,
             string poolName = null,
             int poolCapacity = DefaultCapacity,
             int releaseIdleInterval = DefaultReleaseIdleInterval)
@@ -230,14 +238,14 @@ namespace RGuang.Kit
                 return this;
             }
 
-            if (prefab) Prefab = prefab;
-            if (parentRoot) ParentRoot = parentRoot;
+            Prefab = prefab;
+            ParentRoot = parentRoot;
             if (string.IsNullOrWhiteSpace(poolName)) PoolName = Prefab.name;
             else PoolName = poolName;
 
             ConfigCapacity = poolCapacity;
             ReleaseIdleInterval = releaseIdleInterval;
-            CreatedTime = DateTime.UtcNow;
+            CreatedPoolTime = DateTime.UtcNow.Ticks;
 
             Initialized = true;
             return this;
@@ -248,9 +256,9 @@ namespace RGuang.Kit
         /// </summary>
         public void ClearIdle()
         {
-            var senc = (DateTime.UtcNow - LastSpawnTime).TotalSeconds;
+            var senc = (DateTime.UtcNow - new DateTime(LastSpawnObjTime)).TotalSeconds;
             if (senc < ReleaseIdleInterval) return;
-            LastSpawnTime = DateTime.UtcNow;
+            LastSpawnObjTime = DateTime.UtcNow.Ticks;
 
             if (m_pool.Count < 1) return;
             var arr = m_pool.ToArray();
@@ -262,12 +270,22 @@ namespace RGuang.Kit
             }
         }
 
-        public void Dispose()
+        public void DisposePool()
         {
             if (Initialized)
             {
                 Initialized = false;
-                ClearIdle();
+                if (m_pool.Count > 0)
+                {
+                    var arr = m_pool.ToArray();
+                    m_pool.Clear();
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        CreatedCount--;
+                        GameObject.Destroy(arr[i]);
+                    }
+                }
+
                 UseingCount = 0;
                 CreatedCount = 0;
                 OverflowCount = 0;
@@ -335,7 +353,6 @@ namespace RGuang.Kit
 
         #endregion
 
-
         #region --- UnSpawn ---
         /// <summary>
         /// 回收
@@ -344,7 +361,7 @@ namespace RGuang.Kit
         /// <exception cref="Exception">可能重复回收</exception>
         public void UnSpawn(GameObject obj)
         {
-            LastUnSpawnTime = DateTime.UtcNow;
+            LastUnSpawnObjTime = DateTime.UtcNow.Ticks;
             if (obj.activeSelf) obj.SetActive(false);
             obj.transform.SetParent(ParentRoot);
 
@@ -381,10 +398,66 @@ namespace RGuang.Kit
 
     }
 
-}
+
+    /**  -------------------     Editor     ---------------------  */
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(GameObjectPool))]
+    internal sealed class GameObjectPoolInspector : UnityEditor.Editor
+    {
+        private SerializedProperty m_poolName;
+        private SerializedProperty m_prefab;
+        private SerializedProperty m_parentRoot;
+        private SerializedProperty m_capacity;
+        private SerializedProperty m_releaseIdleInterval;
+
+        public override void OnInspectorGUI()
+        {
+            //base.OnInspectorGUI();
+            serializedObject.Update();
+
+            GameObjectPool t = (GameObjectPool)target;
+
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
+            {
+                EditorGUILayout.PropertyField(m_poolName, new GUIContent("池名"));
+                EditorGUILayout.PropertyField(m_prefab, new GUIContent("预制体"));
+                EditorGUILayout.PropertyField(m_parentRoot, new GUIContent("默认父级"));
+                m_capacity.intValue = EditorGUILayout.IntSlider("池容量", m_capacity.intValue, GameObjectPool.MinCapacity, GameObjectPool.MaxCapacity);
+                m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider("释放闲置对象间隔(秒)", m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
+
+                EditorGUILayout.LabelField($"已创建数量: {t.CreatedCount}");
+                EditorGUILayout.LabelField($"溢出数量: {t.OverflowCount}");
+                EditorGUILayout.LabelField($"正在使用数量: {t.UseingCount}");
+                EditorGUILayout.LabelField($"闲置数量: {t.IdleCount}");
+
+                EditorGUILayout.LabelField($"对象池创建时间: {new DateTime(t.CreatedPoolTime).ToLocalTime()}");
+                EditorGUILayout.LabelField($"上一次创建对象时间: {new DateTime(t.LastCreatedObjTime).ToLocalTime()}");
+                EditorGUILayout.LabelField($"上一次取用对象时间: {new DateTime(t.LastSpawnObjTime).ToLocalTime()}");
+                EditorGUILayout.LabelField($"上一次回收对象时间: {new DateTime(t.LastUnSpawnObjTime).ToLocalTime()}");
+            }
+            EditorGUI.EndDisabledGroup();
+
+            serializedObject.ApplyModifiedProperties();
+            //Repaint();
+        }
+
+
+        private void OnEnable()
+        {
+            m_poolName = serializedObject.FindProperty("m_poolName");
+            m_prefab = serializedObject.FindProperty("m_prefab");
+            m_parentRoot = serializedObject.FindProperty("m_parentRoot");
+            m_capacity = serializedObject.FindProperty("m_capacity");
+            m_releaseIdleInterval = serializedObject.FindProperty("m_releaseIdleInterval");
+
+        }
+    }
+#endif
 
 
 #endif
 
+}
 
 

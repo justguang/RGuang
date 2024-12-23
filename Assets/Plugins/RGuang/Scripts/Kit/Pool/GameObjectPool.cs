@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using NPOI.SS.Formula.Functions;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -372,6 +370,7 @@ namespace RGuang.Kit
                 throw new Exception($"对象池[{PoolName}] 重复回收对象{obj}");
             }
 
+            UseingCount--;
             if (IdleCount >= ConfigCapacity)
             {
                 OverflowCount++;

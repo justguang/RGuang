@@ -100,6 +100,7 @@ namespace CardGame.IUtility
 
         GameObjectPool CreatePool(GameObject obj, Transform parentRoot = null, string poolName = null, int capacity = GameObjectPool.DefaultCapacity, int releaseIdleInterval = GameObjectPool.DefaultReleaseIdleInterval)
         {
+            if (obj == null) return null;
             if (string.IsNullOrWhiteSpace(poolName)) poolName = obj.name;
             var existPool = m_pools.Find(p => p.PoolName.Equals(poolName));
             if (existPool != null)

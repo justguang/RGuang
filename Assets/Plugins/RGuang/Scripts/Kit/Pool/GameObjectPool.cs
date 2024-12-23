@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using NPOI.SS.Formula.Functions;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -405,12 +407,26 @@ namespace RGuang.Kit
     [CustomEditor(typeof(GameObjectPool))]
     internal sealed class GameObjectPoolInspector : UnityEditor.Editor
     {
+        #region Properties
         private SerializedProperty m_poolName;
         private SerializedProperty m_prefab;
         private SerializedProperty m_parentRoot;
         private SerializedProperty m_capacity;
         private SerializedProperty m_releaseIdleInterval;
+        #endregion
 
+        #region GUILabel
+        private readonly GUIContent label_poolName = new GUIContent("池名");
+        private readonly GUIContent label_preafb = new GUIContent("预制体");
+        private readonly GUIContent label_parentRoot = new GUIContent("默认父级");
+        private readonly GUIContent label_capacity = new GUIContent("池容量");
+        private readonly GUIContent label_releaseIdleInterval = new GUIContent("释放闲置对象间隔(秒)");
+
+        private readonly GUIStyle style_createdCount = new GUIStyle();
+        private readonly GUIStyle style_overflowCount = new GUIStyle();
+        private readonly GUIStyle style_usingCount = new GUIStyle();
+        private readonly GUIStyle style_IdleCount = new GUIStyle();
+        #endregion
         public override void OnInspectorGUI()
         {
             //base.OnInspectorGUI();
@@ -420,17 +436,35 @@ namespace RGuang.Kit
 
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                EditorGUILayout.PropertyField(m_poolName, new GUIContent("池名"));
-                EditorGUILayout.PropertyField(m_prefab, new GUIContent("预制体"));
-                EditorGUILayout.PropertyField(m_parentRoot, new GUIContent("默认父级"));
-                m_capacity.intValue = EditorGUILayout.IntSlider("池容量", m_capacity.intValue, GameObjectPool.MinCapacity, GameObjectPool.MaxCapacity);
-                m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider("释放闲置对象间隔(秒)", m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
+                EditorGUILayout.PropertyField(m_poolName, label_poolName);
+                EditorGUILayout.PropertyField(m_prefab, label_preafb);
+                EditorGUILayout.PropertyField(m_parentRoot, label_parentRoot);
+                m_capacity.intValue = EditorGUILayout.IntSlider(label_capacity, m_capacity.intValue, GameObjectPool.MinCapacity, GameObjectPool.MaxCapacity);
+                m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider(label_releaseIdleInterval, m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
 
-                EditorGUILayout.LabelField($"已创建数量: {t.CreatedCount}");
-                EditorGUILayout.LabelField($"溢出数量: {t.OverflowCount}");
-                EditorGUILayout.LabelField($"正在使用数量: {t.UseingCount}");
-                EditorGUILayout.LabelField($"闲置数量: {t.IdleCount}");
+                EditorGUILayout.Space(5);
+                //style_createdCount.normal.textColor = new Color(0.80f, 0.30f, 0.30f);//Red
+                //style_createdCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);//Green
+                //style_createdCount.normal.textColor = new Color(0.30f, 0.30f, 0.80f);//Blue
+                //style_createdCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);//DarkYellow
+                //style_createdCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);//DarkCyan
+                style_createdCount.normal.textColor = Color.white;
+                style_createdCount.fontSize = 13;
+                EditorGUILayout.LabelField($"已创建数量: {t.CreatedCount}", style_createdCount);
 
+                style_overflowCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);
+                style_overflowCount.fontSize = 13;
+                EditorGUILayout.LabelField($"溢出数量: {t.OverflowCount}", style_overflowCount);
+
+                style_usingCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);
+                style_usingCount.fontSize = 13;
+                EditorGUILayout.LabelField($"正在使用数量: {t.UseingCount}", style_usingCount);
+
+                style_IdleCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);
+                style_IdleCount.fontSize = 13;
+                EditorGUILayout.LabelField($"闲置数量: {t.IdleCount}", style_IdleCount);
+
+                EditorGUILayout.Space(5);
                 EditorGUILayout.LabelField($"对象池创建时间: {new DateTime(t.CreatedPoolTime).ToLocalTime()}");
                 EditorGUILayout.LabelField($"上一次创建对象时间: {new DateTime(t.LastCreatedObjTime).ToLocalTime()}");
                 EditorGUILayout.LabelField($"上一次取用对象时间: {new DateTime(t.LastSpawnObjTime).ToLocalTime()}");

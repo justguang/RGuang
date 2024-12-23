@@ -287,6 +287,7 @@ namespace CardGame.IUtility
     [CustomEditor(typeof(GameObjectPoolManager))]
     internal sealed class GameObjectPoolManagerInspector : UnityEditor.Editor
     {
+        #region Properties
         private SerializedProperty m_defaultPoolCapacity;
         private SerializedProperty m_checkPoolOverflow;
         private SerializedProperty m_enableReleaseIdle;
@@ -294,6 +295,12 @@ namespace CardGame.IUtility
         private SerializedProperty m_releaseInactiveTimer;
         private SerializedProperty m_PoolableInfo;
         private SerializedProperty m_pools;
+        #endregion
+
+        #region GUILabel
+        private readonly GUIContent label_PoolableInfo = new GUIContent("配置可池化信息");
+        private readonly GUIContent label_pools = new GUIContent("所有已创建对象池");
+        #endregion
 
         public override void OnInspectorGUI()
         {
@@ -312,12 +319,12 @@ namespace CardGame.IUtility
                 }
 
 
-                EditorGUILayout.PropertyField(m_PoolableInfo, new GUIContent("配置可池化信息"));
+                EditorGUILayout.PropertyField(m_PoolableInfo, label_PoolableInfo);
             }
             EditorGUI.EndDisabledGroup();
 
             EditorGUI.BeginDisabledGroup(true);
-            { EditorGUILayout.PropertyField(m_pools, new GUIContent("所有已创建对象池")); }
+            { EditorGUILayout.PropertyField(m_pools, label_pools); }
             EditorGUI.EndDisabledGroup();
 
             serializedObject.ApplyModifiedProperties();

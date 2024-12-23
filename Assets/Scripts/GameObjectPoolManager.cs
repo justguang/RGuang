@@ -19,6 +19,7 @@ namespace CardGame.IUtility
         [Range(GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval)] public int ReleaseIdleInterval = GameObjectPool.DefaultReleaseIdleInterval;
     }
 
+    [DisallowMultipleComponent]
     public sealed class GameObjectPoolManager : RGuang.Kit.MonoSingleton<GameObjectPoolManager>
     {
         /**  ---  默认池容量  ---  */
@@ -31,19 +32,18 @@ namespace CardGame.IUtility
         [SerializeField] private int m_releaseIdleInterval = GameObjectPool.DefaultReleaseIdleInterval;
 
 
-        [Header("配置池子"), SerializeField] OptionalInspector<PoolableInfo[]> PoolableInfo = new OptionalInspector<PoolableInfo[]>();
+        [SerializeField] OptionalInspector<PoolableInfo[]> PoolableInfo = new OptionalInspector<PoolableInfo[]>();
 
         /**
          *  所有对象池
          */
-        [SerializeField] private readonly List<GameObjectPool> m_pools = new List<GameObjectPool>(GameObjectPool.DefaultCapacity);
+        [SerializeField] private List<GameObjectPool> m_pools = new List<GameObjectPool>(GameObjectPool.DefaultCapacity);
 
         #region Unity Function
 
         private void Awake()
         {
             _instance = this;
-
 #if UNITY_EDITOR
             m_checkPoolOverflow = true;
 #endif
@@ -63,7 +63,7 @@ namespace CardGame.IUtility
         {
             if (m_enableReleaseIdle)
             {
-                m_releaseInactiveTimer += Time.realtimeSinceStartup;
+                m_releaseInactiveTimer += Time.deltaTime;
                 if (m_releaseInactiveTimer >= m_releaseIdleInterval)
                 {
                     m_releaseInactiveTimer -= m_releaseIdleInterval;
@@ -312,8 +312,12 @@ namespace CardGame.IUtility
                 }
 
 
-                EditorGUILayout.PropertyField(m_PoolableInfo);
+                EditorGUILayout.PropertyField(m_PoolableInfo, new GUIContent("配置可池化信息"));
             }
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup(true);
+            { EditorGUILayout.PropertyField(m_pools, new GUIContent("所有已创建对象池")); }
             EditorGUI.EndDisabledGroup();
 
             serializedObject.ApplyModifiedProperties();

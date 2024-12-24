@@ -13,8 +13,6 @@ namespace RGuang.Kit
     [DisallowMultipleComponent]
     public sealed class GameObjectPool : MonoBehaviour
     {
-        private GameObjectPool() { }
-
         #region --- CONST ---
         /// <summary>
         /// 默认容量
@@ -442,25 +440,9 @@ namespace RGuang.Kit
                 m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider(label_releaseIdleInterval, m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
 
                 EditorGUILayout.Space(5);
-                //style_createdCount.normal.textColor = new Color(0.80f, 0.30f, 0.30f);//Red
-                //style_createdCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);//Green
-                //style_createdCount.normal.textColor = new Color(0.30f, 0.30f, 0.80f);//Blue
-                //style_createdCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);//DarkYellow
-                //style_createdCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);//DarkCyan
-                style_createdCount.normal.textColor = Color.white;
-                style_createdCount.fontSize = 13;
                 EditorGUILayout.LabelField($"已创建数量: {t.CreatedCount}", style_createdCount);
-
-                style_overflowCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);
-                style_overflowCount.fontSize = 13;
                 EditorGUILayout.LabelField($"溢出数量: {t.OverflowCount}", style_overflowCount);
-
-                style_usingCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);
-                style_usingCount.fontSize = 13;
                 EditorGUILayout.LabelField($"正在使用数量: {t.UseingCount}", style_usingCount);
-
-                style_IdleCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);
-                style_IdleCount.fontSize = 13;
                 EditorGUILayout.LabelField($"闲置数量: {t.IdleCount}", style_IdleCount);
 
                 EditorGUILayout.Space(5);
@@ -478,11 +460,27 @@ namespace RGuang.Kit
 
         private void OnEnable()
         {
+            /** -- Properties -- */
             m_poolName = serializedObject.FindProperty("m_poolName");
             m_prefab = serializedObject.FindProperty("m_prefab");
             m_parentRoot = serializedObject.FindProperty("m_parentRoot");
             m_capacity = serializedObject.FindProperty("m_capacity");
             m_releaseIdleInterval = serializedObject.FindProperty("m_releaseIdleInterval");
+
+            /** -- Label -- */
+            //style_createdCount.normal.textColor = new Color(0.80f, 0.30f, 0.30f);//Red
+            //style_createdCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);//Green
+            //style_createdCount.normal.textColor = new Color(0.30f, 0.30f, 0.80f);//Blue
+            //style_createdCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);//DarkYellow
+            //style_createdCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);//DarkCyan
+            style_createdCount.normal.textColor = Color.white;
+            style_createdCount.fontSize = 13;
+            style_overflowCount.normal.textColor = new Color(0.60f, 0.60f, 0.0f);
+            style_overflowCount.fontSize = 13;
+            style_usingCount.normal.textColor = new Color(0.0f, 0.60f, 0.60f);
+            style_usingCount.fontSize = 13;
+            style_IdleCount.normal.textColor = new Color(0.30f, 0.80f, 0.30f);
+            style_IdleCount.fontSize = 13;
 
         }
     }

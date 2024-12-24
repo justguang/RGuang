@@ -489,12 +489,12 @@ MonoBehaviour:
     - PoolName: 
       Prefab: {fileID: 9123305822234854503, guid: dc6e8fe0a43c078479b8389a581f33c1,
         type: 3}
-      ParentRoot: {fileID: 0}
       Capacity: 6
       ReleaseIdleInterval: 180
     E_OnValueChanged:
       m_PersistentCalls:
         m_Calls: []
+  m_pools: []
 --- !u!1 &1680484766
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_logSeparate: '>>'
   m_enableTrace: 0
   m_enableSave: 1
-  m_saveFilePath: 
+  m_saveFileDirPath: 
 --- !u!1 &2076821547
 GameObject:
   m_ObjectHideFlags: 0

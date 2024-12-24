@@ -299,6 +299,10 @@ namespace CardGame.IUtility
         #endregion
 
         #region GUILabel
+        private readonly GUIContent label_defaultPoolCapacity = new GUIContent("默认池容量");
+        private readonly GUIContent label_checkPoolOverflow = new GUIContent("检测池溢出");
+        private readonly GUIContent label_enableReleaseIdle = new GUIContent("启用自动释放池中闲置对象");
+        private readonly GUIContent label_releaseIdleInterval = new GUIContent("自动释放池中闲置对象周期(秒)");
         private readonly GUIContent label_PoolableInfo = new GUIContent("配置可池化信息");
         private readonly GUIContent label_pools = new GUIContent("所有已创建对象池");
         #endregion
@@ -309,14 +313,13 @@ namespace CardGame.IUtility
 
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                m_defaultPoolCapacity.intValue = EditorGUILayout.IntSlider("默认池容量", m_defaultPoolCapacity.intValue, GameObjectPool.MinCapacity, GameObjectPool.MaxCapacity);
-                m_checkPoolOverflow.boolValue = EditorGUILayout.Toggle("检测池溢出", m_checkPoolOverflow.boolValue);
-                m_enableReleaseIdle.boolValue = EditorGUILayout.Toggle("启用自动释放池中闲置对象", m_enableReleaseIdle.boolValue);
-                m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider("自动释放池中闲置对象周期(秒)", m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
-
-                if (m_enableReleaseIdle.boolValue)
+                m_defaultPoolCapacity.intValue = EditorGUILayout.IntSlider(label_defaultPoolCapacity, m_defaultPoolCapacity.intValue, GameObjectPool.MinCapacity, GameObjectPool.MaxCapacity);
+                m_checkPoolOverflow.boolValue = EditorGUILayout.Toggle(label_checkPoolOverflow, m_checkPoolOverflow.boolValue);
+                m_enableReleaseIdle.boolValue = EditorGUILayout.Toggle(label_enableReleaseIdle, m_enableReleaseIdle.boolValue);
+                if (m_enableReleaseIdle.boolValue == true)
                 {
-                    EditorGUILayout.LabelField("自动释放池中闲置对象计时(秒): ", m_releaseInactiveTimer.floatValue.ToString("f0"));
+                    m_releaseIdleInterval.intValue = EditorGUILayout.IntSlider(label_releaseIdleInterval, m_releaseIdleInterval.intValue, GameObjectPool.MinReleaseIdleInterval, GameObjectPool.MaxReleaseIdleInterval);
+                    EditorGUILayout.LabelField("自动释放池中闲置对象计时(秒)", m_releaseInactiveTimer.floatValue.ToString("f0"));
                 }
 
 

@@ -10,6 +10,14 @@ using RGuang.Attribute;
 using Log = RGuang.LogKit.Log;
 using ColorLog = RGuang.LogKit.ColorLog;
 using System.Collections.Generic;
+using CardGame.IUtility;
+using System.IO;
+
+
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace CardGame
 {
@@ -25,7 +33,8 @@ namespace CardGame
      * UnityEngine.UI.ToggleGroup                                       10
      * 
      */
-    [DefaultExecutionOrder(-50)]//脚本执行顺序，从小到大
+    [DefaultExecutionOrder(-10)]//脚本执行顺序，从小到大
+    [DisallowMultipleComponent]
     public sealed class RGuangLogKit : MonoBehaviour
     {
         [Header("启用日志等级"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
@@ -49,11 +58,13 @@ namespace CardGame
         [Header("True保存日志文件"), SerializeField, ReadWriteInspector(Mode.InPlayMode)]
         private bool m_enableSave = true;
 
-        [Header("日志文件路劲"), SerializeField, ReadWriteInspector(Mode.InSpector)]
-        private string m_saveFilePath = string.Empty;
+        [SerializeField, HideInInspector]
+        private string m_saveFileDirPath = string.Empty;
+
 
         //日志类型
         readonly LoggerType m_loggerType = LoggerType.Unity;
+
 
         private void Awake()
         {
@@ -72,14 +83,12 @@ namespace CardGame
                 EnableSave = m_enableSave,
             };
 
-            m_saveFilePath = cfg.SavePath;
-
             RGuang.LogKit.Log.InitSetting(cfg);
 
             RGuang.LogKit.Log.Info($" ↓↓↓RGuang.Info 日志初始化Start↓↓↓ 时间=>{DateTime.Now.ToString("yyyy-MM-dd.HH")}");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Cyan, cfg.ToString());
-            Log.TestPrint_Miku();
-            Log.TestPrint_Doge2();
+            RGuang.LogKit.Log.TestPrint_Miku();
+            RGuang.LogKit.Log.TestPrint_Doge2();
 
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.White, " -- 测试白色 --");
             RGuang.LogKit.Log.ColorInfo(RGuang.LogKit.ColorLog.Gray, "-- 测试灰色 --");
@@ -113,6 +122,55 @@ namespace CardGame
 
     }
 
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(RGuangLogKit))]
+    public sealed class RGuangLogKitInspector : UnityEditor.Editor
+    {
+        #region Properties
+        private SerializedProperty m_enableSave;
+        private SerializedProperty m_saveFileDirPath;
+        #endregion
+
+        #region GUILabel
+        private readonly GUIContent label_saveFileDirPath = new GUIContent("日志文件路径:");
+
+        private readonly GUIStyle style_saveFileDirPath = new GUIStyle();
+        #endregion
+
+
+        #region SaveFileDirPath
+        private string txt_saveFileDirPath;
+        #endregion
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            serializedObject.Update();
+
+            if (m_enableSave.boolValue == true)
+            {
+                EditorGUILayout.LabelField($"日志文件路径：{txt_saveFileDirPath}", style_saveFileDirPath);
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void OnEnable()
+        {
+            /** -- Properties -- */
+            m_enableSave = serializedObject.FindProperty("m_enableSave");
+            m_saveFileDirPath = serializedObject.FindProperty("m_saveFileDirPath");
+
+            /** -- GUIStyle -- */
+            style_saveFileDirPath.normal.textColor = new Color(0.0f, 0.60f, 0.60f);
+            style_saveFileDirPath.fontSize = 13;
+
+            txt_saveFileDirPath = UnityEngine.Application.streamingAssetsPath + "/RGuangLog";
+        }
+
+    }
+#endif
 
 
 }

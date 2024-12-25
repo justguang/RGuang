@@ -315,7 +315,7 @@ namespace RGuang.Kit
         public GameObject Spawn(Vector3 pos, bool active = true, Transform parent = null)
         {
             GameObject obj = AvailableObject(active, parent);
-            obj.transform.position = pos;
+            obj.transform.localPosition = pos;
             return obj;
         }
         /// <summary>
@@ -328,8 +328,8 @@ namespace RGuang.Kit
         public GameObject Spawn(Vector3 pos, Quaternion rot, bool active = true, Transform parent = null)
         {
             GameObject obj = AvailableObject(active, parent);
-            obj.transform.position = pos;
-            obj.transform.rotation = rot;
+            obj.transform.localPosition = pos;
+            obj.transform.localRotation = rot;
             return obj;
         }
         /// <summary>
@@ -343,8 +343,8 @@ namespace RGuang.Kit
         public GameObject Spawn(Vector3 pos, Quaternion rot, Vector3 localScale, bool active = true, Transform parent = null)
         {
             GameObject obj = AvailableObject(active, parent);
-            obj.transform.position = pos;
-            obj.transform.rotation = rot;
+            obj.transform.localPosition = pos;
+            obj.transform.localRotation = rot;
             obj.transform.localScale = localScale;
             return obj;
         }
@@ -362,6 +362,7 @@ namespace RGuang.Kit
             LastUnSpawnObjTime = DateTime.UtcNow.Ticks;
             if (obj.activeSelf) obj.SetActive(false);
             obj.transform.SetParent(ParentRoot);
+            //obj.transform.localPosition = Vector3.zero;
 
             if (m_pool.Contains(obj))
             {
